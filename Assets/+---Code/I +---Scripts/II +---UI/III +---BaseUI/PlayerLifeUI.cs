@@ -2,15 +2,13 @@ using JetBrains.Annotations;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TreeEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class PlayerLifeUI : MonoBehaviour
 {
     [SerializeField] List<Transform> lifeImages;
-
-    [Tooltip("player에서 가져오는 변수")]
-    [SerializeField] int fullLifes = 10;
 
     int previousLifes;
 
@@ -19,25 +17,29 @@ public class PlayerLifeUI : MonoBehaviour
 
     private void Start()
     {
-        previousLifes = fullLifes;
+        previousLifes = GameManager.instance.player.MovementStats.MaxLife;
 
-        for(int i = 0; i < fullLifes; i++)
+        // All SetActive(false)
+        for(int i = 0; i < transform.childCount; i++)
+        {
+            Transform child = transform.GetChild(i);
+            child.gameObject.SetActive(false);
+        }
+
+        // MaxLife SetActive(true)
+        for (int i = 0; i < previousLifes; i++)
         {
             Transform child = transform.GetChild(i);
             lifeImages.Add(child);
             lifeImages[i].gameObject.SetActive(true);
         }
+
+        GameManager.instance.player.lifeUpdateUIEvent.AddListener(UpdateLifeImages);
     }
 
-    private void OnEnable()
+    private void OnDestroy()
     {
-        // GameManager.instance.player.lifeUpdateUIEvent.AddListener(UpdateLifeImages)
-
-    }
-
-    private void OnDisable()
-    {
-        // GameManager.instance.player.lifeUpdateUIEvent.RemoveListener(UpdateLifeImages)
+        GameManager.instance.player.lifeUpdateUIEvent.RemoveListener(UpdateLifeImages);
 
     }
 
@@ -67,11 +69,5 @@ public class PlayerLifeUI : MonoBehaviour
         }
 
         previousLifes = currentLifes;
-    }
-
-    // TODO: Event 추가 후 삭제
-    private void Update()
-    {
-        UpdateLifeImages(currentLifes);
     }
 }

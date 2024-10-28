@@ -4,15 +4,17 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class CurrentStateUI : MonoBehaviour
+public class CurrentStatusUI : MonoBehaviour
 {
-    public UnityEvent<bool> onStatChanged;
+    public PointTextUI pointTextUI;
+    public UnityEvent<bool> onStatusChanged;
 
     [SerializeField] TMP_Text changesText;
     [SerializeField] TMP_Text currentStateText;
 
     int previousValue;
     int currentValue;
+    int diff;
 
     // TODO: Ability 찍는거 제한 및 Save기능
     private void Awake()
@@ -27,22 +29,18 @@ public class CurrentStateUI : MonoBehaviour
         {
             Debug.LogError("Failed Get currenValue to int");
         }
-        
-        previousValue = currentValue;
-        changesText.enabled = false;
+
+        Confirm();
+
+        onStatusChanged.AddListener(StatusChange);
     }
 
-    private void OnEnable()
+    private void OnDestroy()
     {
-        onStatChanged.AddListener(StatChange);
+        onStatusChanged.RemoveListener(StatusChange);
     }
 
-    private void OnDisable()
-    {
-        onStatChanged.RemoveListener(StatChange);
-    }
-
-    void StatChange(bool selectedButton)
+    void StatusChange(bool selectedButton)
     {
         currentValue = selectedButton ? (currentValue + 1) : (currentValue - 1);
 
@@ -52,16 +50,28 @@ public class CurrentStateUI : MonoBehaviour
             currentValue = previousValue;
             changesText.enabled = false;
         }
+        else
+        {
+            diff = currentValue - previousValue;
 
-        int diff = currentValue - previousValue;
+            // Changes text 바꾸기
+            if (!changesText.enabled && diff > 0)
+                changesText.enabled = true;
 
-        // Changes text 바꾸기
-        if(!changesText.enabled && diff > 0)
-            changesText.enabled = true;
-
-        changesText.text = "(+" + diff.ToString() + ")";
+            changesText.text = "(+" + diff.ToString() + ")";
+        }
 
         // Current text 바꾸기
         currentStateText.text = currentValue.ToString();
+
+        // PointTextUI 바꾸기(오른쪽 상단)
+        pointTextUI.onChanged.Invoke();
+    }
+
+    public void Confirm()
+    {
+        previousValue = currentValue;
+        changesText.enabled = false;
+        diff = 0;
     }
 }

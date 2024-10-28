@@ -9,7 +9,9 @@ public class PlusMinusButtonUI : MonoBehaviour
     [SerializeField] Button minus;
     [SerializeField] Button plus;
 
-    public CurrentStateUI currentState;
+    public CurrentStatusUI currentStatus;
+
+
 
     private void Awake()
     {
@@ -19,14 +21,14 @@ public class PlusMinusButtonUI : MonoBehaviour
         if(plus == null)
             plus = transform.Find("Plus").GetComponent<Button>();
 
-        if(currentState == null)
-            currentState = transform.parent.Find("CurrentState").gameObject.GetComponent<CurrentStateUI>();
+        if(currentStatus == null)
+            currentStatus = transform.parent.Find("CurrentState").gameObject.GetComponent<CurrentStatusUI>();
 
         minus.onClick.AddListener(Minus);
         plus.onClick.AddListener(Plus);
     }
 
-    private void OnDisable()
+    private void OnDestroy()
     {
         minus.onClick.RemoveListener(Minus);
         plus.onClick.RemoveListener(Plus);
@@ -34,11 +36,19 @@ public class PlusMinusButtonUI : MonoBehaviour
 
     void Minus()
     {
-        currentState.onStatChanged.Invoke(false);
+        if (GameManager.instance.currentUsedStatusPoint > 0)
+        {
+            GameManager.instance.currentUsedStatusPoint--;
+            currentStatus.onStatusChanged.Invoke(false);
+        }
     }
 
     void Plus()
     {
-        currentState.onStatChanged.Invoke(true);
+        if (GameManager.instance.availablePoint > GameManager.instance.currentUsedStatusPoint)
+        {
+            GameManager.instance.currentUsedStatusPoint++;
+            currentStatus.onStatusChanged.Invoke(true);
+        }
     }
 }

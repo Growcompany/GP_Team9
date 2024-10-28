@@ -12,9 +12,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Collider2D _feetColl;
     [SerializeField] private Collider2D _bodyColl;
 
-    public UnityEvent levelUpUIEvent;
-    public UnityEvent expUpUIEvent;
-    public UnityEvent lifeUpdateUIEvent;
+    public UnityEvent<int> levelUpUIEvent;
+    public UnityEvent<int, int> expUpUIEvent;
+    public UnityEvent<int> lifeUpdateUIEvent;
 
     public GameObject laserPrefab;
     public GameObject shootPoint;
@@ -724,15 +724,14 @@ public class PlayerController : MonoBehaviour
             return;
         }
         MovementStats.Level += 1;
-        levelUpUIEvent.Invoke();
+        levelUpUIEvent.Invoke(MovementStats.Level);
     }
 
     public void ExpUp(int exp)
     {
         MovementStats.Exp += exp;
-        expUpUIEvent.Invoke();
+        expUpUIEvent.Invoke(100, MovementStats.Exp);    // 100은 임의로 설정함, 수정 바람
     }
-
     #endregion
 
 

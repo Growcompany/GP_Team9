@@ -9,12 +9,6 @@ public class PlayerLevelUI : MonoBehaviour
 {
     [SerializeField] TMP_Text levelText;
     [SerializeField] Image filledImage;
-
-    [Tooltip("player에서 level 만들면 삭제")]
-    public int tempLevel = 0;
-    public int tempTotalExp = 100;
-    public int tempCurrentExp = 10;
-
     private void Start()
     {
         if(levelText == null)
@@ -22,19 +16,18 @@ public class PlayerLevelUI : MonoBehaviour
 
         if(filledImage == null)
             filledImage = transform.Find("LevelFilled").GetComponent<Image>();
+
+        levelText.text = GameManager.instance.player.MovementStats.Level.ToString();
+        filledImage.fillAmount = GameManager.instance.player.MovementStats.Exp / 100.0f;    // 100은 임의 설정
+
+        GameManager.instance.player.levelUpUIEvent.AddListener(UpdateLevelTextUI);
+        GameManager.instance.player.expUpUIEvent.AddListener(UpdateExpUI);
     }
 
-    
-    private void OnEnable()
+    private void OnDestroy()
     {
-        // GameManager.instance.player.levelUpUIEvent.AddListener(UpdateLevelTextUI)
-        // GameManager.instance.player.expUpUIEvent.AddListener(UpdateExpUI)
-    }
-
-    private void OnDisable()
-    {
-        // GameManager.instance.player.levelUpUIEvent.RemoveListener(UpdateLevelTextUI)
-        // GameManager.instance.player.expUpUIEvent.RemoveListener(UpdateExpUI)
+        GameManager.instance.player.levelUpUIEvent.RemoveListener(UpdateLevelTextUI);
+        GameManager.instance.player.expUpUIEvent.RemoveListener(UpdateExpUI);
     }
 
     // TODO: Player에서
@@ -43,6 +36,7 @@ public class PlayerLevelUI : MonoBehaviour
     void UpdateLevelTextUI(int level)
     {
         levelText.text = level.ToString();
+        GameManager.instance.CalculateAvailableStatusPoint();
     }
 
     // TODO: Player에서
@@ -52,12 +46,5 @@ public class PlayerLevelUI : MonoBehaviour
     {
         float amount = (float)currentExp / totalExp;
         filledImage.fillAmount = amount;
-    }
-
-    // TODO: Event 추가 후 삭제
-    private void Update()
-    {
-        UpdateLevelTextUI(tempLevel);
-        UpdateExpUI(tempTotalExp, tempCurrentExp);
     }
 }

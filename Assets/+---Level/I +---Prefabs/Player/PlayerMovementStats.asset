@@ -12,7 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd20664e8bcded241a48709d82e2162f, type: 3}
   m_Name: PlayerMovementStats
   m_EditorClassIdentifier: 
-  MaxHealth: 100
+  MaxLife: 5
+  Exp: 10
+  Level: 10
+  MaxLevel: 100
   MaxWalkSpeed: 12.5
   GroundAcceleration: 5
   GroundDeceleration: 50
@@ -46,9 +49,11 @@ MonoBehaviour:
   AttackRange: 1.5
   AttackTime: 0.1
   AttackSpeed: 40
+  AttackDamage: 100
   TimeBtwAttacksOnGround: 0.225
   ChargeTime: 0.6
   LaserSpeed: 25
+  LaserDamage: 100
   DebugShowIsGroundedBox: 0
   DebugShowHeadBumpBox: 0
   ShowWalkJumpArc: 0
