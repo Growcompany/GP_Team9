@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MaxLife: 5
   Exp: 10
-  Level: 10
+  Level: 5
   MaxLevel: 100
   MaxWalkSpeed: 12.5
   GroundAcceleration: 5
