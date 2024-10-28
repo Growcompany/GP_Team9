@@ -6,7 +6,7 @@ using UnityEngine;
 public class PlayerMovementStats : ScriptableObject
 {
     [Header("Status")]
-    [Range(1f, 100f)] public float MaxHealth = 100f;
+    [Range(1, 10)] public int MaxLife = 5;
 
     [Header("Walk")]
     [Range(1f, 100f)] public float MaxWalkSpeed = 12.5f;
@@ -47,7 +47,7 @@ public class PlayerMovementStats : ScriptableObject
 
     [Header("Dash")]
     [Range(0f, 1f)] public float DashTime = 0.11f;
-    [Range(1f, 200f)] public float DashSpeed = 40f;
+    [Range(1f, 200f)] public float DashSpeed = 35f;
     [Range(0f, 1f)] public float TimeBtwDashesOnGround = 0.225f;
     [Range(0, 5)] public int NumberOfDashes = 2;
     [Range(0f, 0.5f)] public float DashDiagonallyBias = 0.4f;
@@ -60,8 +60,13 @@ public class PlayerMovementStats : ScriptableObject
     [Range(0.01f, 5f)] public float AttackRange = 1.5f;
     [Range(0f, 5f)] public float AttackTime = 3f;
     [Range(1f, 200f)] public float AttackSpeed = 40f;
+    [Range(1f, 500f)] public float AttackDamage = 100f;
     [Range(0f, 1f)] public float TimeBtwAttacksOnGround = 0.5f;
-    [Range(0.1f, 3f)] public float ChargeTime = 0.5f;
+    [Range(0.1f, 3f)] public float ChargeTime = 0.6f;
+
+    [Header("Laser")]
+    [Range(1, 50)] public int LaserSpeed = 25;
+    [Range(1f, 500f)] public float LaserDamage = 100f;
 
 
     [Header("Debug")]
