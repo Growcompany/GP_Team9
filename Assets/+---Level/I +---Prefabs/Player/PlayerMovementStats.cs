@@ -7,6 +7,9 @@ public class PlayerMovementStats : ScriptableObject
 {
     [Header("Status")]
     [Range(1, 10)] public int MaxLife = 5;
+    [Range(0, 1000)] public int Exp = 10;
+    [Range(1, 100)] public int Level = 1;
+    public int MaxLevel = 100;
 
     [Header("Walk")]
     [Range(1f, 100f)] public float MaxWalkSpeed = 12.5f;
