@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.Events;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -10,6 +11,10 @@ public class PlayerController : MonoBehaviour
     public PlayerMovementStats MovementStats;
     [SerializeField] private Collider2D _feetColl;
     [SerializeField] private Collider2D _bodyColl;
+
+    public UnityEvent levelUpUIEvent;
+    public UnityEvent expUpUIEvent;
+    public UnityEvent lifeUpdateUIEvent;
 
     public GameObject laserPrefab;
     public GameObject shootPoint;
@@ -678,6 +683,8 @@ public class PlayerController : MonoBehaviour
 
     #endregion
 
+
+
     #region Life
 
     public void Damaged()
@@ -707,6 +714,27 @@ public class PlayerController : MonoBehaviour
     }
 
     #endregion
+
+    #region Level Up / EXP
+
+    public void LevelUp()
+    {
+        if (MovementStats.Level >= MovementStats.MaxLevel)
+        {
+            return;
+        }
+        MovementStats.Level += 1;
+        levelUpUIEvent.Invoke();
+    }
+
+    public void ExpUp(int exp)
+    {
+        MovementStats.Exp += exp;
+        expUpUIEvent.Invoke();
+    }
+
+    #endregion
+
 
 
     #region Collision Check
@@ -761,28 +789,6 @@ public class PlayerController : MonoBehaviour
         {
             _bumpedHead = false;
         }
-
-        // #region Debug Visualization
-        // if (MovementStats.DebugShowHeadBumpBox)
-        // {
-        //     float headWidth = MovementStats.HeadWidth;
-
-        //     Color rayColor;
-        //     if (_bumpedHead)
-        //     {
-        //         rayColor = Color.green;
-        //     }
-        //     else
-        //     {
-        //         rayColor = Color.red;
-        //     }
-
-        //     Debug.DrawRay(new Vector2(boxCastOrigin.x - boxCastSize.x / 2 * headWidth, boxCastOrigin.y), Vector2.up * MovementStats.HeadDetectionRayLength, rayColor);
-        //     Debug.DrawRay(new Vector2(boxCastOrigin.x + (boxCastSize.x / 2) * headWidth, boxCastOrigin.y), Vector2.up * MovementStats.HeadDetectionRayLength, rayColor);
-        //     Debug.DrawRay(new Vector2(boxCastOrigin.x - boxCastSize.x / 2 * headWidth, boxCastOrigin.y + MovementStats.HeadDetectionRayLength), Vector2.right * boxCastSize.x * headWidth, rayColor);
-        // }
-
-        // #endregion
     }
 
     private void CollisionCheck()
