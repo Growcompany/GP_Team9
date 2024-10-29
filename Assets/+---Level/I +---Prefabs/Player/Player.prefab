@@ -365,6 +365,10 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: b7737880-34dc-4223-86be-e4f00b3e4c35
     m_ActionName: 'Player/Attack[/Keyboard/z]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 77f26f66-d3f2-4a60-82b9-a9477bfe0bc5
+    m_ActionName: 'Player/Status[/Keyboard/tab]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -385,11 +389,36 @@ MonoBehaviour:
   MovementStats: {fileID: 11400000, guid: c1b0b589067c1a94a9a6f9ded90ef519, type: 2}
   _feetColl: {fileID: 9187463503941168289}
   _bodyColl: {fileID: 1692307770031541155}
+  StatusUIEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 680432533315654098}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: StatusUIManage
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  levelUpUIEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  expUpUIEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  lifeUpdateUIEvent:
+    m_PersistentCalls:
+      m_Calls: []
   laserPrefab: {fileID: 1340588117802886057, guid: 0bb2f9102c0c6c24bbfc1cd9eda7b1b9,
     type: 3}
   shootPoint: {fileID: 4617586057157995254}
   attackArea: {fileID: 0}
   chargingFX: {fileID: 7848607362095877649}
+  statusUI: {fileID: 0}
   _isDead: 0
   _isFacingRight: 0
   _isCharging: 0
