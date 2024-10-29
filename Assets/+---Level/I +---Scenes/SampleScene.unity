@@ -7252,6 +7252,8 @@ MonoBehaviour:
   totalUsedStatusPoint: 0
   availablePoint: 0
   currentUsedStatusPoint: 0
+  coolTimeRatio: 0
+  currentCoolTime: 0
 --- !u!4 &1979644584
 Transform:
   m_ObjectHideFlags: 0

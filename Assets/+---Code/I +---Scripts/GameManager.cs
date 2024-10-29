@@ -13,6 +13,8 @@ public class GameManager : MonoBehaviour
     public int availablePoint;                          // CalculateAvailableStatusPoint 이벤트로 계산됨(ex. Level up, Confirm button)
     public int currentUsedStatusPoint;                  // PlusMinusButtonUI에서 증감, ConfirmButtonUI에서 초기화
                                                         // PointTextUI에서 availablePoint - currentUsedStatusPoint값 사용
+    public float coolTimeRatio;                         // SkillCoolTimeUI에서 사용
+    public float currentCoolTime;                       // SkillCoolTimeUI에서 사용
 
     private void Awake()
     {
@@ -37,5 +39,19 @@ public class GameManager : MonoBehaviour
         totalUsedStatusPoint += currentUsedStatusPoint;
         currentUsedStatusPoint = 0;
         CalculateAvailableStatusPoint();
+    }
+
+    public IEnumerator CalculateCoolTime(float skillCoolTime)
+    {
+        currentCoolTime = skillCoolTime;
+        float per = 1 / skillCoolTime;
+
+        while (currentCoolTime >= 0.0f)
+        {
+            currentCoolTime -= Time.deltaTime; // player에서 FixedUpate로 호출함
+            coolTimeRatio = Mathf.Clamp(currentCoolTime * per, 0.0f, 1.0f);
+
+            yield return null;
+        } 
     }
 }

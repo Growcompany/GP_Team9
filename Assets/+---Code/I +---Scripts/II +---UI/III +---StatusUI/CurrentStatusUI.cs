@@ -12,8 +12,8 @@ public class CurrentStatusUI : MonoBehaviour
     [SerializeField] TMP_Text changesText;
     [SerializeField] TMP_Text currentStateText;
 
+    public int currentValue;
     int previousValue;
-    int currentValue;
     int diff;
 
     // TODO: Ability 찍는거 제한 및 Save기능

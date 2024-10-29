@@ -329,6 +329,7 @@ MonoBehaviour:
       m_Calls: []
   changesText: {fileID: 0}
   currentStateText: {fileID: 0}
+  currentValue: 0
 --- !u!1 &287892325312378029
 GameObject:
   m_ObjectHideFlags: 0
@@ -973,6 +974,7 @@ MonoBehaviour:
       m_Calls: []
   changesText: {fileID: 0}
   currentStateText: {fileID: 0}
+  currentValue: 0
 --- !u!1 &1480745782367685479
 GameObject:
   m_ObjectHideFlags: 0
@@ -1260,6 +1262,7 @@ MonoBehaviour:
       m_Calls: []
   changesText: {fileID: 0}
   currentStateText: {fileID: 0}
+  currentValue: 0
 --- !u!1 &1952960226338427921
 GameObject:
   m_ObjectHideFlags: 0
@@ -2886,6 +2889,7 @@ MonoBehaviour:
       m_Calls: []
   changesText: {fileID: 0}
   currentStateText: {fileID: 0}
+  currentValue: 0
 --- !u!1 &5750988303330916594
 GameObject:
   m_ObjectHideFlags: 0
