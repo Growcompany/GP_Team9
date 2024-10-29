@@ -7,6 +7,7 @@ public class CrabController : MonsterController
     protected override void Awake()
     {
         base.Awake(); // 부모 클래스의 Awake 메서드 호출
+        experiencePoints = 50; // Crab의 경험치
         FlipSprite = false;
         attackAnim = "attackC"; // CrabController의 공격 설정
         idleAnim = "idle";

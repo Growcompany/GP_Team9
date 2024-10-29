@@ -23,6 +23,7 @@ public class MonsterController : MonoBehaviour
     protected string runAnim;
     protected bool FlipSprite = true;
     private bool isDying = false; // 몬스터가 이미 죽음을 처리 중인지 확인
+    public int experiencePoints; // 각 몬스터가 줄 경험치
 
     protected virtual void Awake()
     {
@@ -201,5 +202,10 @@ public class MonsterController : MonoBehaviour
         Debug.Log("Monster is dying");
         isDying = true; // 죽음 상태 설정
         anim.SetTrigger("death"); // 죽음 애니메이션 시작
+        PlayerController player = FindObjectOfType<PlayerController>();
+        if (player != null)
+        {
+            player.ExpUp(experiencePoints); // 경험치 전달
+        }
     }
 }
