@@ -732,6 +732,7 @@ public class PlayerController : MonoBehaviour
     public void Damaged()
     {
         Life -= 1;
+        lifeUpdateUIEvent.Invoke(Life);
     }
 
     private void DieCheck()
