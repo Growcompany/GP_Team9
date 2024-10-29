@@ -25,6 +25,9 @@ public class PlayerController : MonoBehaviour
 
     private Animator _animator; // animation
 
+    // Status UI
+    public GameObject statusUI;
+
     // Life
     public int Life { get; private set; }
     public bool _isDead;
@@ -85,6 +88,9 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
+        // Status UI
+        statusUI = GameObject.Find("---StatusUI---").transform.Find("Frame").gameObject;
+
         // Life
         Life = MovementStats.MaxLife;
         _isDead = false;
@@ -103,6 +109,8 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        StatusUICheck();
+
         CountTimers();
         JumpChecks();
         DashCheck();
@@ -141,6 +149,28 @@ public class PlayerController : MonoBehaviour
 
         _rb.velocity = new Vector2(HorizontalVelocity, VerticalVelocity);
     }
+
+    #region UI
+
+    #region StatusUI
+
+    private void StatusUICheck()
+    {
+        if (InputManager.StatusWasPressed)
+        {
+            statusUI.SetActive(!statusUI.activeSelf);
+        }
+    }
+
+    #endregion
+
+    #endregion
+
+    /*
+    -----------------------------------------------------------------------------------------------------------------
+    
+    -----------------------------------------------------------------------------------------------------------------
+    */
 
     #region Movement
 
