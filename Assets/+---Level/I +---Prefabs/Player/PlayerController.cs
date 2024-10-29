@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Collider2D _feetColl;
     [SerializeField] private Collider2D _bodyColl;
 
+    public UnityEvent StatusUIEvent;
     public UnityEvent<int> levelUpUIEvent;
     public UnityEvent<int, int> expUpUIEvent;
     public UnityEvent<int> lifeUpdateUIEvent;
@@ -91,6 +92,8 @@ public class PlayerController : MonoBehaviour
         // Status UI
         statusUI = GameObject.Find("---StatusUI---").transform.Find("Frame").gameObject;
 
+
+
         // Life
         Life = MovementStats.MaxLife;
         _isDead = false;
@@ -158,8 +161,13 @@ public class PlayerController : MonoBehaviour
     {
         if (InputManager.StatusWasPressed)
         {
-            statusUI.SetActive(!statusUI.activeSelf);
+            StatusUIEvent.Invoke();
         }
+    }
+
+    public void StatusUIManage()
+    {
+        statusUI.SetActive(!statusUI.activeSelf);
     }
 
     #endregion
