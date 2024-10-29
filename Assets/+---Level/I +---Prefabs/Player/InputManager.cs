@@ -8,6 +8,8 @@ public class InputManager : MonoBehaviour
     #region InputManager
     public static PlayerInput PlayerInput;
 
+    public static bool StatusWasPressed;
+
     public static Vector2 Movement;
     public static bool JumpWasPressed;
     public static bool JumpIsHeld;
@@ -18,6 +20,8 @@ public class InputManager : MonoBehaviour
     public static bool AttackIsHolding;
     public static bool AttackWasReleased;
 
+
+    private InputAction _statusAction;
     private InputAction _moveAction;
     private InputAction _jumpAction;
     private InputAction _runAction;
@@ -31,6 +35,8 @@ public class InputManager : MonoBehaviour
     {
         PlayerInput = GetComponent<PlayerInput>();
 
+        _statusAction = PlayerInput.actions["Status"];
+
         _moveAction = PlayerInput.actions["Move"];
         _jumpAction = PlayerInput.actions["Jump"];
         _runAction = PlayerInput.actions["Run"];
@@ -42,6 +48,8 @@ public class InputManager : MonoBehaviour
     private void Update()
     {
         Movement = _moveAction.ReadValue<Vector2>();
+
+        StatusWasPressed = _statusAction.WasPressedThisFrame();
 
         JumpWasPressed = _jumpAction.WasPressedThisFrame();
         JumpIsHeld = _jumpAction.IsPressed();
