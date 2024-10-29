@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.Events;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -11,16 +12,30 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Collider2D _feetColl;
     [SerializeField] private Collider2D _bodyColl;
 
+    public UnityEvent StatusUIEvent;
+    public UnityEvent<int> levelUpUIEvent;
+    public UnityEvent<int, int> expUpUIEvent;
+    public UnityEvent<int> lifeUpdateUIEvent;
+
+    public GameObject laserPrefab;
+    public GameObject shootPoint;
+    public GameObject attackArea;
+    public GameObject chargingFX;
+
     private Rigidbody2D _rb;
 
     private Animator _animator; // animation
 
-    // Health
-    public float Health { get; private set; }
+    // Status UI
+    public GameObject statusUI;
+
+    // Life
+    public int Life { get; private set; }
+    public bool _isDead;
 
     // Movement
     public float HorizontalVelocity { get; private set; }
-    private bool _isFacingRight;
+    public bool _isFacingRight;
 
     // Collision Check
     private RaycastHit2D _groundHit;
@@ -59,20 +74,29 @@ public class PlayerController : MonoBehaviour
     private bool _isDashFastFalling;
     private float _dashFastFallTime;
     private float _dashFastFallReleaseSpeed;
+    private float _rotationTimer;
 
     // Attack vars
     private bool _isAttacking;
-    private bool _isCharging;
+    public bool _isCharging;
+    private bool _isChargeAttacking;
     private Transform attackTransform;
     private LayerMask AttackableLayer;
     private RaycastHit2D[] hits;
+    private float _chargeTimer;
 
     #endregion
 
     private void Awake()
     {
-        // Health
-        Health = MovementStats.MaxHealth;
+        // Status UI
+        statusUI = GameObject.Find("---StatusUI---").transform.Find("Frame").gameObject;
+
+
+
+        // Life
+        Life = MovementStats.MaxLife;
+        _isDead = false;
 
         // Movement
         _isJumping = false;
@@ -81,15 +105,21 @@ public class PlayerController : MonoBehaviour
         _isFacingRight = true;
         _rb = GetComponent<Rigidbody2D>();
         _animator = GetComponent<Animator>();
+
+        // Attack
+        attackArea = GameObject.Find("AttackArea");
     }
 
     private void Update()
     {
+        StatusUICheck();
+
         CountTimers();
         JumpChecks();
         DashCheck();
         AttackCheck();
         LandCheck();
+        DieCheck();
     }
 
     private void FixedUpdate()
@@ -98,7 +128,9 @@ public class PlayerController : MonoBehaviour
         Jump();
         Dash();
         Attack();
+        ChargeAttack();
         Fall();
+        Die();
         Animations();
 
         if (_isGrounded)
@@ -120,6 +152,33 @@ public class PlayerController : MonoBehaviour
 
         _rb.velocity = new Vector2(HorizontalVelocity, VerticalVelocity);
     }
+
+    #region UI
+
+    #region StatusUI
+
+    private void StatusUICheck()
+    {
+        if (InputManager.StatusWasPressed)
+        {
+            StatusUIEvent.Invoke();
+        }
+    }
+
+    public void StatusUIManage()
+    {
+        statusUI.SetActive(!statusUI.activeSelf);
+    }
+
+    #endregion
+
+    #endregion
+
+    /*
+    -----------------------------------------------------------------------------------------------------------------
+    
+    -----------------------------------------------------------------------------------------------------------------
+    */
 
     #region Movement
 
@@ -414,13 +473,12 @@ public class PlayerController : MonoBehaviour
             float distance = Vector2.Distance(_dashDirection, MovementStats.DashDirections[i]);
 
             // check if this is a diagonal direction and apply bias
-            bool isDiagonal = (Mathf.Abs(MovementStats.DashDirections[i].x) == 1 && Mathf.Abs(MovementStats.DashDirections[i].y) == 1);
+            bool isDiagonal = (Mathf.Abs(MovementStats.DashDirections[i].x) > 0 && Mathf.Abs(MovementStats.DashDirections[i].y) > 0);
 
             if (isDiagonal)
             {
                 distance -= MovementStats.DashDiagonallyBias;
             }
-
             else if (distance < minDistance)
             {
                 minDistance = distance;
@@ -449,6 +507,8 @@ public class PlayerController : MonoBehaviour
             _isDashing = true;
             _dashTimer = 0f;
             _dashOnGroundTimer = MovementStats.TimeBtwDashesOnGround;
+
+            _rotationTimer = 0f;
         }
 
 
@@ -457,7 +517,7 @@ public class PlayerController : MonoBehaviour
 
     private void Dash()
     {
-        if (_isDashing)
+        if (_isDashing || _isAirDashing)
         {
             // stop the dash after the timer
             _dashTimer += Time.fixedDeltaTime;
@@ -490,8 +550,10 @@ public class PlayerController : MonoBehaviour
 
             if (_dashDirection.y != 0f || _isAirDashing)
             {
+                // 뒤 상수는 대각선 대시 방향 보정
                 VerticalVelocity = MovementStats.DashSpeed * _dashDirection.y;
             }
+
         }
 
         // handle dash cut time
@@ -500,7 +562,9 @@ public class PlayerController : MonoBehaviour
             if (VerticalVelocity > 0f)
                 if (_dashFastFallTime < MovementStats.DashTimeForUpwardsCancel)
                 {
-                    VerticalVelocity = Mathf.Lerp(_dashFastFallReleaseSpeed, 0f, (_dashFastFallTime / MovementStats.DashTimeForUpwardsCancel));
+                    // 땅에 있을 때 대시하면 높게 안 올라가기 때문에 주석처리
+                    //VerticalVelocity = Mathf.Lerp(_dashFastFallReleaseSpeed, 0f, (_dashFastFallTime / MovementStats.DashTimeForUpwardsCancel));
+                    VerticalVelocity += MovementStats.Gravity * MovementStats.DashGravityOnReleaseMultiplier * Time.fixedDeltaTime;
                 }
                 else if (_dashFastFallTime >= MovementStats.DashTimeForUpwardsCancel)
                 {
@@ -520,12 +584,12 @@ public class PlayerController : MonoBehaviour
     {
         _isDashFastFalling = false;
         _dashOnGroundTimer = -0.01f;
+        _dashTimer = 0f;
     }
 
     private void ResetDashes()
     {
         _numberOfDashesUsed = 0;
-
     }
 
     #endregion
@@ -556,16 +620,35 @@ public class PlayerController : MonoBehaviour
 
     private void AttackCheck()
     {
+        if (InputManager.AttackIsHolding)
+        {
+            _chargeTimer += Time.fixedDeltaTime;
+        }
         if (InputManager.AttackWasPressed)
         {
             InitiateAttack();
         }
-        _isCharging = InputManager.AttackIsHolding;
+        if (InputManager.AttackWasReleased)
+        {
+            if (_isCharging)
+            {
+                InitiateChargeAttack();
+            }
+        }
     }
 
     private void InitiateAttack()
     {
         _isAttacking = true;
+        _chargeTimer = 0f;
+    }
+
+    private void InitiateChargeAttack()
+    {
+        _isAttacking = false;
+        _chargeTimer = 0f;
+        _isCharging = false;
+        _isChargeAttacking = true;
     }
 
 
@@ -573,11 +656,38 @@ public class PlayerController : MonoBehaviour
     {
         if (_isAttacking)
         {
+            // Attack
+            /* Collider2D[] hitEnemies = attackArea.GetComponent<AttackAreaController>().GetHitEnemies();
 
+            foreach (Collider2D enemy in hitEnemies)
+            {
+                enemy.GetComponent<MonsterController>().Damaged(MovementStats.AttackDamage);
+            } */
+            attackArea.SetActive(true);
         }
-        if (_isCharging)
+        else if (!_isAttacking)
+        {
+            attackArea.SetActive(false);
+        }
+        if (_chargeTimer >= MovementStats.ChargeTime)
+        {
+            _isCharging = true;
+        }
+    }
+
+    private void ChargeAttack()
+    {
+        if (_isCharging && _isGrounded)
         {
             HorizontalVelocity = 0f;
+        }
+        if (_isChargeAttacking)
+        {
+            // Shoot Laser
+            ShootLaser();
+            _isChargeAttacking = false;
+
+
         }
     }
 
@@ -589,10 +699,79 @@ public class PlayerController : MonoBehaviour
     private void ResetAttackValues()
     {
         _isAttacking = false;
+        _isCharging = false;
+        _isChargeAttacking = false;
+        _chargeTimer = 0f;
 
     }
 
     #endregion
+
+
+    #region Shoot
+
+    public void ShootLaser()
+    {
+        GameObject clone = Instantiate(laserPrefab);
+
+        clone.transform.localScale = new Vector3(6f, 6f, 10f);
+        clone.transform.position = shootPoint.transform.position;
+        clone.transform.rotation = shootPoint.transform.rotation;
+    }
+
+    #endregion
+
+
+
+    #region Life
+
+    public void Damaged()
+    {
+        Life -= 1;
+    }
+
+    private void DieCheck()
+    {
+        if (Life <= 0)
+        {
+            _isDead = true;
+        }
+        else
+        {
+            _isDead = false;
+        }
+    }
+
+    private void Die()
+    {
+        if (_isDead)
+        {
+            // Disable player
+            // gameObject.SetActive(false);
+        }
+    }
+
+    #endregion
+
+    #region Level Up / EXP
+
+    public void LevelUp()
+    {
+        if (MovementStats.Level >= MovementStats.MaxLevel)
+        {
+            return;
+        }
+        MovementStats.Level += 1;
+        levelUpUIEvent.Invoke(MovementStats.Level);
+    }
+
+    public void ExpUp(int exp)
+    {
+        MovementStats.Exp += exp;
+        expUpUIEvent.Invoke(100, MovementStats.Exp);    // 100은 임의로 설정함, 수정 바람
+    }
+    #endregion
+
 
 
     #region Collision Check
@@ -647,28 +826,6 @@ public class PlayerController : MonoBehaviour
         {
             _bumpedHead = false;
         }
-
-        // #region Debug Visualization
-        // if (MovementStats.DebugShowHeadBumpBox)
-        // {
-        //     float headWidth = MovementStats.HeadWidth;
-
-        //     Color rayColor;
-        //     if (_bumpedHead)
-        //     {
-        //         rayColor = Color.green;
-        //     }
-        //     else
-        //     {
-        //         rayColor = Color.red;
-        //     }
-
-        //     Debug.DrawRay(new Vector2(boxCastOrigin.x - boxCastSize.x / 2 * headWidth, boxCastOrigin.y), Vector2.up * MovementStats.HeadDetectionRayLength, rayColor);
-        //     Debug.DrawRay(new Vector2(boxCastOrigin.x + (boxCastSize.x / 2) * headWidth, boxCastOrigin.y), Vector2.up * MovementStats.HeadDetectionRayLength, rayColor);
-        //     Debug.DrawRay(new Vector2(boxCastOrigin.x - boxCastSize.x / 2 * headWidth, boxCastOrigin.y + MovementStats.HeadDetectionRayLength), Vector2.right * boxCastSize.x * headWidth, rayColor);
-        // }
-
-        // #endregion
     }
 
     private void CollisionCheck()
@@ -711,38 +868,48 @@ public class PlayerController : MonoBehaviour
 
     private void Animations()
     {
+        if (_isDead)
         {
-            // movement animation
-
-            if (_isDashing || _isAirDashing)
+            if (!_animator.GetCurrentAnimatorStateInfo(0).IsName("Player Die"))
             {
-                _animator.SetBool("isJumping", false);
-                _animator.SetBool("isDashing", true);
-            }
-            else if (_isJumping)
-            {
-                if (VerticalVelocity >= 0)
-                {
-                    _animator.SetFloat("VerticalVelocity", 1);
-                }
-                else
-                {
-                    _animator.SetFloat("VerticalVelocity", -1);
-                }
-                _animator.SetBool("isJumping", true);
-                _animator.SetBool("isDashing", false);
-            }
-            else if (!_isJumping && !_isDashing)
-            {
-                _animator.SetFloat("HorizontalVelocity", Mathf.Abs(HorizontalVelocity));
-                _animator.SetBool("isJumping", false);
-                _animator.SetBool("isDashing", false);
+                _animator.SetTrigger("isDead");
             }
         }
+
+
         {
             // attack animation
             _animator.SetBool("isCharging", _isCharging);
             _animator.SetBool("isAttack1", _isAttacking);
+            _animator.SetFloat("HorizontalVelocity", Mathf.Abs(HorizontalVelocity));
+            _animator.SetBool("isJumping", _isJumping);
+            _animator.SetBool("isDashing", _isDashing || _isAirDashing);
+        }
+        {
+            _rotationTimer += Time.fixedDeltaTime;
+            if ((_isDashing || _isAirDashing) && !_isGrounded)
+            {
+                // 대시 방향으로 캐릭터 rotate
+                if (_isFacingRight)
+                    transform.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(_dashDirection.y, _dashDirection.x) * Mathf.Rad2Deg);
+                else
+                    transform.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(_dashDirection.y, _dashDirection.x) * Mathf.Rad2Deg + 180);
+            }
+            else if (_rotationTimer > 0.3f)
+            {
+                _rotationTimer = 0f;
+                transform.rotation = Quaternion.Euler(0, 0, 0);
+            }
+        }
+        {
+            if (_isCharging)
+            {
+                chargingFX.SetActive(true);
+            }
+            else
+            {
+                chargingFX.SetActive(false);
+            }
         }
     }
 
