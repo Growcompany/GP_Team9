@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class GreenSnailController : MonsterController
 {
-    public int experiencePoints = 50; // GreenSnail이 주는 경험치
-
     protected override void Awake()
     {
         base.Awake(); // 부모 클래스의 Awake 메서드 호출

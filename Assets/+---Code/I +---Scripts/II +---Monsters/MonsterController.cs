@@ -10,6 +10,8 @@ public class MonsterController : MonoBehaviour
     public float speed;
     [SerializeField]
     public float AttackRange;
+    [SerializeField]
+    protected int experiencePoints;
     protected Transform player;
     protected Animator anim;
     protected PolygonCollider2D polygonCollider;
@@ -23,7 +25,6 @@ public class MonsterController : MonoBehaviour
     protected string runAnim;
     protected bool FlipSprite = true;
     private bool isDying = false; // 몬스터가 이미 죽음을 처리 중인지 확인
-    public int experiencePoints; // 각 몬스터가 줄 경험치
 
     protected virtual void Awake()
     {
