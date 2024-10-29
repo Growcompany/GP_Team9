@@ -9,7 +9,7 @@ public class LaserController : MonoBehaviour
     public GameObject ExplosionPrefab;
 
     private bool isEnabled;
-
+    private float LaserDamage;
     private bool _isFacingRight;
 
     void Start()
@@ -19,7 +19,6 @@ public class LaserController : MonoBehaviour
 
         playerController = FindObjectOfType<PlayerController>();
         MovementStats = playerController.MovementStats;
-
         _isFacingRight = playerController._isFacingRight;
 
         if (!playerController._isFacingRight)
@@ -61,46 +60,83 @@ public class LaserController : MonoBehaviour
 
     // Is Trigger 옵션 해제 시 사용
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    //private void OnTriggerEnter2D(Collision2D collision)
+    //{
+    //    if (collision.collider.tag == "Player")
+    //        return;
+
+    //    else if (collision.collider.name == "Ground")
+    //    {
+    //        // Hit the ground
+    //    }
+
+    //    else if (collision.collider.tag == "Monster")
+    //    {
+    //        if (!isEnabled)
+    //        {
+    //            Debug.Log("Laser hit: " + collision.collider.gameObject + " with tag: " + collision.collider.tag);
+    //            MonsterController monsterController = collision.collider.gameObject.GetComponent<MonsterController>();
+    //            monsterController.Damaged(MovementStats.LaserDamage);
+    //            StartCoroutine(LaserRoutine(0.1f));
+    //        }
+
+    //    }
+
+    //    Explode(collision.contacts[0].point);
+    //}
+
+    private void OnTriggerEnter2D(Collider2D collider)
     {
-        if (collision.collider.tag == "Player")
+        playerController = FindObjectOfType<PlayerController>();
+        MovementStats = playerController.MovementStats;
+        LaserDamage = MovementStats.LaserDamage;
+        Debug.Log("LaserDamage when triggered: " + LaserDamage);
+
+        if (collider.tag == "Player")
             return;
 
-        else if (collision.collider.name == "Ground")
+        else if (collider.name == "Ground")
         {
-            // Hit the ground
+            Debug.Log("Laser hit the ground.");
         }
-
-        else if (collision.collider.tag == "Monster")
+        else if (collider.tag == "Monster")
         {
             if (!isEnabled)
             {
-                Debug.Log("Laser hit: " + collision.collider.gameObject + " with tag: " + collision.collider.tag);
-                MonsterController monsterController = collision.collider.gameObject.GetComponent<MonsterController>();
-                monsterController.Damaged(MovementStats.LaserDamage);
-                StartCoroutine(LaserRoutine(0.1f));
-            }
+                MonsterController monsterController = collider.GetComponentInParent<MonsterController>();
 
+                if (monsterController != null)
+                {
+                    Debug.Log("Applying damage to Monster: " + LaserDamage);
+                    monsterController.Damaged(LaserDamage);
+                    StartCoroutine(LaserRoutine(0.1f));
+                }
+                else
+                {
+                    Debug.LogWarning("MonsterController not found on the collided object.");
+                }
+            }
         }
 
-        Explode(collision.contacts[0].point);
+        Explode(collider.transform.position);
     }
+
 
     private void Explode(Vector2 position)
     {
         // Is Trigger 옵션 사용 시 사용
-        /* Destroy(gameObject);
+        Destroy(gameObject);
         Vector3 newPosition;
         if (_isFacingRight)
             newPosition = new Vector3(transform.position.x + 1f, transform.position.y, transform.position.z);
         else
             newPosition = new Vector3(transform.position.x - 1f, transform.position.y, transform.position.z);
         // Change to ExplosionPrefab
-        Instantiate(ExplosionPrefab, newPosition, Quaternion.identity); */
+        Instantiate(ExplosionPrefab, newPosition, Quaternion.identity);
 
-        // Is Trigger 옵션 해제 시 사용
-        Destroy(gameObject);
-        Instantiate(ExplosionPrefab, position, Quaternion.identity);
+        //// Is Trigger 옵션 해제 시 사용
+        //Destroy(gameObject);
+        //Instantiate(ExplosionPrefab, position, Quaternion.identity);
     }
 
     public IEnumerator LaserRoutine(float time)

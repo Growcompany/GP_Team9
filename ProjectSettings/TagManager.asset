@@ -5,7 +5,6 @@ TagManager:
   serializedVersion: 2
   tags:
   - Monster
-  - Obstacle
   layers:
   - Default
   - TransparentFX
@@ -16,8 +15,8 @@ TagManager:
   - 
   - 
   - Ground
-  - 
-  - 
+  - Player
+  - Monster
   - 
   - 
   - 
