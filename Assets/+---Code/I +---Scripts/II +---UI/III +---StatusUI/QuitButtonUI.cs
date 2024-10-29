@@ -13,7 +13,7 @@ public class QuitButtonUI : MonoBehaviour
         button.onClick.AddListener(Quit);
     }
 
-    private void OnDisable()
+    private void OnDestroy()
     {
         button.onClick.RemoveListener(Quit);
     }
