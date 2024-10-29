@@ -161,10 +161,8 @@ MonoBehaviour:
     handlenext: {x: -0.40907288, y: 0, z: -5.7757864}
     curveTypeRotation: 0
     rotationCurve:
-      serializedVersion: 2
       m_Curve:
-      - serializedVersion: 3
-        time: 0
+      - time: 0
         value: 0
         inSlope: 0.4573728
         outSlope: 0.4573728
@@ -172,8 +170,7 @@ MonoBehaviour:
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 1
+      - time: 1
         value: 1
         inSlope: 0.43870634
         outSlope: 0.43870634
@@ -186,10 +183,8 @@ MonoBehaviour:
       m_RotationOrder: 4
     curveTypePosition: 1
     positionCurve:
-      serializedVersion: 2
       m_Curve:
-      - serializedVersion: 3
-        time: 0
+      - time: 0
         value: 0
         inSlope: 0
         outSlope: 1
@@ -197,8 +192,7 @@ MonoBehaviour:
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 1
+      - time: 1
         value: 1
         inSlope: 1
         outSlope: 0
@@ -216,10 +210,8 @@ MonoBehaviour:
     handlenext: {x: -6.4742994, y: 0, z: -4.033576}
     curveTypeRotation: 0
     rotationCurve:
-      serializedVersion: 2
       m_Curve:
-      - serializedVersion: 3
-        time: 0
+      - time: 0
         value: 0
         inSlope: 0.4573728
         outSlope: 0.4573728
@@ -227,8 +219,7 @@ MonoBehaviour:
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 1
+      - time: 1
         value: 1
         inSlope: 0.43870634
         outSlope: 0.43870634
@@ -241,10 +232,8 @@ MonoBehaviour:
       m_RotationOrder: 4
     curveTypePosition: 1
     positionCurve:
-      serializedVersion: 2
       m_Curve:
-      - serializedVersion: 3
-        time: 0
+      - time: 0
         value: 0
         inSlope: 0
         outSlope: 1
@@ -252,8 +241,7 @@ MonoBehaviour:
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 1
+      - time: 1
         value: 1
         inSlope: 1
         outSlope: 0
@@ -271,10 +259,8 @@ MonoBehaviour:
     handlenext: {x: -0.44895935, y: 1.1033096, z: 5.799323}
     curveTypeRotation: 0
     rotationCurve:
-      serializedVersion: 2
       m_Curve:
-      - serializedVersion: 3
-        time: 0
+      - time: 0
         value: 0
         inSlope: 0.4573728
         outSlope: 0.4573728
@@ -282,8 +268,7 @@ MonoBehaviour:
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 1
+      - time: 1
         value: 1
         inSlope: 0.43870634
         outSlope: 0.43870634
@@ -296,10 +281,8 @@ MonoBehaviour:
       m_RotationOrder: 4
     curveTypePosition: 1
     positionCurve:
-      serializedVersion: 2
       m_Curve:
-      - serializedVersion: 3
-        time: 0
+      - time: 0
         value: 0
         inSlope: 0
         outSlope: 1
@@ -307,8 +290,7 @@ MonoBehaviour:
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 1
+      - time: 1
         value: 1
         inSlope: 1
         outSlope: 0
@@ -326,10 +308,8 @@ MonoBehaviour:
     handlenext: {x: 5.559801, y: -0, z: -0.029015541}
     curveTypeRotation: 0
     rotationCurve:
-      serializedVersion: 2
       m_Curve:
-      - serializedVersion: 3
-        time: 0
+      - time: 0
         value: 0
         inSlope: 0.4573728
         outSlope: 0.4573728
@@ -337,8 +317,7 @@ MonoBehaviour:
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 1
+      - time: 1
         value: 1
         inSlope: 0.43870634
         outSlope: 0.43870634
@@ -351,10 +330,8 @@ MonoBehaviour:
       m_RotationOrder: 4
     curveTypePosition: 1
     positionCurve:
-      serializedVersion: 2
       m_Curve:
-      - serializedVersion: 3
-        time: 0
+      - time: 0
         value: 0
         inSlope: 0
         outSlope: 1
@@ -362,8 +339,7 @@ MonoBehaviour:
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 1
+      - time: 1
         value: 1
         inSlope: 1
         outSlope: 0
@@ -381,10 +357,8 @@ MonoBehaviour:
     handlenext: {x: 4.0812035, y: -0.8790326, z: -5.007968}
     curveTypeRotation: 0
     rotationCurve:
-      serializedVersion: 2
       m_Curve:
-      - serializedVersion: 3
-        time: 0
+      - time: 0
         value: 0
         inSlope: 0.4573728
         outSlope: 0.4573728
@@ -392,8 +366,7 @@ MonoBehaviour:
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 1
+      - time: 1
         value: 1
         inSlope: 0.43870634
         outSlope: 0.43870634
@@ -406,10 +379,8 @@ MonoBehaviour:
       m_RotationOrder: 4
     curveTypePosition: 1
     positionCurve:
-      serializedVersion: 2
       m_Curve:
-      - serializedVersion: 3
-        time: 0
+      - time: 0
         value: 0
         inSlope: 0
         outSlope: 1
@@ -417,8 +388,7 @@ MonoBehaviour:
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 1
+      - time: 1
         value: 1
         inSlope: 1
         outSlope: 0
@@ -436,10 +406,8 @@ MonoBehaviour:
     handlenext: {x: -7.2626514, y: 0, z: -6.170559}
     curveTypeRotation: 0
     rotationCurve:
-      serializedVersion: 2
       m_Curve:
-      - serializedVersion: 3
-        time: 0
+      - time: 0
         value: 0
         inSlope: 0.4573728
         outSlope: 0.4573728
@@ -447,8 +415,7 @@ MonoBehaviour:
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 1
+      - time: 1
         value: 1
         inSlope: 0.43870634
         outSlope: 0.43870634
@@ -461,10 +428,8 @@ MonoBehaviour:
       m_RotationOrder: 4
     curveTypePosition: 1
     positionCurve:
-      serializedVersion: 2
       m_Curve:
-      - serializedVersion: 3
-        time: 0
+      - time: 0
         value: 0
         inSlope: 0
         outSlope: 1
@@ -472,8 +437,7 @@ MonoBehaviour:
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 1
+      - time: 1
         value: 1
         inSlope: 1
         outSlope: 0
@@ -491,10 +455,8 @@ MonoBehaviour:
     handlenext: {x: -2.2312834, y: 0, z: 3.4213858}
     curveTypeRotation: 0
     rotationCurve:
-      serializedVersion: 2
       m_Curve:
-      - serializedVersion: 3
-        time: 0
+      - time: 0
         value: 0
         inSlope: 0.4573728
         outSlope: 0.4573728
@@ -502,8 +464,7 @@ MonoBehaviour:
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 1
+      - time: 1
         value: 1
         inSlope: 0.43870634
         outSlope: 0.43870634
@@ -516,10 +477,8 @@ MonoBehaviour:
       m_RotationOrder: 4
     curveTypePosition: 1
     positionCurve:
-      serializedVersion: 2
       m_Curve:
-      - serializedVersion: 3
-        time: 0
+      - time: 0
         value: 0
         inSlope: 0
         outSlope: 1
@@ -527,8 +486,7 @@ MonoBehaviour:
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 1
+      - time: 1
         value: 1
         inSlope: 1
         outSlope: 0
@@ -546,10 +504,8 @@ MonoBehaviour:
     handlenext: {x: 6.825821, y: 0, z: 4.345196}
     curveTypeRotation: 0
     rotationCurve:
-      serializedVersion: 2
       m_Curve:
-      - serializedVersion: 3
-        time: 0
+      - time: 0
         value: 0
         inSlope: 0.4573728
         outSlope: 0.4573728
@@ -557,8 +513,7 @@ MonoBehaviour:
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 1
+      - time: 1
         value: 1
         inSlope: 0.43870634
         outSlope: 0.43870634
@@ -571,10 +526,8 @@ MonoBehaviour:
       m_RotationOrder: 4
     curveTypePosition: 1
     positionCurve:
-      serializedVersion: 2
       m_Curve:
-      - serializedVersion: 3
-        time: 0
+      - time: 0
         value: 0
         inSlope: 0
         outSlope: 1
@@ -582,8 +535,7 @@ MonoBehaviour:
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 1
+      - time: 1
         value: 1
         inSlope: 1
         outSlope: 0
@@ -596,13 +548,34 @@ MonoBehaviour:
       m_RotationOrder: 4
     chained: 1
   visual:
-    pathColor: {r: 0, g: 1, b: 0, a: 1}
-    inactivePathColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-    frustrumColor: {r: 1, g: 1, b: 1, a: 1}
-    handleColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+    pathColor:
+      r: 0
+      g: 1
+      b: 0
+      a: 1
+    inactivePathColor:
+      r: 0.5
+      g: 0.5
+      b: 0.5
+      a: 1
+    frustrumColor:
+      r: 1
+      g: 1
+      b: 1
+      a: 1
+    handleColor:
+      r: 1
+      g: 0.92156863
+      b: 0.015686275
+      a: 1
   looped: 1
   alwaysShow: 1
   afterLoop: 0
+  currentWaypointIndex: 0
+  currentTimeInWaypoint: 0
+  timePerSegment: 0
+  paused: 0
+  playing: 0
 --- !u!4 &47332222
 Transform:
   m_ObjectHideFlags: 0
@@ -757,6 +730,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e3126cbbf1c85a43b396850218ecc38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  startPos: {x: 0, y: 0, z: 0}
   height: 3
   speed: 3
 --- !u!23 &467876387

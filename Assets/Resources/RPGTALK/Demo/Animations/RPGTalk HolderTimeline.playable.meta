@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 443abc0a3df8c453db1f0aa302a08ed1
+timeCreated: 1505254170
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 73392
+  packageName: RPGTalk
+  packageVersion: 1.3.1
+  assetPath: Assets/RPGTALK/Demo/Animations/RPGTalk HolderTimeline.playable
+  uploadId: 301028

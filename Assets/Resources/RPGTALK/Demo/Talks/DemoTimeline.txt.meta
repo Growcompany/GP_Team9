@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: c3d22b59287bf4be0afadd2e4ab3bacc
+timeCreated: 1445881609
+licenseType: Store
+TextScriptImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 73392
+  packageName: RPGTalk
+  packageVersion: 1.3.1
+  assetPath: Assets/Resources/RPGTALK/Demo/Talks/DemoTimeline.txt
+  uploadId: 301028

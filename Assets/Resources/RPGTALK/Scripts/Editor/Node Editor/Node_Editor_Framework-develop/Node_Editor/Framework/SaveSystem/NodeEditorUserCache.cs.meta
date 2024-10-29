@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: 1bb1bb38f09a0534daf0b17a3e45693c
+timeCreated: 1466090292
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 73392
+  packageName: RPGTalk
+  packageVersion: 1.3.1
+  assetPath: Assets/Resources/RPGTALK/Scripts/Editor/Node Editor/Node_Editor_Framework-develop/Node_Editor/Framework/SaveSystem/NodeEditorUserCache.cs
+  uploadId: 301028
