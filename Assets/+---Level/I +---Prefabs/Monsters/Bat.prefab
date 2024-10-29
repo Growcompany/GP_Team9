@@ -125,4 +125,5 @@ MonoBehaviour:
   hp: 100
   speed: 5
   AttackRange: 2
+  experiencePoints: 0
   detectionRange: 10

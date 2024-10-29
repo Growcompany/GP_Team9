@@ -10,6 +10,8 @@ public class MonsterController : MonoBehaviour
     public float speed;
     [SerializeField]
     public float AttackRange;
+    [SerializeField]
+    protected int experiencePoints;
     protected Transform player;
     protected Animator anim;
     protected PolygonCollider2D polygonCollider;
@@ -201,5 +203,10 @@ public class MonsterController : MonoBehaviour
         Debug.Log("Monster is dying");
         isDying = true; // 죽음 상태 설정
         anim.SetTrigger("death"); // 죽음 애니메이션 시작
+        PlayerController player = FindObjectOfType<PlayerController>();
+        if (player != null)
+        {
+            player.ExpUp(experiencePoints); // 경험치 전달
+        }
     }
 }
