@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 2b0031d8fffa64f098e26e33a1d1a135
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 73392
+  packageName: RPGTalk
+  packageVersion: 1.3.1
+  assetPath: Assets/RPGTALK/Demo/Languages/PT_BR.asset
+  uploadId: 301028

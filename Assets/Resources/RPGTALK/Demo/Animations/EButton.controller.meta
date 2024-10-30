@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: c3fec3a76951344b694af0cb7478377a
+timeCreated: 1505942643
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 9100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 73392
+  packageName: RPGTalk
+  packageVersion: 1.3.1
+  assetPath: Assets/RPGTALK/Demo/Animations/EButton.controller
+  uploadId: 301028
