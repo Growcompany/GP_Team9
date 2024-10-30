@@ -9,7 +9,6 @@ public class BossEntrance : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            Debug.LogWarning("boss");
             SceneManager.LoadScene("BossScene");
         }
     }
