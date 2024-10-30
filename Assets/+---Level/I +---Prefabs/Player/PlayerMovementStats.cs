@@ -7,6 +7,7 @@ public class PlayerMovementStats : ScriptableObject
 {
     [Header("Status")]
     [Range(1, 10)] public int MaxLife = 5;
+    [Range(1, 10)] public int Life = 5;
     [Range(0, 1000)] public int Exp = 10;
     [Range(1, 100)] public int Level = 1;
     [Range(1, 100)] public int Strength = 1;
@@ -26,12 +27,13 @@ public class PlayerMovementStats : ScriptableObject
 
     [Header("Grounded/Collision Checks")]
     public LayerMask GroundLayer;
+    public LayerMask MonsterLayer;
     public float GroundDetectionRayLength = 0.02f;
     public float HeadDetectionRayLength = 0.02f;
     [Range(0f, 1f)] public float HeadWidth = 0.75f;
 
     [Header("Jump")]
-    public float JumpHeight = 6.5f;
+    public float JumpHeight = 10f;
     [Range(1f, 1.1f)] public float JumpHeightCompensationFactor = 1.054f;
     public float TimeTillJumpApex = 0.35f;
     [Range(0.01f, 5f)] public float GravityOnReleaseMultiplier = 2f;
@@ -73,6 +75,7 @@ public class PlayerMovementStats : ScriptableObject
     [Header("Laser")]
     [Range(1, 50)] public int LaserSpeed = 25;
     [Range(1f, 500f)] public float LaserDamage = 100f;
+    [Range(0f, 5f)] public float LaserCoolTime = 5f;
 
 
     [Header("Debug")]
