@@ -12,6 +12,9 @@ public class PlayerLifeUI : MonoBehaviour
 
     int previousLifes;
 
+    [Tooltip("player에서 life 만들면 삭제")]
+    public int currentLifes;
+
     private void Start()
     {
         previousLifes = GameManager.instance.player.MovementStats.MaxLife;
@@ -36,7 +39,7 @@ public class PlayerLifeUI : MonoBehaviour
 
     private void OnDestroy()
     {
-        GameManager.instance.player.lifeUpdateUIEvent.RemoveAllListeners();
+        GameManager.instance.player.lifeUpdateUIEvent.RemoveListener(UpdateLifeImages);
 
     }
 
@@ -52,7 +55,7 @@ public class PlayerLifeUI : MonoBehaviour
         {
             for(int i = 0; i < Math.Abs(diff); i++)
             {
-                lifeImages[Math.Clamp(previousLifes - 1 - i, 0, 9)].gameObject.SetActive(false);
+                lifeImages[previousLifes - 1 - i].gameObject.SetActive(false);
             }
         }
 
@@ -61,7 +64,7 @@ public class PlayerLifeUI : MonoBehaviour
         {
             for(int i = 0; i < Math.Abs(diff); i++)
             {
-                lifeImages[Math.Clamp(previousLifes + i, 0, 9)].gameObject.SetActive(true);
+                lifeImages[previousLifes + i].gameObject.SetActive(true);
             }
         }
 

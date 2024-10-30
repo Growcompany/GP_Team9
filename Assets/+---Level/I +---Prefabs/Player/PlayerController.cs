@@ -93,6 +93,8 @@ public class PlayerController : MonoBehaviour
         // Status UI
         statusUI = GameObject.Find("---StatusUI---").transform.Find("Frame").gameObject;
 
+
+
         // Life
         Life = MovementStats.MaxLife;
         _isDead = false;
@@ -621,10 +623,7 @@ public class PlayerController : MonoBehaviour
     {
         if (InputManager.AttackIsHolding)
         {
-            if (GameManager.instance.coolTimeRatio > 0.0f)
-                _chargeTimer = 0f;
-            else
-                _chargeTimer += Time.fixedDeltaTime;
+            _chargeTimer += Time.fixedDeltaTime;
         }
         if (InputManager.AttackWasPressed)
         {
@@ -658,6 +657,13 @@ public class PlayerController : MonoBehaviour
     {
         if (_isAttacking)
         {
+            // Attack
+            /* Collider2D[] hitEnemies = attackArea.GetComponent<AttackAreaController>().GetHitEnemies();
+
+            foreach (Collider2D enemy in hitEnemies)
+            {
+                enemy.GetComponent<MonsterController>().Damaged(MovementStats.AttackDamage);
+            } */
             attackArea.SetActive(true);
         }
         else if (!_isAttacking)

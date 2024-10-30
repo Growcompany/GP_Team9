@@ -10,6 +10,9 @@ public class PlusMinusButtonUI : MonoBehaviour
     [SerializeField] Button plus;
 
     public CurrentStatusUI currentStatus;
+
+
+
     private void Awake()
     {
         if(minus == null)
