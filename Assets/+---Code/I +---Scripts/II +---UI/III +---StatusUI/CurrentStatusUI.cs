@@ -68,10 +68,24 @@ public class CurrentStatusUI : MonoBehaviour
         pointTextUI.onChanged.Invoke();
     }
 
-    public void Confirm()
+    // 내부 초기화용
+    private void Confirm()
     {
         previousValue = currentValue;
         changesText.enabled = false;
         diff = 0;
+    }
+
+    public void Confirm(StatusType type)
+    {
+        switch(type)
+        {
+            case StatusType.Life:           GameManager.instance.player.MovementStats.MaxLife = currentValue;       break;
+            case StatusType.Strength:       GameManager.instance.player.MovementStats.Strength = currentValue;      break;
+            case StatusType.Dodge:          GameManager.instance.player.MovementStats.Dodge = currentValue;         break;
+            case StatusType.SkillCoolTime:  GameManager.instance.player.MovementStats.SkillCoolTime = currentValue; break;
+        }
+
+        Confirm();
     }
 }
