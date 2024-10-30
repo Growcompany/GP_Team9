@@ -10,6 +10,8 @@ public class MonsterController : MonoBehaviour
     public float speed;
     [SerializeField]
     public float AttackRange;
+    [SerializeField]
+    protected int experiencePoints;
     protected Transform player;
     protected Animator anim;
     protected PolygonCollider2D polygonCollider;
@@ -22,7 +24,7 @@ public class MonsterController : MonoBehaviour
     protected string idleAnim;
     protected string runAnim;
     protected bool FlipSprite = true;
-
+    private bool isDying = false; // 몬스터가 이미 죽음을 처리 중인지 확인
 
     protected virtual void Awake()
     {
@@ -48,6 +50,17 @@ public class MonsterController : MonoBehaviour
 
     protected virtual void Update()
     {
+
+        if (isDying) // 죽음 상태일 때 나머지 애니메이션 건너뜀
+        {
+            AnimatorStateInfo stateInfo = anim.GetCurrentAnimatorStateInfo(0);
+            if (stateInfo.IsName("death") && stateInfo.normalizedTime >= 1.0f)
+            {
+                Destroy(gameObject);
+            }
+            return; // 더 이상 애니메이션 트리거나 업데이트 작업을 하지 않음
+        }
+
         DirCheck(); // �÷��̾��� ��ġ�� ���� ��������Ʈ ������
 
         float distanceToPlayer = Vector3.Distance(transform.position, player.position);
@@ -84,19 +97,10 @@ public class MonsterController : MonoBehaviour
             Debug.Log("idleAnim");
         }
 
-
-        // ��������Ʈ ����� ��� �ݶ��̴� ������Ʈ
         if (spriteRenderer.sprite != previousSprite)
         {
             UpdateCollider();
             previousSprite = spriteRenderer.sprite; // ���� ��������Ʈ�� ���� ��������Ʈ�� ����
-        }
-
-        // death �ִϸ��̼��� ������ ������Ʈ ����
-        AnimatorStateInfo stateInfo = anim.GetCurrentAnimatorStateInfo(0);
-        if (stateInfo.IsName("death") && stateInfo.normalizedTime >= 1.0f)
-        {
-            Destroy(gameObject);
         }
 
     }
@@ -122,14 +126,29 @@ public class MonsterController : MonoBehaviour
     {
         polygonCollider.pathCount = 0;
 
-        // ��������Ʈ�� ���� ��θ� ������ ����Ʈ ����
+        // 현재 Sprite의 모양을 가져옵니다.
         List<Vector2> physicsShape = new List<Vector2>();
-
-        // ���� ��������Ʈ���� ���� ��� ��������
         spriteRenderer.sprite.GetPhysicsShape(0, physicsShape);
 
-        // ���� ��θ� ������ �ݶ��̴��� ����
+        // Sprite가 플립된 상태를 반영해 Collider 좌표 반전 적용
+        for (int i = 0; i < physicsShape.Count; i++)
+        {
+            Vector2 point = physicsShape[i];
+
+            if (spriteRenderer.flipX)
+                point.x *= -1; // X축이 뒤집히도록 설정
+
+            if (spriteRenderer.flipY)
+                point.y *= -1; // Y축이 뒤집히도록 설정
+
+            physicsShape[i] = point;
+        }
+
+        // Collider의 모양을 업데이트
         polygonCollider.SetPath(0, physicsShape.ToArray());
+
+        // Collider의 Trigger 상태를 항상 유지
+        polygonCollider.isTrigger = true;
     }
 
     void DirCheck()
@@ -168,6 +187,7 @@ public class MonsterController : MonoBehaviour
 
     public virtual void Damaged(float amount)
     {
+        Debug.Log("Monster is dying Damaged: "+amount);
         anim.SetTrigger("hit");
         hp -= amount;
         if (hp <= 0)
@@ -178,6 +198,15 @@ public class MonsterController : MonoBehaviour
 
     protected virtual void Die()
     {
-        anim.SetTrigger("death");
+        if (isDying) return; // 이미 죽음 상태라면 중복 호출 방지
+
+        Debug.Log("Monster is dying");
+        isDying = true; // 죽음 상태 설정
+        anim.SetTrigger("death"); // 죽음 애니메이션 시작
+        PlayerController player = FindObjectOfType<PlayerController>();
+        if (player != null)
+        {
+            player.ExpUp(experiencePoints); // 경험치 전달
+        }
     }
 }
