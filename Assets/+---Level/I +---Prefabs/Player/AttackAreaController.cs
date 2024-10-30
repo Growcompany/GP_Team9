@@ -9,7 +9,7 @@ public class AttackAreaController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        playerController = FindObjectOfType<PlayerController>();
+        playerController = Object.FindFirstObjectByType<PlayerController>();
         MovementStats = playerController.MovementStats;
     }
 
@@ -31,9 +31,8 @@ public class AttackAreaController : MonoBehaviour
 
         else if (collider.tag == "Monster")
         {
-            MonsterController monsterController = collider.gameObject.GetComponent<MonsterController>();
-            monsterController.Damaged(MovementStats.AttackDamage);
-            Debug.Log(MovementStats.AttackDamage);
+            //MonsterController monsterController = collider.gameObject.GetComponent<MonsterController>();
+            //monsterController.Damaged(MovementStats.AttackDamage);
             // collider.gameObject.BroadcastMessage("Damaged", MovementStats.AttackDamage);
         }
     }
