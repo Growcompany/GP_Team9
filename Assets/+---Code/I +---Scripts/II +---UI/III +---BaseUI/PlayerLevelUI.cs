@@ -26,8 +26,8 @@ public class PlayerLevelUI : MonoBehaviour
 
     private void OnDestroy()
     {
-        GameManager.instance.player.levelUpUIEvent.RemoveListener(UpdateLevelTextUI);
-        GameManager.instance.player.expUpUIEvent.RemoveListener(UpdateExpUI);
+        GameManager.instance.player.levelUpUIEvent.RemoveAllListeners();
+        GameManager.instance.player.expUpUIEvent.RemoveAllListeners();
     }
 
     // TODO: Player¿¡¼­

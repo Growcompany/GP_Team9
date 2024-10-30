@@ -10,6 +10,9 @@ public class ChangeRoom : MonoBehaviour
 
     public void Start()
     {
+        BaseUI = GameObject.Find("---BaseUI---");
+        StatusUI = GameObject.Find("---StatusUI---");
+
         // StatusUI, BaseUI의 Canvas 비활성화
         if (StatusUI != null)
         {

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.Loading;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -66,6 +67,20 @@ public class CurrentStatusUI : MonoBehaviour
 
         // PointTextUI 바꾸기(오른쪽 상단)
         pointTextUI.onChanged.Invoke();
+    }
+
+    public void Load(StatusType type)
+    {
+        switch (type)
+        {
+            case StatusType.Life:               currentValue = GameManager.instance.player.MovementStats.MaxLife;        break;
+            case StatusType.Strength:           currentValue = GameManager.instance.player.MovementStats.Strength;       break;
+            case StatusType.Dodge:              currentValue = GameManager.instance.player.MovementStats.Dodge;          break;
+            case StatusType.SkillCoolTime:      currentValue = GameManager.instance.player.MovementStats.SkillCoolTime;  break;
+        }
+
+        currentStateText.text = currentValue.ToString();
+        previousValue = currentValue;
     }
 
     // 내부 초기화용
