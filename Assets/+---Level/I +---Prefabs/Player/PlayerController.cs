@@ -729,6 +729,18 @@ public class PlayerController : MonoBehaviour
     {
         MovementStats.Life -= 1;
         lifeUpdateUIEvent.Invoke(MovementStats.Life);
+        StartCoroutine(ChangeRed());
+    }
+
+    private IEnumerator ChangeRed()
+    {
+        GetComponent<SpriteRenderer>().color = Color.red;
+        yield return new WaitForSeconds(0.1f);
+        GetComponent<SpriteRenderer>().color = Color.white;
+        yield return new WaitForSeconds(0.1f);
+        GetComponent<SpriteRenderer>().color = Color.red;
+        yield return new WaitForSeconds(0.1f);
+        GetComponent<SpriteRenderer>().color = Color.white;
     }
 
     private void DieCheck()
