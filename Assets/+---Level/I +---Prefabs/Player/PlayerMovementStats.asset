@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MaxLife: 5
   Life: 5
-  Exp: 60
-  Level: 6
+  Exp: 10
+  Level: 1
   Strength: 1
   Dodge: 1
   SkillCoolTime: 1
@@ -53,6 +53,7 @@ MonoBehaviour:
   DashDiagonallyBias: 0.4
   DashGravityOnReleaseMultiplier: 1
   DashTimeForUpwardsCancel: 0.027
+  AvoidanceTime: 0.4
   AttackRange: 1.5
   AttackTime: 0.1
   AttackSpeed: 40

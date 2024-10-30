@@ -32,7 +32,9 @@ public class PlayerController : MonoBehaviour
 
     // Life
     public bool _isDead;
-    public bool _isBeingDamaged;
+    private bool _isBeingDamaged;
+    private bool _isAvoiding;
+    private float _avoidanceTimer;
 
     // Movement
     public float HorizontalVelocity { get; private set; }
@@ -101,6 +103,8 @@ public class PlayerController : MonoBehaviour
         // Life
         _isDead = false;
         _isBeingDamaged = false;
+        _isAvoiding = false;
+        _avoidanceTimer = 0f;
 
         // Movement
         _isJumping = false;
@@ -733,12 +737,15 @@ public class PlayerController : MonoBehaviour
     {
         if (!_isBeingDamaged)
         {
-            _isBeingDamaged = true;
-            MovementStats.Life -= 1;
-            lifeUpdateUIEvent.Invoke(MovementStats.Life);
-            StartCoroutine(ChangeRed());
-            yield return new WaitForSeconds(1f);
-            _isBeingDamaged = false;
+            if (!_isAvoiding)
+            {
+                _isBeingDamaged = true;
+                MovementStats.Life -= 1;
+                lifeUpdateUIEvent.Invoke(MovementStats.Life);
+                StartCoroutine(ChangeRed());
+                yield return new WaitForSeconds(1f);
+                _isBeingDamaged = false;
+            }
         }
     }
 
@@ -875,11 +882,29 @@ public class PlayerController : MonoBehaviour
 
     }
 
+    private void AvoidCheck()
+    {
+        if (_avoidanceTimer < 5f)
+        {
+            _avoidanceTimer += Time.fixedDeltaTime;
+        }
+        if (_isDashing || _isAirDashing)
+        {
+            _isAvoiding = true;
+            _avoidanceTimer = 0f;
+        }
+        if (_avoidanceTimer > MovementStats.AvoidanceTime)
+        {
+            _isAvoiding = false;
+        }
+    }
+
     private void CollisionCheck()
     {
         IsGrounded();
         BumpedHead();
         PlayerCollidesWithMonster();
+        AvoidCheck();
     }
 
 
