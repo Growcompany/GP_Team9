@@ -91,6 +91,7 @@ public class PlayerController : MonoBehaviour
     {
         // Status UI
         statusUI = GameObject.Find("---StatusUI---").transform.Find("Frame").gameObject;
+        statusUI.SetActive(false);
 
         // Status
         ResetStatus();
