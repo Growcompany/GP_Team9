@@ -93,8 +93,6 @@ public class PlayerController : MonoBehaviour
         // Status UI
         statusUI = GameObject.Find("---StatusUI---").transform.Find("Frame").gameObject;
 
-
-
         // Life
         Life = MovementStats.MaxLife;
         _isDead = false;

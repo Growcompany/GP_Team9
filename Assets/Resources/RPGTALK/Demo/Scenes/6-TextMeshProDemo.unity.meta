@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 562ecd269f6b3440e8d2ced86241ead9
+timeCreated: 1505957495
+licenseType: Store
+DefaultImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 73392
+  packageName: RPGTalk
+  packageVersion: 1.3.1
+  assetPath: Assets/RPGTALK/Demo/Scenes/6-TextMeshProDemo.unity
+  uploadId: 301028
