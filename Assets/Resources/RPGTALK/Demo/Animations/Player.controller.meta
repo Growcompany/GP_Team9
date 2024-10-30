@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 26dcb507725f747739923b0296a29efe
+timeCreated: 1475719556
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 73392
+  packageName: RPGTalk
+  packageVersion: 1.3.1
+  assetPath: Assets/RPGTALK/Demo/Animations/Player.controller
+  uploadId: 301028

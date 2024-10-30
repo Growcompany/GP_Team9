@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 5f89923001ac44b0cb969da9ea280f1a
+timeCreated: 1475715910
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 73392
+  packageName: RPGTalk
+  packageVersion: 1.3.1
+  assetPath: Assets/RPGTALK/Demo/Animations/FunnyGuy_Talking.anim
+  uploadId: 301028

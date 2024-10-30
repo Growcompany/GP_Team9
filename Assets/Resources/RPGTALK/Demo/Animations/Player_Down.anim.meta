@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 70eacb16145424f44a4b0d22972ecff8
+timeCreated: 1475719586
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 73392
+  packageName: RPGTalk
+  packageVersion: 1.3.1
+  assetPath: Assets/RPGTALK/Demo/Animations/Player_Down.anim
+  uploadId: 301028
