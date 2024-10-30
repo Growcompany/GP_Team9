@@ -1,0 +1,121 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\\uBC30\uC6B0\uADFC\\Documents\\GitHub\\GP_Team9\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{0379A158-CAF3-472D-7EDA-35925C3B94BC}|Assembly-CSharp.csproj|C:\\Users\\\uBC30\uC6B0\uADFC\\Documents\\GitHub\\GP_Team9\\assets\\\u002B---level\\i \u002B---prefabs\\player\\attackareacontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0379A158-CAF3-472D-7EDA-35925C3B94BC}|Assembly-CSharp.csproj|solutionrelative:assets\\\u002B---level\\i \u002B---prefabs\\player\\attackareacontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0379A158-CAF3-472D-7EDA-35925C3B94BC}|Assembly-CSharp.csproj|C:\\Users\\\uBC30\uC6B0\uADFC\\Documents\\GitHub\\GP_Team9\\assets\\\u002B---level\\i \u002B---prefabs\\player\\playercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0379A158-CAF3-472D-7EDA-35925C3B94BC}|Assembly-CSharp.csproj|solutionrelative:assets\\\u002B---level\\i \u002B---prefabs\\player\\playercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0379A158-CAF3-472D-7EDA-35925C3B94BC}|Assembly-CSharp.csproj|c:\\users\\\uBC30\uC6B0\uADFC\\documents\\github\\gp_team9\\assets\\wookun\\destructibleobstacle.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0379A158-CAF3-472D-7EDA-35925C3B94BC}|Assembly-CSharp.csproj|solutionrelative:assets\\wookun\\destructibleobstacle.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0379A158-CAF3-472D-7EDA-35925C3B94BC}|Assembly-CSharp.csproj|C:\\Users\\\uBC30\uC6B0\uADFC\\Documents\\GitHub\\GP_Team9\\assets\\wookun\\ghost_trap\\ghostcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0379A158-CAF3-472D-7EDA-35925C3B94BC}|Assembly-CSharp.csproj|solutionrelative:assets\\wookun\\ghost_trap\\ghostcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0379A158-CAF3-472D-7EDA-35925C3B94BC}|Assembly-CSharp.csproj|C:\\Users\\\uBC30\uC6B0\uADFC\\Documents\\GitHub\\GP_Team9\\assets\\wookun\\ghost_trap\\explosion2d\\selfdestruct.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0379A158-CAF3-472D-7EDA-35925C3B94BC}|Assembly-CSharp.csproj|solutionrelative:assets\\wookun\\ghost_trap\\explosion2d\\selfdestruct.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0379A158-CAF3-472D-7EDA-35925C3B94BC}|Assembly-CSharp.csproj|C:\\Users\\\uBC30\uC6B0\uADFC\\Documents\\GitHub\\GP_Team9\\assets\\\u002B---code\\i \u002B---scripts\\ii \u002B---monsters\\batcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0379A158-CAF3-472D-7EDA-35925C3B94BC}|Assembly-CSharp.csproj|solutionrelative:assets\\\u002B---code\\i \u002B---scripts\\ii \u002B---monsters\\batcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 3,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "DestructibleObstacle.cs",
+              "DocumentMoniker": "C:\\Users\\\uBC30\uC6B0\uADFC\\Documents\\GitHub\\GP_Team9\\Assets\\wookun\\DestructibleObstacle.cs",
+              "RelativeDocumentMoniker": "Assets\\wookun\\DestructibleObstacle.cs",
+              "ToolTip": "C:\\Users\\\uBC30\uC6B0\uADFC\\Documents\\GitHub\\GP_Team9\\Assets\\wookun\\DestructibleObstacle.cs",
+              "RelativeToolTip": "Assets\\wookun\\DestructibleObstacle.cs",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAywBsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-29T11:26:44.661Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "SelfDestruct.cs",
+              "DocumentMoniker": "C:\\Users\\\uBC30\uC6B0\uADFC\\Documents\\GitHub\\GP_Team9\\Assets\\wookun\\ghost_trap\\Explosion2D\\SelfDestruct.cs",
+              "RelativeDocumentMoniker": "Assets\\wookun\\ghost_trap\\Explosion2D\\SelfDestruct.cs",
+              "ToolTip": "C:\\Users\\\uBC30\uC6B0\uADFC\\Documents\\GitHub\\GP_Team9\\Assets\\wookun\\ghost_trap\\Explosion2D\\SelfDestruct.cs",
+              "RelativeToolTip": "Assets\\wookun\\ghost_trap\\Explosion2D\\SelfDestruct.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-28T11:29:41.152Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "GhostController.cs",
+              "DocumentMoniker": "C:\\Users\\\uBC30\uC6B0\uADFC\\Documents\\GitHub\\GP_Team9\\Assets\\wookun\\ghost_trap\\GhostController.cs",
+              "RelativeDocumentMoniker": "Assets\\wookun\\ghost_trap\\GhostController.cs",
+              "ToolTip": "C:\\Users\\\uBC30\uC6B0\uADFC\\Documents\\GitHub\\GP_Team9\\Assets\\wookun\\ghost_trap\\GhostController.cs",
+              "RelativeToolTip": "Assets\\wookun\\ghost_trap\\GhostController.cs",
+              "ViewState": "AgIAAD0AAAAAAAAAAAAowE4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-28T11:04:43.82Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "AttackAreaController.cs",
+              "DocumentMoniker": "C:\\Users\\\uBC30\uC6B0\uADFC\\Documents\\GitHub\\GP_Team9\\Assets\\\u002B---Level\\I \u002B---Prefabs\\Player\\AttackAreaController.cs",
+              "RelativeDocumentMoniker": "Assets\\\u002B---Level\\I \u002B---Prefabs\\Player\\AttackAreaController.cs",
+              "ToolTip": "C:\\Users\\\uBC30\uC6B0\uADFC\\Documents\\GitHub\\GP_Team9\\Assets\\\u002B---Level\\I \u002B---Prefabs\\Player\\AttackAreaController.cs",
+              "RelativeToolTip": "Assets\\\u002B---Level\\I \u002B---Prefabs\\Player\\AttackAreaController.cs",
+              "ViewState": "AgIAAA0AAAAAAAAAAAAAwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-29T11:22:53.363Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "PlayerController.cs",
+              "DocumentMoniker": "C:\\Users\\\uBC30\uC6B0\uADFC\\Documents\\GitHub\\GP_Team9\\Assets\\\u002B---Level\\I \u002B---Prefabs\\Player\\PlayerController.cs",
+              "RelativeDocumentMoniker": "Assets\\\u002B---Level\\I \u002B---Prefabs\\Player\\PlayerController.cs",
+              "ToolTip": "C:\\Users\\\uBC30\uC6B0\uADFC\\Documents\\GitHub\\GP_Team9\\Assets\\\u002B---Level\\I \u002B---Prefabs\\Player\\PlayerController.cs",
+              "RelativeToolTip": "Assets\\\u002B---Level\\I \u002B---Prefabs\\Player\\PlayerController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-28T09:27:22.59Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "BatController.cs",
+              "DocumentMoniker": "C:\\Users\\\uBC30\uC6B0\uADFC\\Documents\\GitHub\\GP_Team9\\Assets\\\u002B---Code\\I \u002B---Scripts\\II \u002B---Monsters\\BatController.cs",
+              "RelativeDocumentMoniker": "Assets\\\u002B---Code\\I \u002B---Scripts\\II \u002B---Monsters\\BatController.cs",
+              "ToolTip": "C:\\Users\\\uBC30\uC6B0\uADFC\\Documents\\GitHub\\GP_Team9\\Assets\\\u002B---Code\\I \u002B---Scripts\\II \u002B---Monsters\\BatController.cs",
+              "RelativeToolTip": "Assets\\\u002B---Code\\I \u002B---Scripts\\II \u002B---Monsters\\BatController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-28T08:59:45.538Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
