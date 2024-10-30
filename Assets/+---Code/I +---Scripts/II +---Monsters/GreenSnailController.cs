@@ -14,5 +14,4 @@ public class GreenSnailController : MonsterController
         runAnim = "run";
     }
 
-
 }

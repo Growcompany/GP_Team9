@@ -154,6 +154,7 @@ MonoBehaviour:
   hp: 200
   speed: 3
   AttackRange: 2.5
+  experiencePoints: 0
   detectionRange: 8
 --- !u!61 &2954519071094950218
 BoxCollider2D:

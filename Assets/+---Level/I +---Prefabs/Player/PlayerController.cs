@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
     public UnityEvent<int> levelUpUIEvent;
     public UnityEvent<int, int> expUpUIEvent;
     public UnityEvent<int> lifeUpdateUIEvent;
+    public UnityEvent skillCoolTimeUIEvent;
 
     public GameObject laserPrefab;
     public GameObject shootPoint;
@@ -620,7 +621,10 @@ public class PlayerController : MonoBehaviour
     {
         if (InputManager.AttackIsHolding)
         {
-            _chargeTimer += Time.fixedDeltaTime;
+            if (GameManager.instance.coolTimeRatio > 0.0f)
+                _chargeTimer = 0f;
+            else
+                _chargeTimer += Time.fixedDeltaTime;
         }
         if (InputManager.AttackWasPressed)
         {
@@ -654,20 +658,14 @@ public class PlayerController : MonoBehaviour
     {
         if (_isAttacking)
         {
-            // Attack
-            /* Collider2D[] hitEnemies = attackArea.GetComponent<AttackAreaController>().GetHitEnemies();
-
-            foreach (Collider2D enemy in hitEnemies)
-            {
-                enemy.GetComponent<MonsterController>().Damaged(MovementStats.AttackDamage);
-            } */
             attackArea.SetActive(true);
         }
         else if (!_isAttacking)
         {
             attackArea.SetActive(false);
         }
-        if (_chargeTimer >= MovementStats.ChargeTime)
+
+        if (_chargeTimer >= MovementStats.ChargeTime && GameManager.instance.coolTimeRatio <= 0.0f)
         {
             _isCharging = true;
         }
@@ -679,13 +677,15 @@ public class PlayerController : MonoBehaviour
         {
             HorizontalVelocity = 0f;
         }
+
         if (_isChargeAttacking)
         {
             // Shoot Laser
             ShootLaser();
             _isChargeAttacking = false;
 
-
+            StartCoroutine(GameManager.instance.CalculateCoolTime(5.0f));
+            skillCoolTimeUIEvent.Invoke();
         }
     }
 
@@ -726,6 +726,7 @@ public class PlayerController : MonoBehaviour
     public void Damaged()
     {
         Life -= 1;
+        lifeUpdateUIEvent.Invoke(Life);
     }
 
     private void DieCheck()

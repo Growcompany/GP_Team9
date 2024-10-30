@@ -127,6 +127,7 @@ MonoBehaviour:
   hp: 300
   speed: 5
   AttackRange: 3
+  experiencePoints: 0
   detectionRange: 8
 --- !u!50 &5243851850164703461
 Rigidbody2D:
