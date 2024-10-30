@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 0f8c1b6c340254108807ce81cdbac281
+timeCreated: 1505000877
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 9100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 73392
+  packageName: RPGTalk
+  packageVersion: 1.3.1
+  assetPath: Assets/RPGTALK/Demo/Animations/Coin.controller
+  uploadId: 301028

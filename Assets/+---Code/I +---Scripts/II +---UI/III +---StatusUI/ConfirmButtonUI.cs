@@ -23,14 +23,25 @@ public class ConfirmButtonUI : MonoBehaviour
 
     private void Start()
     {
+
         button = GetComponent<Button>();
         button.onClick.AddListener(GameManager.instance.ConfirmPoints);
         button.onClick.AddListener(ConfirmCurrentStatus);
+
+        LoadCurrentStatus();
     }
 
     private void OnDestroy()
     {
         button.onClick.RemoveAllListeners();
+    }
+
+    private void LoadCurrentStatus()
+    {
+        for (int i = 0; i < currentStatusUIs.Count; i++)
+        {
+            currentStatusUIs[i].Load(statusTypes[i]);
+        }
     }
 
     private void ConfirmCurrentStatus()

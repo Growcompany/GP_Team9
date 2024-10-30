@@ -12,7 +12,7 @@ public class SkillCoolTimeUI : MonoBehaviour
     [SerializeField] TMP_Text text;
     IEnumerator UpdateImage()
     {
-        while(GameManager.instance.coolTimeRatio >= 0.0f)
+        while (GameManager.instance.coolTimeRatio >= 0.0f)
         {
             grayFilledImage.fillAmount = GameManager.instance.coolTimeRatio;
             yield return null;
@@ -47,8 +47,6 @@ public class SkillCoolTimeUI : MonoBehaviour
 
     private void OnDestroy()
     {
-        GameManager.instance.player.skillCoolTimeUIEvent.RemoveListener(UpdateCoolTimeUI);
+        GameManager.instance.player.skillCoolTimeUIEvent.RemoveAllListeners();
     }
-
-
 }
