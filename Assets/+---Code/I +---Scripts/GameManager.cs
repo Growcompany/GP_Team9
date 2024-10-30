@@ -8,7 +8,6 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
 
     public PlayerController player;
-    public GameObject playerSpawnPos;
 
     public int totalUsedStatusPoint;                    // ConfirmButtonUI에서 조절
     public int availablePoint;                          // CalculateAvailableStatusPoint 이벤트로 계산됨(ex. Level up, Confirm button)
@@ -23,12 +22,11 @@ public class GameManager : MonoBehaviour
             instance = this;
         else
         {
-            Debug.LogError("GameManager already exists");
+            Debug.LogError("GameManager alread exists");
             return;
         }
 
         CalculateAvailableStatusPoint();
-        DontDestroyOnLoad(gameObject);
     }
 
     public void CalculateAvailableStatusPoint()
@@ -50,23 +48,10 @@ public class GameManager : MonoBehaviour
 
         while (currentCoolTime >= 0.0f)
         {
-            currentCoolTime -= Time.deltaTime;
+            currentCoolTime -= Time.deltaTime; // player에서 FixedUpate로 호출함
             coolTimeRatio = Mathf.Clamp(currentCoolTime * per, 0.0f, 1.0f);
 
             yield return null;
-        }
+        } 
     }
-
-    public void RespawnPlayer()
-    {
-        player.transform.position = playerSpawnPos.transform.position;
-    }
-
-    //public void Update()
-    //{
-    //    if(Input.GetKeyDown(KeyCode.Escape))
-    //    {
-    //        RespawnPlayer();
-    //    }
-    //}
 }

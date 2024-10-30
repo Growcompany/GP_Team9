@@ -17,7 +17,7 @@ public class LaserController : MonoBehaviour
         // Destroy the laser after 2.5 seconds
         Destroy(gameObject, 2.5f);
 
-        playerController = Object.FindFirstObjectByType<PlayerController>();
+        playerController = FindObjectOfType<PlayerController>();
         MovementStats = playerController.MovementStats;
         _isFacingRight = playerController._isFacingRight;
 
@@ -87,7 +87,7 @@ public class LaserController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collider)
     {
-        playerController = Object.FindFirstObjectByType<PlayerController>();
+        playerController = FindObjectOfType<PlayerController>();
         MovementStats = playerController.MovementStats;
         LaserDamage = MovementStats.LaserDamage;
         Debug.Log("LaserDamage when triggered: " + LaserDamage);
@@ -113,19 +113,7 @@ public class LaserController : MonoBehaviour
                 }
                 else
                 {
-                    // MonsterController가 없으면 BossController를 시도합니다.
-                    BossController bossController = collider.GetComponentInParent<BossController>();
-
-                    if (bossController != null)
-                    {
-                        Debug.Log("Applying damage to Boss: " + LaserDamage);
-                        bossController.Damaged(LaserDamage);
-                        StartCoroutine(LaserRoutine(0.1f));
-                    }
-                    else
-                    {
-                        Debug.LogWarning("Neither MonsterController nor BossController found on the collided object.");
-                    }
+                    Debug.LogWarning("MonsterController not found on the collided object.");
                 }
             }
         }

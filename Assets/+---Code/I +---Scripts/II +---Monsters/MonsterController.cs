@@ -203,7 +203,7 @@ public class MonsterController : MonoBehaviour
         Debug.Log("Monster is dying");
         isDying = true; // 죽음 상태 설정
         anim.SetTrigger("death"); // 죽음 애니메이션 시작
-        PlayerController player = Object.FindFirstObjectByType<PlayerController>();
+        PlayerController player = FindObjectOfType<PlayerController>();
         if (player != null)
         {
             player.ExpUp(experiencePoints); // 경험치 전달
