@@ -31,7 +31,6 @@ public class PlayerController : MonoBehaviour
     public GameObject statusUI;
 
     // Life
-    public int Life { get; private set; }
     public bool _isDead;
 
     // Movement
@@ -93,10 +92,10 @@ public class PlayerController : MonoBehaviour
         // Status UI
         statusUI = GameObject.Find("---StatusUI---").transform.Find("Frame").gameObject;
 
-
+        // Status
+        ResetStatus();
 
         // Life
-        Life = MovementStats.MaxLife;
         _isDead = false;
 
         // Movement
@@ -114,6 +113,7 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         StatusUICheck();
+        StatusCheck();
 
         CountTimers();
         JumpChecks();
@@ -686,7 +686,7 @@ public class PlayerController : MonoBehaviour
             ShootLaser();
             _isChargeAttacking = false;
 
-            StartCoroutine(GameManager.instance.CalculateCoolTime(5.0f));
+            StartCoroutine(GameManager.instance.CalculateCoolTime(MovementStats.LaserCoolTime));
             skillCoolTimeUIEvent.Invoke();
         }
     }
@@ -727,13 +727,13 @@ public class PlayerController : MonoBehaviour
 
     public void Damaged()
     {
-        Life -= 1;
-        lifeUpdateUIEvent.Invoke(Life);
+        MovementStats.Life -= 1;
+        lifeUpdateUIEvent.Invoke(MovementStats.Life);
     }
 
     private void DieCheck()
     {
-        if (Life <= 0)
+        if (MovementStats.Life <= 0)
         {
             _isDead = true;
         }
@@ -754,23 +754,56 @@ public class PlayerController : MonoBehaviour
 
     #endregion
 
-    #region Level Up / EXP
-
-    public void LevelUp()
-    {
-        if (MovementStats.Level >= MovementStats.MaxLevel)
-        {
-            return;
-        }
-        MovementStats.Level += 1;
-        levelUpUIEvent.Invoke(MovementStats.Level);
-    }
+    #region Status (Level Up, EXP, Strength, ...)
 
     public void ExpUp(int exp)
     {
         MovementStats.Exp += exp;
         expUpUIEvent.Invoke(100, MovementStats.Exp);    // 100은 임의로 설정함, 수정 바람
     }
+
+    private void StatusCheck()
+    {
+        // Life
+        // Todo: Life Up
+
+        // Level Up
+        if ((int)(MovementStats.Exp / 10) > MovementStats.Level)
+        {
+            if (MovementStats.Level >= MovementStats.MaxLevel)
+            {
+                return;
+            }
+            MovementStats.Level = (int)(MovementStats.Exp / 10);
+            MovementStats.Life = MovementStats.MaxLife;
+            levelUpUIEvent.Invoke(MovementStats.Level);
+        }
+
+        // Strength
+        MovementStats.AttackDamage = MovementStats.Strength * 10;
+        MovementStats.LaserDamage = MovementStats.Strength * 10;
+
+        // Dodge
+        // Todo: Dodge
+
+        // SkillCoolTime
+        float tempValue = 5f - (MovementStats.SkillCoolTime * 0.5f);
+        if (tempValue < 0.5f)
+            tempValue = 0.5f;
+        MovementStats.LaserCoolTime = tempValue;
+    }
+
+    private void ResetStatus()
+    {
+        MovementStats.MaxLife = 5;
+        MovementStats.Level = 1;
+        MovementStats.Exp = 10;
+        MovementStats.Life = MovementStats.MaxLife;
+        MovementStats.Strength = 1;
+        MovementStats.Dodge = 1;
+        MovementStats.SkillCoolTime = 1;
+    }
+
     #endregion
 
 

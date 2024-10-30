@@ -7,6 +7,7 @@ public class PlayerMovementStats : ScriptableObject
 {
     [Header("Status")]
     [Range(1, 10)] public int MaxLife = 5;
+    [Range(1, 10)] public int Life = 5;
     [Range(0, 1000)] public int Exp = 10;
     [Range(1, 100)] public int Level = 1;
     [Range(1, 100)] public int Strength = 1;
@@ -73,6 +74,7 @@ public class PlayerMovementStats : ScriptableObject
     [Header("Laser")]
     [Range(1, 50)] public int LaserSpeed = 25;
     [Range(1f, 500f)] public float LaserDamage = 100f;
+    [Range(0f, 5f)] public float LaserCoolTime = 5f;
 
 
     [Header("Debug")]

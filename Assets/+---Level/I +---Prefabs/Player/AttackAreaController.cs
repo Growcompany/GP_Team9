@@ -33,6 +33,7 @@ public class AttackAreaController : MonoBehaviour
         {
             MonsterController monsterController = collider.gameObject.GetComponent<MonsterController>();
             monsterController.Damaged(MovementStats.AttackDamage);
+            Debug.Log(MovementStats.AttackDamage);
             // collider.gameObject.BroadcastMessage("Damaged", MovementStats.AttackDamage);
         }
     }
