@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 4a8fcee8ffae34dca812c38648029949
+timeCreated: 1475704545
+licenseType: Store
+DefaultImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 73392
+  packageName: RPGTalk
+  packageVersion: 1.3.1
+  assetPath: Assets/RPGTALK/Demo/Scenes/2-ComplexDemo.unity
+  uploadId: 301028

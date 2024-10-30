@@ -12,9 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd20664e8bcded241a48709d82e2162f, type: 3}
   m_Name: PlayerMovementStats
   m_EditorClassIdentifier: 
-  MaxLife: 5
-  Exp: 10
-  Level: 5
+  MaxLife: 3
+  Exp: 0
+  Level: 1
+  Strength: 1
+  Dodge: 1
+  SkillCoolTime: 1
   MaxLevel: 100
   MaxWalkSpeed: 12.5
   GroundAcceleration: 5
