@@ -29,6 +29,9 @@ MonoBehaviour:
   GroundLayer:
     serializedVersion: 2
     m_Bits: 256
+  MonsterLayer:
+    serializedVersion: 2
+    m_Bits: 1024
   GroundDetectionRayLength: 0.02
   HeadDetectionRayLength: 0.02
   HeadWidth: 0.75

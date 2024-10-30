@@ -32,6 +32,7 @@ public class PlayerController : MonoBehaviour
 
     // Life
     public bool _isDead;
+    public bool _isBeingDamaged;
 
     // Movement
     public float HorizontalVelocity { get; private set; }
@@ -40,6 +41,7 @@ public class PlayerController : MonoBehaviour
     // Collision Check
     private RaycastHit2D _groundHit;
     private RaycastHit2D _headHit;
+    private RaycastHit2D _monsterHit;
     private bool _isGrounded;
     private bool _bumpedHead;
 
@@ -98,6 +100,7 @@ public class PlayerController : MonoBehaviour
 
         // Life
         _isDead = false;
+        _isBeingDamaged = false;
 
         // Movement
         _isJumping = false;
@@ -726,11 +729,17 @@ public class PlayerController : MonoBehaviour
 
     #region Life
 
-    public void Damaged()
+    public IEnumerator Damaged()
     {
-        MovementStats.Life -= 1;
-        lifeUpdateUIEvent.Invoke(MovementStats.Life);
-        StartCoroutine(ChangeRed());
+        if (!_isBeingDamaged)
+        {
+            _isBeingDamaged = true;
+            MovementStats.Life -= 1;
+            lifeUpdateUIEvent.Invoke(MovementStats.Life);
+            StartCoroutine(ChangeRed());
+            yield return new WaitForSeconds(1f);
+            _isBeingDamaged = false;
+        }
     }
 
     private IEnumerator ChangeRed()
@@ -837,26 +846,6 @@ public class PlayerController : MonoBehaviour
         {
             _isGrounded = false;
         }
-
-        // #region Debug Visualization
-        // if (MovementStats.DebugShowIsGroundedBox)
-        // {
-        //     Color rayColor;
-        //     if (_isGrounded)
-        //     {
-        //         rayColor = Color.green;
-        //     }
-        //     else
-        //     {
-        //         rayColor = Color.red;
-        //     }
-
-        //     Debug.DrawRay(new Vector2(boxCastOrigin.x - boxCastSize.x / 2, boxCastOrigin.y), Vector2.down * MovementStats.GroundDetectionRayLength, rayColor);
-        //     Debug.DrawRay(new Vector2(boxCastOrigin.x + boxCastSize.x / 2, boxCastOrigin.y), Vector2.down * MovementStats.GroundDetectionRayLength, rayColor);
-        //     Debug.DrawRay(new Vector2(boxCastOrigin.x - boxCastSize.x / 2, boxCastOrigin.y - MovementStats.GroundDetectionRayLength), Vector2.right * boxCastSize.x, rayColor);
-        // }
-
-        // #endregion
     }
 
     private void BumpedHead()
@@ -875,10 +864,22 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void PlayerCollidesWithMonster()
+    {
+        // BodyColl Collides with Monster Layer
+        _monsterHit = Physics2D.BoxCast(_bodyColl.bounds.center, _bodyColl.bounds.size, 0f, Vector2.zero, 0f, MovementStats.MonsterLayer);
+        if (_monsterHit.collider != null)
+        {
+            StartCoroutine(Damaged());
+        }
+
+    }
+
     private void CollisionCheck()
     {
         IsGrounded();
         BumpedHead();
+        PlayerCollidesWithMonster();
     }
 
 
