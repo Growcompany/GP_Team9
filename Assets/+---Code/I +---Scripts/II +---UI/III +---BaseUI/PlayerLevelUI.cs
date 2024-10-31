@@ -17,6 +17,7 @@ public class PlayerLevelUI : MonoBehaviour
         if(filledImage == null)
             filledImage = transform.Find("LevelFilled").GetComponent<Image>();
 
+        Debug.LogWarning("Current player: " + GameManager.instance.player);
         levelText.text = GameManager.instance.player.MovementStats.Level.ToString();
         filledImage.fillAmount = GameManager.instance.player.MovementStats.Exp / 100.0f;    // 100은 임의 설정
 

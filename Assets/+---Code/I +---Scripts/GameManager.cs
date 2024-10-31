@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -27,8 +28,11 @@ public class GameManager : MonoBehaviour
             return;
         }
 
+        if(player == null)
+            player = Object.FindFirstObjectByType<PlayerController>();
+
         CalculateAvailableStatusPoint();
-        DontDestroyOnLoad(gameObject);
+        // DontDestroyOnLoad(gameObject);
     }
 
     public void CalculateAvailableStatusPoint()
@@ -62,11 +66,34 @@ public class GameManager : MonoBehaviour
         player.transform.position = playerSpawnPos.transform.position;
     }
 
-    //public void Update()
-    //{
-    //    if(Input.GetKeyDown(KeyCode.Escape))
-    //    {
-    //        RespawnPlayer();
-    //    }
-    //}
+    public void LoadScene(string sceneName)
+    {
+        StartCoroutine(LoadSceneAsync(sceneName));
+    }
+
+    private IEnumerator LoadSceneAsync(string sceneName)
+    {
+        yield return null;
+
+        Debug.LogWarning("Load Start");
+        AsyncOperation async = SceneManager.LoadSceneAsync(sceneName);
+        
+        while(!async.isDone)
+        {
+            yield return null;
+        }
+
+        Debug.LogWarning("Load End");
+        player = Object.FindFirstObjectByType<PlayerController>();
+        Debug.LogWarning("Player Found");
+    }
+
+    public void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            player.Damaged();
+            Debug.LogWarning(player.Life);
+        }
+    }
 }

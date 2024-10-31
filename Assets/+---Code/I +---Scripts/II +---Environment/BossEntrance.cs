@@ -5,11 +5,13 @@ using UnityEngine.SceneManagement;
 
 public class BossEntrance : MonoBehaviour
 {
+    public LayerMask triggerLayer;
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        if ((1 << collision.gameObject.layer) == triggerLayer)
         {
-            SceneManager.LoadScene("BossScene");
+            GameManager.instance.LoadScene("BossScene");
         }
     }
 }
