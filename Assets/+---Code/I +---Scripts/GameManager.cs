@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour
         else
         {
             Debug.LogError("GameManager already exists");
+            Destroy(gameObject);
             return;
         }
 
@@ -66,27 +67,7 @@ public class GameManager : MonoBehaviour
         player.transform.position = playerSpawnPos.transform.position;
     }
 
-    public void LoadScene(string sceneName)
-    {
-        StartCoroutine(LoadSceneAsync(sceneName));
-    }
-
-    private IEnumerator LoadSceneAsync(string sceneName)
-    {
-        yield return null;
-
-        Debug.LogWarning("Load Start");
-        AsyncOperation async = SceneManager.LoadSceneAsync(sceneName);
-        
-        while(!async.isDone)
-        {
-            yield return null;
-        }
-
-        Debug.LogWarning("Load End");
-        player = Object.FindFirstObjectByType<PlayerController>();
-        Debug.LogWarning("Player Found");
-    }
+    
 
     public void Update()
     {

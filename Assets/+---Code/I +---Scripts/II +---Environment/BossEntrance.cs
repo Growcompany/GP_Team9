@@ -11,7 +11,7 @@ public class BossEntrance : MonoBehaviour
     {
         if ((1 << collision.gameObject.layer) == triggerLayer)
         {
-            GameManager.instance.LoadScene("BossScene");
+            SceneTransition.Instance.LoadScene("BossScene");
         }
     }
 }

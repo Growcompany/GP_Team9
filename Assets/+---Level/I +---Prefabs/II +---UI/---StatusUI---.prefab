@@ -173,6 +173,8 @@ MonoBehaviour:
   minus: {fileID: 0}
   plus: {fileID: 0}
   currentStatus: {fileID: 0}
+  min: 1
+  max: 10
 --- !u!1 &247229870982159064
 GameObject:
   m_ObjectHideFlags: 0
@@ -754,7 +756,7 @@ GameObject:
   - component: {fileID: 1839333926995054839}
   - component: {fileID: 7607702083409554271}
   m_Layer: 5
-  m_Name: Lifes
+  m_Name: Life
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1109,6 +1111,8 @@ MonoBehaviour:
   minus: {fileID: 0}
   plus: {fileID: 0}
   currentStatus: {fileID: 0}
+  min: 1
+  max: 100
 --- !u!1 &1681861964964035499
 GameObject:
   m_ObjectHideFlags: 0
@@ -1696,6 +1700,8 @@ MonoBehaviour:
   minus: {fileID: 0}
   plus: {fileID: 0}
   currentStatus: {fileID: 0}
+  min: 1
+  max: 100
 --- !u!1 &2471562687998379073
 GameObject:
   m_ObjectHideFlags: 0
@@ -3321,6 +3327,8 @@ MonoBehaviour:
   minus: {fileID: 0}
   plus: {fileID: 0}
   currentStatus: {fileID: 0}
+  min: 1
+  max: 100
 --- !u!1 &6579416508823165891
 GameObject:
   m_ObjectHideFlags: 0

@@ -13,7 +13,7 @@ public class CurrentStatusUI : MonoBehaviour
     [SerializeField] TMP_Text changesText;
     [SerializeField] TMP_Text currentStateText;
 
-    public int currentValue;
+    public int currentValue;            // PlusMinusButtonUI에서 사용
     int previousValue;
     int diff;
 

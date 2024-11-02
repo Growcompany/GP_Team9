@@ -17,12 +17,10 @@ public class QuitButtonUI : MonoBehaviour
     private void OnDestroy()
     {
         button.onClick.RemoveListener(Quit);
-        Debug.LogWarning("Remove all(Destroy)");
     }
 
     public void Quit()
     {
         transform.parent.gameObject.SetActive(false);
-        Debug.LogWarning("Quit");
     }
 }
