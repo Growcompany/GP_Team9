@@ -25,7 +25,6 @@ public class SceneTransition : MonoBehaviour
 
         Init();
     }
-
     private void Init()
     {
         if (fadeEffect == null)

@@ -18,6 +18,8 @@ public class GameManager : MonoBehaviour
     public float coolTimeRatio;                         // SkillCoolTimeUI에서 사용
     public float currentCoolTime;                       // SkillCoolTimeUI에서 사용
 
+    public FadeEffect deathUIFadeEffect;
+
     private void Awake()
     {
         if (instance == null)
@@ -67,14 +69,12 @@ public class GameManager : MonoBehaviour
         player.transform.position = playerSpawnPos.transform.position;
     }
 
-    
-
     public void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            player.Damaged();
-            Debug.LogWarning(player.Life);
+            Debug.LogWarning("Fade out");
+            deathUIFadeEffect.FadeOut();
         }
     }
 }
