@@ -89,6 +89,14 @@ public class PlayerController : MonoBehaviour
     private RaycastHit2D[] hits;
     private float _chargeTimer;
 
+    // Sound
+    public AudioSource audioSrc;
+    public AudioClip moveSound;
+    public AudioClip jumpSound;
+    public AudioClip landSound;
+    public AudioClip attackSound;
+    public float _moveSoundTimer;
+
     #endregion
 
     private void Awake()
@@ -116,6 +124,10 @@ public class PlayerController : MonoBehaviour
 
         // Attack
         attackArea = GameObject.Find("AttackArea");
+
+        // Sound
+        _moveSoundTimer = 0f;
+        audioSrc = GetComponent<AudioSource>();
     }
 
     private void Update()
@@ -141,6 +153,7 @@ public class PlayerController : MonoBehaviour
         Fall();
         Die();
         Animations();
+        Sound();
 
         if (_isGrounded)
         {
@@ -987,6 +1000,36 @@ public class PlayerController : MonoBehaviour
     }
 
     #endregion
+
+    #region Sound
+
+
+
+    private void Sound()
+    {
+        // walking
+        if (_isGrounded && HorizontalVelocity != 0 && (!_isDashing || !_isAirDashing))
+        {
+            if (_moveSoundTimer > MovementStats.MoveSoundGap || _moveSoundTimer == 0f)
+            {
+                if (InputManager.Movement.x != 0)
+                {
+                    PlayMoveSound();
+                    _moveSoundTimer = 0f;
+                }
+            }
+            _moveSoundTimer += Time.fixedDeltaTime;
+        }
+    }
+
+    private void PlayMoveSound()
+    {
+        audioSrc.clip = moveSound;
+        audioSrc.Play();
+    }
+
+    #endregion
+
 
 
 
