@@ -86,6 +86,10 @@ public class PlayerController : MonoBehaviour
     private RaycastHit2D[] hits;
     private float _chargeTimer;
 
+    // invincible
+    private bool isInvincible = false; // 무적 상태 플래그
+    private SpriteRenderer spriteRenderer;
+
     #endregion
 
     private void Awake()
@@ -107,6 +111,9 @@ public class PlayerController : MonoBehaviour
 
         // Attack
         attackArea = GameObject.Find("AttackArea");
+
+        // invincible
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     private void Update()
@@ -725,8 +732,41 @@ public class PlayerController : MonoBehaviour
 
     public void Damaged()
     {
+        if (isInvincible) return; // 무적 상태일 때는 데미지를 받지 않음
+
         Life -= 1;
         lifeUpdateUIEvent.Invoke(Life);
+
+        if (Life > 0)
+        {
+            StartCoroutine(InvincibilityFlash());
+        }
+        else
+        {
+            // 플레이어 사망 처리
+            _isDead = true;
+        }
+    }
+
+    private IEnumerator InvincibilityFlash()
+    {
+        isInvincible = true;
+        float flashDuration = 2f; // 무적 상태 지속 시간
+        float flashInterval = 0.1f; // 깜빡임 간격
+
+        float timeElapsed = 0f;
+        while (timeElapsed < flashDuration)
+        {
+            spriteRenderer.color = Color.white; // 하얀색
+            yield return new WaitForSeconds(flashInterval / 2);
+            spriteRenderer.color = Color.black; // 검은색
+            yield return new WaitForSeconds(flashInterval / 2);
+
+            timeElapsed += flashInterval;
+        }
+
+        spriteRenderer.color = Color.white; // 원래 색상으로 복귀
+        isInvincible = false;
     }
 
     private void DieCheck()
