@@ -61,7 +61,7 @@ public class PlayerLifeUI : MonoBehaviour
         {
             for(int i = 0; i < Math.Abs(diff); i++)
             {
-                lifeImages[Math.Clamp(previousLifes + i, 0, 9)].gameObject.SetActive(true);
+                lifeImages[Math.Clamp(previousLifes + i - 1, 0, 9)].gameObject.SetActive(true);
             }
         }
 

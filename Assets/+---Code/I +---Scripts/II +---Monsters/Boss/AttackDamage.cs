@@ -1,0 +1,26 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class AttackDamage : MonoBehaviour
+{
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player"))
+        {
+            // PlayerController 컴포넌트 가져오기
+            PlayerController playerController = collision.GetComponent<PlayerController>();
+
+            if (playerController != null)
+            {
+                // 플레이어에 데미지 주기
+                playerController.Damaged();
+                Debug.Log("Player damaged by MonsterSkill damage");
+            }
+            else
+            {
+                Debug.LogWarning("PlayerController not found on the collided object.");
+            }
+        }
+    }
+}

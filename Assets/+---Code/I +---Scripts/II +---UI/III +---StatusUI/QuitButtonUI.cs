@@ -10,6 +10,7 @@ public class QuitButtonUI : MonoBehaviour
     private void Awake()
     {
         button = GetComponent<Button>();
+        button.onClick.RemoveAllListeners();
         button.onClick.AddListener(Quit);
     }
 
@@ -18,7 +19,7 @@ public class QuitButtonUI : MonoBehaviour
         button.onClick.RemoveListener(Quit);
     }
 
-    void Quit()
+    public void Quit()
     {
         transform.parent.gameObject.SetActive(false);
     }

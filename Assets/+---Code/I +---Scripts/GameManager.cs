@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -17,6 +18,8 @@ public class GameManager : MonoBehaviour
     public float coolTimeRatio;                         // SkillCoolTimeUI에서 사용
     public float currentCoolTime;                       // SkillCoolTimeUI에서 사용
 
+    public FadeEffect deathUIFadeEffect;
+
     private void Awake()
     {
         if (instance == null)
@@ -24,11 +27,15 @@ public class GameManager : MonoBehaviour
         else
         {
             Debug.LogError("GameManager already exists");
+            Destroy(gameObject);
             return;
         }
 
+        if(player == null)
+            player = Object.FindFirstObjectByType<PlayerController>();
+
         CalculateAvailableStatusPoint();
-        DontDestroyOnLoad(gameObject);
+        // DontDestroyOnLoad(gameObject);
     }
 
     public void CalculateAvailableStatusPoint()
@@ -62,11 +69,12 @@ public class GameManager : MonoBehaviour
         player.transform.position = playerSpawnPos.transform.position;
     }
 
-    //public void Update()
-    //{
-    //    if(Input.GetKeyDown(KeyCode.Escape))
-    //    {
-    //        RespawnPlayer();
-    //    }
-    //}
+    public void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Debug.LogWarning("Fade out");
+            deathUIFadeEffect.FadeOut();
+        }
+    }
 }
