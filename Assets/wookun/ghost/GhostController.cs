@@ -108,7 +108,7 @@ public class GhostController : MonoBehaviour
         {
             // 플레이어를 반대 방향으로 밀어내기
             Vector2 pushDirection = (collision.transform.position - transform.position).normalized;
-            collision.rigidbody.velocity = pushDirection * 10f; // 강한 반대 방향의 속도 적용
+            collision.rigidbody.velocity = pushDirection * 3f; // 강한 반대 방향의 속도 적용
         }
     }
 }
