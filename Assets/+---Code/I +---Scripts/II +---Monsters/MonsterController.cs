@@ -1,17 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MonsterController : MonoBehaviour
 {
     [SerializeField]
     public float hp;
+    private float maxHp; // 최대 HP 값, Start에서 초기화
     [SerializeField]
     public float speed;
     [SerializeField]
     public float AttackRange;
     [SerializeField]
     protected int experiencePoints;
+    [SerializeField] protected float patrolWallDistance = 3f; // 순찰 시 탐지할 최대 거리
+    [SerializeField] protected float groundCheckDistance = 0.5f; // 낭떠러지 탐지 거리
+    [SerializeField] protected LayerMask groundLayer; // 땅과 벽의 레이어
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip attackSound; // 공격 소리
+    [SerializeField] private Transform hpBarTransform; // HP 바 오브젝트의 Transform
+    protected Vector3 patrolDirection = Vector3.right; // 순찰 방향
+    protected bool isPatrolling = true;
     protected Transform player;
     protected Animator anim;
     protected PolygonCollider2D polygonCollider;
@@ -25,6 +35,7 @@ public class MonsterController : MonoBehaviour
     protected string runAnim;
     protected bool FlipSprite = true;
     private bool isDying = false; // 몬스터가 이미 죽음을 처리 중인지 확인
+    private bool isInvincible = false; // 데미지 중복 방지
 
     protected virtual void Awake()
     {
@@ -35,6 +46,7 @@ public class MonsterController : MonoBehaviour
 
     protected virtual void Start()
     {
+        maxHp = hp;
         // �±� "Player"�� ������Ʈ ã��
         GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
 
@@ -61,14 +73,19 @@ public class MonsterController : MonoBehaviour
             return; // 더 이상 애니메이션 트리거나 업데이트 작업을 하지 않음
         }
 
-        DirCheck(); // �÷��̾��� ��ġ�� ���� ��������Ʈ ������
-
         float distanceToPlayer = Vector3.Distance(transform.position, player.position);
         //Debug.Log("Player detected at position: " + player.position + ", distanceToPlayer: " + distanceToPlayer);
 
         // �÷��̾ ���� ���� ���� ������ ����
         if (distanceToPlayer <= detectionRange)
         {
+            DirCheck();
+            if (spriteRenderer.sprite != previousSprite)
+            {
+                UpdateCollider();
+                previousSprite = spriteRenderer.sprite; // ���� ��������Ʈ�� ���� ��������Ʈ�� ����
+            }
+
             // �÷��̾ ���� ���� �ȿ� ������ ����
             if (distanceToPlayer <= AttackRange)
             {
@@ -95,14 +112,38 @@ public class MonsterController : MonoBehaviour
         {
             TriggerAnimation(idleAnim);
             Debug.Log("idleAnim");
+            // 플레이어가 탐지되지 않았을 때 순찰 동작 실행
+            Patrol();
         }
 
-        if (spriteRenderer.sprite != previousSprite)
+    }
+    protected virtual void Patrol()
+    {
+        RaycastHit2D wallHit = Physics2D.Raycast(transform.position, patrolDirection, patrolWallDistance, groundLayer);
+        Debug.DrawLine(transform.position, transform.position + (Vector3)patrolDirection * patrolWallDistance, Color.red);
+
+        // 발 밑에서 아래 방향으로 조금 앞을 감지하는 레이캐스트
+        Vector2 groundCheckStart = (Vector2)transform.position + Vector2.down * 2f + (Vector2)patrolDirection * 1f;
+        RaycastHit2D groundHit = Physics2D.Raycast(groundCheckStart, Vector2.down, groundCheckDistance, groundLayer);
+        Debug.DrawLine(groundCheckStart, groundCheckStart + Vector2.down * groundCheckDistance, Color.blue);
+
+        if (wallHit.collider != null || groundHit.collider == null)
         {
-            UpdateCollider();
-            previousSprite = spriteRenderer.sprite; // ���� ��������Ʈ�� ���� ��������Ʈ�� ����
+            patrolDirection = -patrolDirection; // 방향을 반대로 전환
+            if (patrolDirection.x > 0)
+            {
+                spriteRenderer.flipX = false; // 오른쪽을 바라보도록
+            }
+            else
+            {
+                spriteRenderer.flipX = true; // 왼쪽을 바라보도록
+            }
         }
-
+        else
+        {
+            Move(patrolDirection);
+            TriggerAnimation(runAnim);
+        }
     }
 
     // Gizmos�� ���� ������ ���� ���� �׸���
@@ -119,7 +160,15 @@ public class MonsterController : MonoBehaviour
 
     protected virtual void TriggerAnimation(string Animation)
     {
-        anim.SetTrigger(Animation); // ������ ����� �ִϸ��̼� �̸��� ���
+        anim.SetTrigger(Animation);
+        // 공격 애니메이션 트리거 시 공격 소리를 한 번만 재생
+        if (Animation == attackAnim && attackSound != null && audioSource != null)
+        {
+            if (!audioSource.isPlaying) // 현재 오디오가 재생 중인지 확인
+            {
+                audioSource.PlayOneShot(attackSound);
+            }
+        }
     }
 
     void UpdateCollider()
@@ -185,15 +234,69 @@ public class MonsterController : MonoBehaviour
         transform.Translate(direction * speed * Time.deltaTime);
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        Debug.Log("Collided with: " + collision.gameObject.name);
+
+        // 충돌한 오브젝트가 "AttackedRange"인지 확인
+        if (collision.gameObject.name == "AttackedRange")
+        {
+            // 부모 오브젝트에서 PlayerController를 가져오기
+            PlayerController playerController = collision.transform.parent.GetComponent<PlayerController>();
+
+            if (playerController != null)
+            {
+                // 데미지 처리
+                playerController.Damaged();
+                Debug.Log("Player damaged by AttackedRange");
+            }
+            else
+            {
+                Debug.LogWarning("PlayerController not found on the parent object.");
+            }
+        }
+    }
+
+    public virtual void UpdateHPBar()
+    {
+        if (hpBarTransform != null)
+        {
+            float hpPercentage = hp / maxHp; // 현재 HP를 최대 HP로 나눈 비율
+
+            if (hpPercentage < 0)
+            {
+                hpPercentage = 0;
+            }
+            hpBarTransform.localScale = new Vector3(hpPercentage, 1f, 1f); // X 스케일 조정
+        }
+    }
+
     public virtual void Damaged(float amount)
     {
-        Debug.Log("Monster is dying Damaged: "+amount);
-        anim.SetTrigger("hit");
+        if (isInvincible) return; // 무적 상태일 때는 데미지를 받지 않음
+
+        Debug.Log("Monster is taking damage: " + amount);
+        anim.SetTrigger("hit"); // 히트 애니메이션 실행
+
         hp -= amount;
+
+        UpdateHPBar();
+
         if (hp <= 0)
         {
             Die();
         }
+        else
+        {
+            StartCoroutine(InvincibilityCoroutine(0.2f)); // 0.2초 동안 데미지 안받음 중복방지
+        }
+
+    }
+    private IEnumerator InvincibilityCoroutine(float duration)
+    {
+        isInvincible = true;
+        yield return new WaitForSeconds(duration);
+        isInvincible = false;
     }
 
     protected virtual void Die()

@@ -32,8 +32,10 @@ public class PlayerController : MonoBehaviour
     public FadeEffect fadeEffectUI;
 
     // Life
-    public int Life { get; private set; }
     public bool _isDead;
+    private bool _isBeingDamaged;
+    private bool _isAvoiding;
+    private float _avoidanceTimer;
 
     // Movement
     public float HorizontalVelocity { get; private set; }
@@ -42,6 +44,7 @@ public class PlayerController : MonoBehaviour
     // Collision Check
     private RaycastHit2D _groundHit;
     private RaycastHit2D _headHit;
+    private RaycastHit2D _monsterHit;
     private bool _isGrounded;
     private bool _bumpedHead;
 
@@ -93,10 +96,16 @@ public class PlayerController : MonoBehaviour
     {
         // Status UI
         statusUI = GameObject.Find("---StatusUI---").transform.Find("Frame").gameObject;
+        statusUI.SetActive(false);
+
+        // Status
+        ResetStatus();
 
         // Life
-        Life = MovementStats.MaxLife;
         _isDead = false;
+        _isBeingDamaged = false;
+        _isAvoiding = false;
+        _avoidanceTimer = 0f;
 
         // Movement
         _isJumping = false;
@@ -113,6 +122,7 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         StatusUICheck();
+        StatusCheck();
 
         CountTimers();
         JumpChecks();
@@ -685,7 +695,7 @@ public class PlayerController : MonoBehaviour
             ShootLaser();
             _isChargeAttacking = false;
 
-            StartCoroutine(GameManager.instance.CalculateCoolTime(5.0f));
+            StartCoroutine(GameManager.instance.CalculateCoolTime(MovementStats.LaserCoolTime));
             skillCoolTimeUIEvent.Invoke();
         }
     }
@@ -724,15 +734,36 @@ public class PlayerController : MonoBehaviour
 
     #region Life
 
-    public void Damaged()
+    public IEnumerator Damaged()
     {
-        Life -= 1;
-        lifeUpdateUIEvent.Invoke(Life);
+        if (!_isBeingDamaged)
+        {
+            if (!_isAvoiding)
+            {
+                _isBeingDamaged = true;
+                MovementStats.Life -= 1;
+                lifeUpdateUIEvent.Invoke(MovementStats.Life);
+                StartCoroutine(ChangeRed());
+                yield return new WaitForSeconds(1f);
+                _isBeingDamaged = false;
+            }
+        }
+    }
+
+    private IEnumerator ChangeRed()
+    {
+        GetComponent<SpriteRenderer>().color = Color.red;
+        yield return new WaitForSeconds(0.1f);
+        GetComponent<SpriteRenderer>().color = Color.white;
+        yield return new WaitForSeconds(0.1f);
+        GetComponent<SpriteRenderer>().color = Color.red;
+        yield return new WaitForSeconds(0.1f);
+        GetComponent<SpriteRenderer>().color = Color.white;
     }
 
     private void DieCheck()
     {
-        if (Life <= 0)
+        if (MovementStats.Life <= 0)
         {
             _isDead = true;
         }
@@ -755,23 +786,56 @@ public class PlayerController : MonoBehaviour
 
     #endregion
 
-    #region Level Up / EXP
-
-    public void LevelUp()
-    {
-        if (MovementStats.Level >= MovementStats.MaxLevel)
-        {
-            return;
-        }
-        MovementStats.Level += 1;
-        levelUpUIEvent.Invoke(MovementStats.Level);
-    }
+    #region Status (Level Up, EXP, Strength, ...)
 
     public void ExpUp(int exp)
     {
         MovementStats.Exp += exp;
         expUpUIEvent.Invoke(100, MovementStats.Exp);    // 100은 임의로 설정함, 수정 바람
     }
+
+    private void StatusCheck()
+    {
+        // Life
+        // Todo: Life Up
+
+        // Level Up
+        if ((int)(MovementStats.Exp / 10) > MovementStats.Level)
+        {
+            if (MovementStats.Level >= MovementStats.MaxLevel)
+            {
+                return;
+            }
+            MovementStats.Level = (int)(MovementStats.Exp / 10);
+            MovementStats.Life = MovementStats.MaxLife;
+            levelUpUIEvent.Invoke(MovementStats.Level);
+        }
+
+        // Strength
+        MovementStats.AttackDamage = MovementStats.Strength * 10;
+        MovementStats.LaserDamage = MovementStats.Strength * 10;
+
+        // Dodge
+        // Todo: Dodge
+
+        // SkillCoolTime
+        float tempValue = 5f - (MovementStats.SkillCoolTime * 0.5f);
+        if (tempValue < 0.5f)
+            tempValue = 0.5f;
+        MovementStats.LaserCoolTime = tempValue;
+    }
+
+    private void ResetStatus()
+    {
+        MovementStats.MaxLife = 5;
+        MovementStats.Level = 1;
+        MovementStats.Exp = 10;
+        MovementStats.Life = MovementStats.MaxLife;
+        MovementStats.Strength = 1;
+        MovementStats.Dodge = 1;
+        MovementStats.SkillCoolTime = 1;
+    }
+
     #endregion
 
 
@@ -792,26 +856,6 @@ public class PlayerController : MonoBehaviour
         {
             _isGrounded = false;
         }
-
-        // #region Debug Visualization
-        // if (MovementStats.DebugShowIsGroundedBox)
-        // {
-        //     Color rayColor;
-        //     if (_isGrounded)
-        //     {
-        //         rayColor = Color.green;
-        //     }
-        //     else
-        //     {
-        //         rayColor = Color.red;
-        //     }
-
-        //     Debug.DrawRay(new Vector2(boxCastOrigin.x - boxCastSize.x / 2, boxCastOrigin.y), Vector2.down * MovementStats.GroundDetectionRayLength, rayColor);
-        //     Debug.DrawRay(new Vector2(boxCastOrigin.x + boxCastSize.x / 2, boxCastOrigin.y), Vector2.down * MovementStats.GroundDetectionRayLength, rayColor);
-        //     Debug.DrawRay(new Vector2(boxCastOrigin.x - boxCastSize.x / 2, boxCastOrigin.y - MovementStats.GroundDetectionRayLength), Vector2.right * boxCastSize.x, rayColor);
-        // }
-
-        // #endregion
     }
 
     private void BumpedHead()
@@ -830,10 +874,40 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void PlayerCollidesWithMonster()
+    {
+        // BodyColl Collides with Monster Layer
+        _monsterHit = Physics2D.BoxCast(_bodyColl.bounds.center, _bodyColl.bounds.size, 0f, Vector2.zero, 0f, MovementStats.MonsterLayer);
+        if (_monsterHit.collider != null)
+        {
+            StartCoroutine(Damaged());
+        }
+
+    }
+
+    private void AvoidCheck()
+    {
+        if (_avoidanceTimer < 5f)
+        {
+            _avoidanceTimer += Time.fixedDeltaTime;
+        }
+        if (_isDashing || _isAirDashing)
+        {
+            _isAvoiding = true;
+            _avoidanceTimer = 0f;
+        }
+        if (_avoidanceTimer > MovementStats.AvoidanceTime)
+        {
+            _isAvoiding = false;
+        }
+    }
+
     private void CollisionCheck()
     {
         IsGrounded();
         BumpedHead();
+        PlayerCollidesWithMonster();
+        AvoidCheck();
     }
 
 
