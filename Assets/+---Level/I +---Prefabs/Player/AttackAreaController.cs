@@ -31,8 +31,8 @@ public class AttackAreaController : MonoBehaviour
 
         else if (collider.tag == "Monster")
         {
-            //MonsterController monsterController = collider.gameObject.GetComponent<MonsterController>();
-            //monsterController.Damaged(MovementStats.AttackDamage);
+            MonsterController monsterController = collider.gameObject.GetComponent<MonsterController>();
+            monsterController.Damaged(MovementStats.AttackDamage);
             // collider.gameObject.BroadcastMessage("Damaged", MovementStats.AttackDamage);
         }
     }
