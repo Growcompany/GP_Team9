@@ -17,11 +17,6 @@ public class BatController : MonsterController
         // Bat 클래스는 자동 patrol 기능을 사용하지 않음
         // 이 메서드는 빈 상태로 둡니다.
     }
-    //protected override void OnDrawGizmos()
-    //{
-    //    // Bat 클래스는 자동 patrol 기능을 사용하지 않음
-    //    // 이 메서드는 빈 상태로 둡니다.
-    //}
 
 
 }

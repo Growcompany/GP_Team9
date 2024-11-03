@@ -5,11 +5,15 @@ using UnityEngine;
 public class BossController : MonoBehaviour
 {
     [SerializeField] private float hp;
+    private float maxHp; // 최대 HP 값, Start에서 초기화
     [SerializeField] private float speed;
     [SerializeField] private float AttackRange;
     [SerializeField] private int experiencePoints;
     [SerializeField] private float detectionRange = 10f;
     [SerializeField] private Transform attack2point; // attack2_razer가 보스 앞에 놓일 위치
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip attack3Sound; // 공격 소리
+    [SerializeField] private Transform hpBarTransform; // HP 바 오브젝트의 Transform
     public Transform[] attackPoints; // 공격 위치 4개의 Transform 배열로 설정
     public GameObject attackPrefab; // 경고+공격 이펙트 프리팹 (하나의 프리팹 안에 경고/공격 이펙트 있음)
     public GameObject attack2Prefab; // Attack2_razer 프리팹
@@ -22,6 +26,7 @@ public class BossController : MonoBehaviour
     protected Animator anim;
     private bool isDying = false; // 몬스터가 이미 죽음을 처리 중인지 확인
     private bool isAttacking = false; // 현재 공격 중인지 확인
+    private bool isInvincible = false; // 데미지 중복 방지
 
     private void Awake()
     {
@@ -30,6 +35,7 @@ public class BossController : MonoBehaviour
 
     private void Start()
     {
+        maxHp = hp;
         originalPosition = transform.position; // 시작 시 보스 위치 저장
         GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
 
@@ -192,6 +198,7 @@ public class BossController : MonoBehaviour
         // 2초 대기 후 Attack2_razer 프리팹 생성
         yield return new WaitForSeconds(2f);
         GameObject attack2Instance = Instantiate(attack2Prefab, attack2point.position, Quaternion.Euler(0, 0, 90));
+        Debug.Log("attack2 boss");
 
         // 1.5초 뒤 idle 상태로 전환
         yield return new WaitForSeconds(1.5f);
@@ -221,7 +228,7 @@ public class BossController : MonoBehaviour
         Destroy(attack3Instance);
 
         anim.SetTrigger("attack2"); // 공격모션 실행
-
+        audioSource.PlayOneShot(attack3Sound); // 공격 효과음 실행
         // 보스를 Attack3 위치로 빠르게 이동
         float step = 0f;
         while (Vector3.Distance(transform.position, attackPosition) > 0.1f)
@@ -251,15 +258,46 @@ public class BossController : MonoBehaviour
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, AttackRange);
     }
-
-    public void Damaged(float amount)
+    public virtual void UpdateHPBar()
     {
-        Debug.Log("Monster is dying Damaged: " + amount);
+        if (hpBarTransform != null)
+        {
+            float hpPercentage = hp / maxHp; // 현재 HP를 최대 HP로 나눈 비율
+
+            if (hpPercentage < 0)
+            {
+                hpPercentage = 0;
+            }
+            hpBarTransform.localScale = new Vector3(hpPercentage, 1f, 1f); // X 스케일 조정
+        }
+    }
+
+    public virtual void Damaged(float amount)
+    {
+        if (isInvincible) return; // 무적 상태일 때는 데미지를 받지 않음
+
+        Debug.Log("Monster is taking damage: " + amount);
+        anim.SetTrigger("hit"); // 히트 애니메이션 실행
+
         hp -= amount;
+
+        UpdateHPBar();
+
         if (hp <= 0)
         {
             Die();
         }
+        else
+        {
+            StartCoroutine(InvincibilityCoroutine(0.1f)); // 0.1초 동안 데미지 안받음 중복방지
+        }
+
+    }
+    private IEnumerator InvincibilityCoroutine(float duration)
+    {
+        isInvincible = true;
+        yield return new WaitForSeconds(duration);
+        isInvincible = false;
     }
 
     private void Die()
@@ -273,6 +311,29 @@ public class BossController : MonoBehaviour
         if (player != null)
         {
             player.ExpUp(experiencePoints); // 경험치 전달
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        Debug.Log("Collided with: " + collision.gameObject.name);
+
+        // 충돌한 오브젝트가 "AttackedRange"인지 확인
+        if (collision.gameObject.name == "AttackedRange")
+        {
+            // 부모 오브젝트에서 PlayerController를 가져오기
+            PlayerController playerController = collision.transform.parent.GetComponent<PlayerController>();
+
+            if (playerController != null)
+            {
+                // 데미지 처리
+                playerController.Damaged();
+                Debug.Log("Player damaged by AttackedRange");
+            }
+            else
+            {
+                Debug.LogWarning("PlayerController not found on the parent object.");
+            }
         }
     }
 }

@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MonsterController : MonoBehaviour
 {
     [SerializeField]
     public float hp;
+    private float maxHp; // 최대 HP 값, Start에서 초기화
     [SerializeField]
     public float speed;
     [SerializeField]
@@ -17,6 +19,7 @@ public class MonsterController : MonoBehaviour
     [SerializeField] protected LayerMask groundLayer; // 땅과 벽의 레이어
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioClip attackSound; // 공격 소리
+    [SerializeField] private Transform hpBarTransform; // HP 바 오브젝트의 Transform
     protected Vector3 patrolDirection = Vector3.right; // 순찰 방향
     protected bool isPatrolling = true;
     protected Transform player;
@@ -43,6 +46,7 @@ public class MonsterController : MonoBehaviour
 
     protected virtual void Start()
     {
+        maxHp = hp;
         // �±� "Player"�� ������Ʈ ã��
         GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
 
@@ -253,6 +257,19 @@ public class MonsterController : MonoBehaviour
         }
     }
 
+    public virtual void UpdateHPBar()
+    {
+        if (hpBarTransform != null)
+        {
+            float hpPercentage = hp / maxHp; // 현재 HP를 최대 HP로 나눈 비율
+
+            if (hpPercentage < 0)
+            {
+                hpPercentage = 0;
+            }
+            hpBarTransform.localScale = new Vector3(hpPercentage, 1f, 1f); // X 스케일 조정
+        }
+    }
 
     public virtual void Damaged(float amount)
     {
@@ -260,7 +277,11 @@ public class MonsterController : MonoBehaviour
 
         Debug.Log("Monster is taking damage: " + amount);
         anim.SetTrigger("hit"); // 히트 애니메이션 실행
+
         hp -= amount;
+
+        UpdateHPBar();
+
         if (hp <= 0)
         {
             Die();

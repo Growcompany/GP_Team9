@@ -33,14 +33,26 @@ public class AttackAreaController : MonoBehaviour
 
         else if (collider.tag == "Monster")
         {
+            // 먼저 MonsterController를 시도하여 찾기
             MonsterController monster = collider.GetComponent<MonsterController>();
-            monster.Damaged(MovementStats.AttackDamage);
-            Debug.Log("Monster damaged by AttackArea with damage: " + MovementStats.AttackDamage);
-            // 공격이 한 번 발생했음을 표시
-            hasAttacked = true;
-            //MonsterController monsterController = collider.gameObject.GetComponent<MonsterController>();
-            //monsterController.Damaged(MovementStats.AttackDamage);
-            // collider.gameObject.BroadcastMessage("Damaged", MovementStats.AttackDamage);
+
+            if (monster != null)
+            {
+                monster.Damaged(MovementStats.AttackDamage);
+                Debug.Log("Monster damaged by AttackArea with damage: " + MovementStats.AttackDamage);
+                hasAttacked = true;
+            }
+            else
+            {
+                // MonsterController가 없으면 BossController 시도
+                BossController boss = collider.GetComponent<BossController>();
+                if (boss != null)
+                {
+                    boss.Damaged(MovementStats.AttackDamage);
+                    Debug.Log("Boss damaged by AttackArea with damage: " + MovementStats.AttackDamage);
+                    hasAttacked = true;
+                }
+            }
         }
     }
     private void OnTriggerExit2D(Collider2D collision)
