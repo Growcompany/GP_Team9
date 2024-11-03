@@ -995,6 +995,11 @@ public class PlayerController : MonoBehaviour
         {
             if (!_animator.GetCurrentAnimatorStateInfo(0).IsName("Player Die"))
             {
+                _animator.SetBool("isCharging", false);
+                _animator.SetBool("isAttack1", false);
+                _animator.SetFloat("HorizontalVelocity", 0f);
+                _animator.SetBool("isJumping", false);
+                _animator.SetBool("isDashing", false);
                 _animator.SetTrigger("isDead");
             }
         }
