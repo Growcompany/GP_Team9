@@ -48,5 +48,6 @@ public class RespawnPointManager : MonoBehaviour
         yield return new WaitForSeconds(4);
         player.fadeEffectUI.fadeImage.gameObject.SetActive(false);
         player.transform.position = respawnPoints[currentRespawnPointIndex].transform.position;
+        player.Revive();
     }
 }

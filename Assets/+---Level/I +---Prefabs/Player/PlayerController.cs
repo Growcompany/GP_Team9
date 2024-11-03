@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviour
     public UnityEvent<int, int> expUpUIEvent;
     public UnityEvent<int> lifeUpdateUIEvent;
     public UnityEvent skillCoolTimeUIEvent;
+    public PointTextUI pointTextUI;
 
     public GameObject laserPrefab;
     public GameObject shootPoint;
@@ -106,8 +107,10 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         // Status UI
-        statusUI = GameObject.Find("---StatusUI---").transform.Find("Frame").gameObject;
-        statusUI.SetActive(false);
+        //statusUI = GameObject.Find("---StatusUI---").transform.Find("Frame").gameObject;
+        // statusUI.SetActive(false);
+        statusUI = GameObject.Find("---StatusUI---").gameObject;
+        statusUI.GetComponent<Canvas>().enabled = false;
 
         // Status
         ResetStatus();
@@ -200,7 +203,8 @@ public class PlayerController : MonoBehaviour
 
     public void StatusUIManage()
     {
-        statusUI.SetActive(!statusUI.activeSelf);
+        statusUI.GetComponent<Canvas>().enabled = !statusUI.GetComponent<Canvas>().enabled;
+        // statusUI.SetActive(!statusUI.activeSelf);
     }
 
     #endregion
@@ -855,6 +859,7 @@ public class PlayerController : MonoBehaviour
             MovementStats.Life = MovementStats.MaxLife;
             lifeUpdateUIEvent.Invoke(MovementStats.Life);
             levelUpUIEvent.Invoke(MovementStats.Level);
+            pointTextUI.onChanged.Invoke();
         }
 
         // Strength

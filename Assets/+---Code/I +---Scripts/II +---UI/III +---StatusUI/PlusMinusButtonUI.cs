@@ -30,7 +30,7 @@ public class PlusMinusButtonUI : MonoBehaviour
         minus.onClick.AddListener(Minus);
         plus.onClick.AddListener(Plus);
 
-        CheckMinMax();
+        //CheckMinMax();
     }
 
     private void OnDestroy()
@@ -77,15 +77,14 @@ public class PlusMinusButtonUI : MonoBehaviour
     // flag = false ==> Minus È®ÀÎ
     void CheckMinMax(bool flag)
     {
-        if(flag)
+        int nextValue = flag ? currentStatus.currentValue + 1 : currentStatus.currentValue - 1;
+        if(nextValue >= max)
         {
-            if (currentStatus.currentValue + 1 >= max)
-                plus.enabled = false;
+            plus.enabled = false;
         }
-        else
+        else if(nextValue <= min)
         {
-            if (currentStatus.currentValue - 1 <= min)
-                minus.enabled = false;
+            minus.enabled = false;
         }
     }
 

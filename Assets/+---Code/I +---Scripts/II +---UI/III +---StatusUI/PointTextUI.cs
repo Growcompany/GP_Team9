@@ -25,6 +25,7 @@ public class PointTextUI : MonoBehaviour
 
     void UpdateText()
     {
+        Debug.LogWarning(GameManager.instance.availablePoint);
         text.text = (GameManager.instance.availablePoint - GameManager.instance.currentUsedStatusPoint).ToString();
     }
 }

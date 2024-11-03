@@ -32,8 +32,13 @@ public class GameManager : MonoBehaviour
         if(player == null)
             player = Object.FindFirstObjectByType<PlayerController>();
 
-        CalculateAvailableStatusPoint();
+        
         // DontDestroyOnLoad(gameObject);
+    }
+
+    private void Start()
+    {
+        CalculateAvailableStatusPoint();
     }
 
     public void CalculateAvailableStatusPoint()
@@ -62,16 +67,12 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void RespawnPlayer()
-    {
-        // player.transform.position = playerSpawnPos.transform.position;
-    }
-
     public void Update()
     {
         if(Input.GetKey(KeyCode.Escape))
         {
-            RespawnPointManager.Instance.Respawn(player);
+            player.ExpUp(10);
+            
         }
     }
 }
