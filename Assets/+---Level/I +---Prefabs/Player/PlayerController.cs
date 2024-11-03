@@ -786,14 +786,14 @@ public class PlayerController : MonoBehaviour
 
     private void DieCheck()
     {
-        if (MovementStats.Life <= 0 || transform.position.y < -10f)
+        if (MovementStats.Life <= 0 || transform.position.y < -20f)
         {
             _isDead = true;
         }
-        else if (transform.position.y < -6f)
+        else if (transform.position.y < -16f)
         {
             scene = SceneManager.GetActiveScene();
-            if (scene.name == "BossScene" && transform.position.y < -10f)
+            if (scene.name == "BossScene" && transform.position.y < -20f)
                 _isDead = true;
             else if (scene.name != "BossScene")
                 _isDead = true;
