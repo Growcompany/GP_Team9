@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.Events;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -29,12 +30,14 @@ public class PlayerController : MonoBehaviour
 
     // Status UI
     public GameObject statusUI;
+    private Scene scene;
 
     // Life
     public bool _isDead;
     private bool _isBeingDamaged;
     private bool _isAvoiding;
     private float _avoidanceTimer;
+    public int dieCount;
 
     // Movement
     public float HorizontalVelocity { get; private set; }
@@ -113,6 +116,7 @@ public class PlayerController : MonoBehaviour
         _isBeingDamaged = false;
         _isAvoiding = false;
         _avoidanceTimer = 0f;
+        dieCount = 0;
 
         // Movement
         _isJumping = false;
@@ -775,9 +779,17 @@ public class PlayerController : MonoBehaviour
 
     private void DieCheck()
     {
-        if (MovementStats.Life <= 0)
+        if (MovementStats.Life <= 0 || transform.position.y < -10f)
         {
             _isDead = true;
+        }
+        else if (transform.position.y < -6f)
+        {
+            scene = SceneManager.GetActiveScene();
+            if (scene.name == "BossScene" && transform.position.y < -10f)
+                _isDead = true;
+            else if (scene.name != "BossScene")
+                _isDead = true;
         }
         else
         {
@@ -791,6 +803,7 @@ public class PlayerController : MonoBehaviour
         {
             // Disable player
             // gameObject.SetActive(false);
+            dieCount++;
         }
     }
 
