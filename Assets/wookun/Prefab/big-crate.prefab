@@ -174,8 +174,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6c8820174fcc7c42a511def1b15505f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  monsterPrefab: {fileID: 7318391512515406625, guid: 602567df66afa3e4a8da2f123f7beee7,
-    type: 3}
+  monsterPrefab: {fileID: 0}
   spawnPoint: {fileID: 3221068322195403456}
   health: 3
   monsterCount: 3
