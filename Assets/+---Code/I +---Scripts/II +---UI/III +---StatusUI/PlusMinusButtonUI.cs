@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,6 +11,11 @@ public class PlusMinusButtonUI : MonoBehaviour
     [SerializeField] Button plus;
 
     public CurrentStatusUI currentStatus;
+
+    [Header("PlayerMovementStats 참고")]
+    [SerializeField] private int min;
+    [SerializeField] private int max;
+
     private void Awake()
     {
         if(minus == null)
@@ -23,6 +29,8 @@ public class PlusMinusButtonUI : MonoBehaviour
 
         minus.onClick.AddListener(Minus);
         plus.onClick.AddListener(Plus);
+
+        CheckMinMax();
     }
 
     private void OnDestroy()
@@ -33,6 +41,14 @@ public class PlusMinusButtonUI : MonoBehaviour
 
     void Minus()
     {
+        // plus 버튼 enable
+        if(!plus.enabled)
+            plus.enabled = true;
+
+        // min값보다 작으면 minus 버튼 disable
+        CheckMinMax(false);
+
+        // Current Status 감소
         if (GameManager.instance.currentUsedStatusPoint > 0)
         {
             GameManager.instance.currentUsedStatusPoint--;
@@ -42,10 +58,40 @@ public class PlusMinusButtonUI : MonoBehaviour
 
     void Plus()
     {
+        // minus 버튼 enable
+        if(!minus.enabled)
+            minus.enabled = true;
+
+        // max값보다 크면 plus 버튼 disable
+        CheckMinMax(true);
+
+        // Current Status 증가
         if (GameManager.instance.availablePoint > GameManager.instance.currentUsedStatusPoint)
         {
             GameManager.instance.currentUsedStatusPoint++;
             currentStatus.onStatusChanged.Invoke(true);
         }
+    }
+
+    // flag = true ==> Plus 확인
+    // flag = false ==> Minus 확인
+    void CheckMinMax(bool flag)
+    {
+        if(flag)
+        {
+            if (currentStatus.currentValue + 1 >= max)
+                plus.enabled = false;
+        }
+        else
+        {
+            if (currentStatus.currentValue - 1 <= min)
+                minus.enabled = false;
+        }
+    }
+
+    void CheckMinMax()
+    {
+        CheckMinMax(true);
+        CheckMinMax(false);
     }
 }

@@ -1,0 +1,73 @@
+using System.Collections;
+using System.Collections.Generic;
+using TMPro;
+using Unity.VisualScripting;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class FadeEffect : MonoBehaviour
+{
+    public Image fadeImage;
+
+    public bool isText = false;
+    public TMP_Text fadeText;
+    public float duration = 1.0f;
+
+    private void Awake()
+    {
+        Color colorImage = fadeImage.color;
+        colorImage.a = 0;
+        fadeImage.color = colorImage;
+
+        if (isText)
+        {
+            Color colorText = fadeText.color;
+            colorText.a = 0;
+            fadeText.color = colorText;
+        }
+    }
+
+    public void FadeIn()
+    {
+        StartCoroutine(Fade(1, 0));
+    }
+
+    public void FadeOut()
+    {
+        StartCoroutine(Fade(0, 1));
+    }
+
+    IEnumerator Fade(float startAlpha, float endAlpha)
+    {
+        float elapsedTime = 0.0f;
+        Color colorImage = fadeImage.color;
+        Color colorText = new Color();
+        if(isText)
+        {
+            colorText = fadeText.color;
+        }
+
+        while(elapsedTime < duration)
+        {
+            elapsedTime += Time.deltaTime;
+            colorImage.a = Mathf.Lerp(startAlpha, endAlpha, elapsedTime / duration);
+
+            fadeImage.color = colorImage;
+            if(isText)
+            {
+                colorText.a = colorImage.a;
+                fadeText.color = colorText;
+            }
+            yield return null;
+        }
+
+        colorImage.a = endAlpha;
+        fadeImage.color = colorImage;
+
+        if (isText)
+        {
+            colorText.a = endAlpha;
+            fadeText.color = colorText;
+        }
+    }
+}

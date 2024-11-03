@@ -6,6 +6,8 @@ public class AttackAreaController : MonoBehaviour
 {
     public PlayerController playerController;
     public PlayerMovementStats MovementStats;
+    private bool hasAttacked = false; // 공격 실행 여부 플래그
+
     // Start is called before the first frame update
     void Start()
     {
@@ -31,9 +33,34 @@ public class AttackAreaController : MonoBehaviour
 
         else if (collider.tag == "Monster")
         {
-            //MonsterController monsterController = collider.gameObject.GetComponent<MonsterController>();
-            //monsterController.Damaged(MovementStats.AttackDamage);
-            // collider.gameObject.BroadcastMessage("Damaged", MovementStats.AttackDamage);
+            // 먼저 MonsterController를 시도하여 찾기
+            MonsterController monster = collider.GetComponent<MonsterController>();
+
+            if (monster != null)
+            {
+                monster.Damaged(MovementStats.AttackDamage);
+                Debug.Log("Monster damaged by AttackArea with damage: " + MovementStats.AttackDamage);
+                hasAttacked = true;
+            }
+            else
+            {
+                // MonsterController가 없으면 BossController 시도
+                BossController boss = collider.GetComponent<BossController>();
+                if (boss != null)
+                {
+                    boss.Damaged(MovementStats.AttackDamage);
+                    Debug.Log("Boss damaged by AttackArea with damage: " + MovementStats.AttackDamage);
+                    hasAttacked = true;
+                }
+            }
+        }
+    }
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        // 트리거를 벗어나면 다시 공격할 수 있도록 플래그 초기화
+        if (collision.GetComponent<MonsterController>() != null)
+        {
+            hasAttacked = false;
         }
     }
 
