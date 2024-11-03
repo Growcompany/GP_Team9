@@ -139,6 +139,10 @@ public class PlayerController : MonoBehaviour
         StatusUICheck();
         StatusCheck();
 
+        if (_isDead)
+        {
+            return;
+        }
         CountTimers();
         JumpChecks();
         DashCheck();
@@ -161,11 +165,13 @@ public class PlayerController : MonoBehaviour
 
         if (_isGrounded)
         {
-            Move(MovementStats.GroundAcceleration, MovementStats.GroundDeceleration, InputManager.Movement);
+            if (!_isDead)
+                Move(MovementStats.GroundAcceleration, MovementStats.GroundDeceleration, InputManager.Movement);
         }
         else
         {
-            Move(MovementStats.AirAcceleration, MovementStats.AirDeceleration, InputManager.Movement);
+            if (!_isDead)
+                Move(MovementStats.AirAcceleration, MovementStats.AirDeceleration, InputManager.Movement);
         }
 
         ApplyVelocity();
@@ -801,9 +807,17 @@ public class PlayerController : MonoBehaviour
     {
         if (_isDead)
         {
-            // Disable player
-            // gameObject.SetActive(false);
+            // Disable inputmanager
+
         }
+    }
+
+    public void Revive()
+    {
+        _isDead = false;
+        MovementStats.Life = MovementStats.MaxLife;
+        lifeUpdateUIEvent.Invoke(MovementStats.Life);
+        dieCount++;
     }
 
     #endregion
@@ -830,6 +844,7 @@ public class PlayerController : MonoBehaviour
             }
             MovementStats.Level = (int)(MovementStats.Exp / 10);
             MovementStats.Life = MovementStats.MaxLife;
+            lifeUpdateUIEvent.Invoke(MovementStats.Life);
             levelUpUIEvent.Invoke(MovementStats.Level);
         }
 
@@ -853,6 +868,7 @@ public class PlayerController : MonoBehaviour
         MovementStats.Level = 1;
         MovementStats.Exp = 10;
         MovementStats.Life = MovementStats.MaxLife;
+        lifeUpdateUIEvent.Invoke(MovementStats.Life);
         MovementStats.Strength = 1;
         MovementStats.Dodge = 1;
         MovementStats.SkillCoolTime = 1;
@@ -1032,12 +1048,20 @@ public class PlayerController : MonoBehaviour
             }
             _moveSoundTimer += Time.fixedDeltaTime;
         }
+        // landed
+        if ((_isJumping || _isFalling || _isDashFastFalling) && _isGrounded && VerticalVelocity <= 0f)
+        {
+            audioSrc.PlayOneShot(landSound);
+        }
+        if (_isDashing || _isAirDashing)
+        {
+            audioSrc.PlayOneShot(jumpSound);
+        }
     }
 
     private void PlayMoveSound()
     {
-        audioSrc.clip = moveSound;
-        audioSrc.Play();
+        audioSrc.PlayOneShot(moveSound);
     }
 
     #endregion

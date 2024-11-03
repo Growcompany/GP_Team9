@@ -47,7 +47,7 @@ MonoBehaviour:
   JumpBufferTime: 0.125
   JumpCoyoteTime: 0.1
   DashTime: 0.05
-  DashSpeed: 35
+  DashSpeed: 85
   TimeBtwDashesOnGround: 0.225
   NumberOfDashes: 2
   DashDiagonallyBias: 0.4
@@ -63,6 +63,7 @@ MonoBehaviour:
   LaserSpeed: 25
   LaserDamage: 10
   LaserCoolTime: 4.5
+  MoveSoundGap: 0.2
   DebugShowIsGroundedBox: 0
   DebugShowHeadBumpBox: 0
   ShowWalkJumpArc: 0
