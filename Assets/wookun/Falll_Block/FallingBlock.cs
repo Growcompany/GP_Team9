@@ -3,17 +3,11 @@ using UnityEngine;
 
 public class FallingBlock : MonoBehaviour
 {
-    public GameObject explosionEffectPrefab;
-    public AudioClip destructionSound; // 파괴 사운드
+    public GameObject explosionEffectPrefab; // 파괴 이펙트 프리팹
     private Animator animator;
     private Rigidbody2D rb;
     private bool isFalling = false;
     private bool isDestroyed = false;
-    private AudioSource audioSource; // AudioSource 컴포넌트
-
-    // 초기 위치와 회전 상태를 저장할 변수
-    private Vector3 initialPosition;
-    private Quaternion initialRotation;
 
     private void Start()
     {
@@ -22,28 +16,21 @@ public class FallingBlock : MonoBehaviour
 
         // 초기 상태를 Kinematic으로 설정하여 중력 영향을 받지 않음
         rb.bodyType = RigidbodyType2D.Kinematic;
-
-        // AudioSource 컴포넌트 추가 및 설정
-        audioSource = gameObject.AddComponent<AudioSource>();
-        audioSource.clip = destructionSound;
-        audioSource.playOnAwake = false;
-
-        // 초기 위치와 회전 저장
-        initialPosition = transform.position;
-        initialRotation = transform.rotation;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        // 플레이어가 감지 트리거에 들어오면 박스가 떨어지기 시작
         if (!isFalling && other.CompareTag("Player"))
         {
             isFalling = true;
-            rb.bodyType = RigidbodyType2D.Dynamic;
+            rb.bodyType = RigidbodyType2D.Dynamic; // 감지 후 Dynamic으로 변경하여 중력 적용
         }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        // 땅이나 플레이어와 충돌 시 파괴
         if (!isDestroyed && isFalling && (collision.collider.CompareTag("Ground") || collision.collider.CompareTag("Player")))
         {
             isDestroyed = true;
@@ -53,49 +40,29 @@ public class FallingBlock : MonoBehaviour
 
     private void TriggerDestruction()
     {
+        // 파괴 애니메이션 트리거 설정
         animator.SetTrigger("fall");
+
+        // Rigidbody를 Kinematic으로 설정하여 중력 영향을 받지 않도록 함
         rb.bodyType = RigidbodyType2D.Kinematic;
-        rb.velocity = Vector2.zero;
+        rb.velocity = Vector2.zero; // 파괴 시 속도를 0으로 초기화하여 멈춤
 
-        // 파괴 사운드 재생
-        if (audioSource != null && destructionSound != null)
-        {
-            audioSource.Play();
-        }
-
+        // 파괴 이펙트 생성 (선택 사항)
         if (explosionEffectPrefab != null)
         {
             Instantiate(explosionEffectPrefab, transform.position, Quaternion.identity);
         }
 
+        // 파괴 애니메이션 완료 후 제거
         StartCoroutine(DestroyAfterAnimation());
     }
 
     private IEnumerator DestroyAfterAnimation()
     {
+        // 애니메이션의 실제 재생 시간 동안 대기
         yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length);
-        gameObject.SetActive(false); // 오브젝트를 비활성화하여 삭제 효과 제공
-    }
 
-    // revive 후 오브젝트를 원상복구하는 메서드
-    public void ResetBlock()
-    {
-        // 초기 위치와 회전으로 복구
-        transform.position = initialPosition;
-        transform.rotation = initialRotation;
-
-        // 상태 초기화
-        isFalling = false;
-        isDestroyed = false;
-
-        // Rigidbody 상태 초기화
-        rb.bodyType = RigidbodyType2D.Kinematic;
-        rb.velocity = Vector2.zero;
-
-        // 애니메이션 상태 초기화
-        animator.ResetTrigger("fall");
-
-        // 오브젝트 활성화
-        gameObject.SetActive(true);
+        // 오브젝트 제거
+        Destroy(gameObject);
     }
 }

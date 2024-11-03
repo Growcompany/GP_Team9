@@ -202,8 +202,6 @@ MonoBehaviour:
   knockbackForce: 5
   onDuration: 2
   offDuration: 2
-  soundTriggerDistance: 5
-  warningSound: {fileID: 8300000, guid: dde7c52ee93e00e4e926a6d863fadc2c, type: 3}
 --- !u!114 &5926057026638764645
 MonoBehaviour:
   m_ObjectHideFlags: 0

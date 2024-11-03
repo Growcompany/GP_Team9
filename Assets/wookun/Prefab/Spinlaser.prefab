@@ -86,10 +86,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   centerPoint: {fileID: 7572497928440475941}
   rotationSpeed: 50
-  knockbackForce: 5
-  damageAmount: 1
-  proximitySound: {fileID: 8300000, guid: b0fb6e1145a97094da7211e41a73272e, type: 3}
-  triggerDistance: 5
 --- !u!61 &5227826544463400053
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -614,10 +610,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   centerPoint: {fileID: 0}
   rotationSpeed: 50
-  knockbackForce: 5
-  damageAmount: 1
-  proximitySound: {fileID: 0}
-  triggerDistance: 5
 --- !u!1 &7960374625096165403
 GameObject:
   m_ObjectHideFlags: 0
