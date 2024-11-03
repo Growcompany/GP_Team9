@@ -7,10 +7,14 @@ public class ForceFieldController : MonoBehaviour
     public float knockbackForce = 5.0f; // 플레이어가 밀려나는 힘
     public float onDuration = 2.0f; // 전기 오브젝트가 켜진 상태로 유지되는 시간
     public float offDuration = 2.0f; // 전기 오브젝트가 꺼진 상태로 유지되는 시간
+    public float soundTriggerDistance = 5.0f; // 경고음이 재생될 거리
+    public AudioClip warningSound; // 경고음 오디오 클립
 
     private bool isActive = true; // 전기 오브젝트의 현재 활성화 상태
     private SpriteRenderer spriteRenderer;
     private Collider2D collider2D;
+    private AudioSource audioSource;
+    private GameObject player; // 플레이어 오브젝트
 
     private void Start()
     {
@@ -18,8 +22,37 @@ public class ForceFieldController : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         collider2D = GetComponent<Collider2D>();
 
+        // AudioSource 컴포넌트 추가 및 설정
+        audioSource = gameObject.AddComponent<AudioSource>();
+        audioSource.clip = warningSound;
+        audioSource.loop = false;
+        audioSource.playOnAwake = false;
+
+        // 플레이어 오브젝트 찾기
+        player = GameObject.FindGameObjectWithTag("Player");
+
         // 전기 오브젝트의 켜짐/꺼짐 상태를 주기적으로 변경하는 코루틴 시작
         StartCoroutine(ToggleElectricity());
+    }
+
+    private void Update()
+    {
+        if (player != null)
+        {
+            // 장애물과 플레이어 간의 거리 계산
+            float distanceToPlayer = Vector2.Distance(transform.position, player.transform.position);
+
+            // 플레이어가 지정된 거리 이내로 접근했을 때
+            if (distanceToPlayer <= soundTriggerDistance)
+            {
+                // 경고음이 재생 중이 아닐 경우 재생
+                if (!audioSource.isPlaying)
+                {
+                    audioSource.Play();
+                    Debug.Log("Warning sound played.");
+                }
+            }
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

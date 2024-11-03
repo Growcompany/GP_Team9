@@ -199,8 +199,8 @@ MonoBehaviour:
   player: {fileID: 0}
   followSpeed: 1
   floatAmplitude: 3
-  floatFrequency: 1
+  floatFrequency: 3
   explosionEffectPrefab: {fileID: 8409420106267765905, guid: 31d37d4a1fd880849bde80d79f399915,
     type: 3}
-  explosionRadius: 2
-  explosionForce: 1000
+  explosionRadius: 4
+  explosionSound: {fileID: 8300000, guid: a946579100e0bed46a66359eb8bf8773, type: 3}
