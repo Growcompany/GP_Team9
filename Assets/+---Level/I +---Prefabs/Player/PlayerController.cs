@@ -29,6 +29,7 @@ public class PlayerController : MonoBehaviour
 
     // Status UI
     public GameObject statusUI;
+    public FadeEffect fadeEffectUI;
 
     // Life
     public int Life { get; private set; }
@@ -747,6 +748,8 @@ public class PlayerController : MonoBehaviour
         {
             // Disable player
             // gameObject.SetActive(false);
+            fadeEffectUI.FadeOut();
+            RespawnPointManager.Instance.Respawn(this);
         }
     }
 

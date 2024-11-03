@@ -15,6 +15,9 @@ public class FadeEffect : MonoBehaviour
 
     private void Awake()
     {
+        // 기본 상태가 false라서 켜줌
+        fadeImage.gameObject.SetActive(true);
+
         Color colorImage = fadeImage.color;
         colorImage.a = 0;
         fadeImage.color = colorImage;

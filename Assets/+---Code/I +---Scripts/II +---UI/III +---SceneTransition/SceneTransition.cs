@@ -8,7 +8,6 @@ public class SceneTransition : MonoBehaviour
     public static SceneTransition Instance {  get; private set; }
 
     [SerializeField] private FadeEffect fadeEffect;
-    private bool isWaiting = false;
 
     private void Awake()
     {
