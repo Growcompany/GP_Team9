@@ -1012,7 +1012,7 @@ public class PlayerController : MonoBehaviour
         {
             if (_moveSoundTimer > MovementStats.MoveSoundGap || _moveSoundTimer == 0f)
             {
-                if (InputManager.Movement.x != 0)
+                if (InputManager.Movement.x != 0 && _animator.GetCurrentAnimatorStateInfo(0).IsName("Movement"))
                 {
                     PlayMoveSound();
                     _moveSoundTimer = 0f;
