@@ -803,7 +803,6 @@ public class PlayerController : MonoBehaviour
         {
             // Disable player
             // gameObject.SetActive(false);
-            dieCount++;
         }
     }
 
