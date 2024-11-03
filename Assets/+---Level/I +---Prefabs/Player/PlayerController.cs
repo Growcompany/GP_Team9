@@ -31,6 +31,7 @@ public class PlayerController : MonoBehaviour
     // Status UI
     public GameObject statusUI;
     private Scene scene;
+    public FadeEffect fadeEffectUI;
 
     // Life
     public bool _isDead;
@@ -807,8 +808,16 @@ public class PlayerController : MonoBehaviour
     {
         if (_isDead)
         {
-            // Disable inputmanager
+            _isDashing = false;
+            _isAirDashing = false;
+            _isJumping = false;
+            _isAttacking = false;
+            _isCharging = false;
+            _isChargeAttacking = false;
+            _isBeingDamaged = false;
 
+            fadeEffectUI.FadeOut();
+            RespawnPointManager.Instance.Respawn(this);
         }
     }
 
@@ -990,39 +999,41 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-
+        else
         {
-            // attack animation
-            _animator.SetBool("isCharging", _isCharging);
-            _animator.SetBool("isAttack1", _isAttacking);
-            _animator.SetFloat("HorizontalVelocity", Mathf.Abs(HorizontalVelocity));
-            _animator.SetBool("isJumping", _isJumping);
-            _animator.SetBool("isDashing", _isDashing || _isAirDashing);
-        }
-        {
-            _rotationTimer += Time.fixedDeltaTime;
-            if ((_isDashing || _isAirDashing) && !_isGrounded)
             {
-                // 대시 방향으로 캐릭터 rotate
-                if (_isFacingRight)
-                    transform.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(_dashDirection.y, _dashDirection.x) * Mathf.Rad2Deg);
+                // attack animation
+                _animator.SetBool("isCharging", _isCharging);
+                _animator.SetBool("isAttack1", _isAttacking);
+                _animator.SetFloat("HorizontalVelocity", Mathf.Abs(HorizontalVelocity));
+                _animator.SetBool("isJumping", _isJumping);
+                _animator.SetBool("isDashing", _isDashing || _isAirDashing);
+            }
+            {
+                _rotationTimer += Time.fixedDeltaTime;
+                if ((_isDashing || _isAirDashing) && !_isGrounded)
+                {
+                    // 대시 방향으로 캐릭터 rotate
+                    if (_isFacingRight)
+                        transform.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(_dashDirection.y, _dashDirection.x) * Mathf.Rad2Deg);
+                    else
+                        transform.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(_dashDirection.y, _dashDirection.x) * Mathf.Rad2Deg + 180);
+                }
+                else if (_rotationTimer > 0.3f)
+                {
+                    _rotationTimer = 0f;
+                    transform.rotation = Quaternion.Euler(0, 0, 0);
+                }
+            }
+            {
+                if (_isCharging)
+                {
+                    chargingFX.SetActive(true);
+                }
                 else
-                    transform.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(_dashDirection.y, _dashDirection.x) * Mathf.Rad2Deg + 180);
-            }
-            else if (_rotationTimer > 0.3f)
-            {
-                _rotationTimer = 0f;
-                transform.rotation = Quaternion.Euler(0, 0, 0);
-            }
-        }
-        {
-            if (_isCharging)
-            {
-                chargingFX.SetActive(true);
-            }
-            else
-            {
-                chargingFX.SetActive(false);
+                {
+                    chargingFX.SetActive(false);
+                }
             }
         }
     }
