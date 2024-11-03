@@ -80,6 +80,9 @@ public class PlayerMovementStats : ScriptableObject
     [Range(1f, 500f)] public float LaserDamage = 100f;
     [Range(0f, 5f)] public float LaserCoolTime = 5f;
 
+    [Header("Sound")]
+    public float MoveSoundGap = 0.2f;
+
 
     [Header("Debug")]
     public bool DebugShowIsGroundedBox;

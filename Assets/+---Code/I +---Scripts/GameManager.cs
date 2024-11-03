@@ -9,7 +9,6 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
 
     public PlayerController player;
-    public GameObject playerSpawnPos;
 
     public int totalUsedStatusPoint;                    // ConfirmButtonUI에서 조절
     public int availablePoint;                          // CalculateAvailableStatusPoint 이벤트로 계산됨(ex. Level up, Confirm button)
@@ -18,7 +17,6 @@ public class GameManager : MonoBehaviour
     public float coolTimeRatio;                         // SkillCoolTimeUI에서 사용
     public float currentCoolTime;                       // SkillCoolTimeUI에서 사용
 
-    public FadeEffect deathUIFadeEffect;
 
     private void Awake()
     {
@@ -66,15 +64,14 @@ public class GameManager : MonoBehaviour
 
     public void RespawnPlayer()
     {
-        player.transform.position = playerSpawnPos.transform.position;
+        // player.transform.position = playerSpawnPos.transform.position;
     }
 
     public void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if(Input.GetKey(KeyCode.Escape))
         {
-            Debug.LogWarning("Fade out");
-            deathUIFadeEffect.FadeOut();
+            RespawnPointManager.Instance.Respawn(player);
         }
     }
 }

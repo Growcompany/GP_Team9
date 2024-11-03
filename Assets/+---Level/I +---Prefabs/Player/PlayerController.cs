@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.Events;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -29,12 +30,15 @@ public class PlayerController : MonoBehaviour
 
     // Status UI
     public GameObject statusUI;
+    private Scene scene;
+    public FadeEffect fadeEffectUI;
 
     // Life
     public bool _isDead;
     private bool _isBeingDamaged;
     private bool _isAvoiding;
     private float _avoidanceTimer;
+    public int dieCount;
 
     // Movement
     public float HorizontalVelocity { get; private set; }
@@ -89,6 +93,14 @@ public class PlayerController : MonoBehaviour
     private RaycastHit2D[] hits;
     private float _chargeTimer;
 
+    // Sound
+    public AudioSource audioSrc;
+    public AudioClip moveSound;
+    public AudioClip jumpSound;
+    public AudioClip landSound;
+    public AudioClip attackSound;
+    public float _moveSoundTimer;
+
     #endregion
 
     private void Awake()
@@ -105,6 +117,7 @@ public class PlayerController : MonoBehaviour
         _isBeingDamaged = false;
         _isAvoiding = false;
         _avoidanceTimer = 0f;
+        dieCount = 0;
 
         // Movement
         _isJumping = false;
@@ -116,6 +129,10 @@ public class PlayerController : MonoBehaviour
 
         // Attack
         attackArea = GameObject.Find("AttackArea");
+
+        // Sound
+        _moveSoundTimer = 0f;
+        audioSrc = GetComponent<AudioSource>();
     }
 
     private void Update()
@@ -123,6 +140,10 @@ public class PlayerController : MonoBehaviour
         StatusUICheck();
         StatusCheck();
 
+        if (_isDead)
+        {
+            return;
+        }
         CountTimers();
         JumpChecks();
         DashCheck();
@@ -141,14 +162,17 @@ public class PlayerController : MonoBehaviour
         Fall();
         Die();
         Animations();
+        Sound();
 
         if (_isGrounded)
         {
-            Move(MovementStats.GroundAcceleration, MovementStats.GroundDeceleration, InputManager.Movement);
+            if (!_isDead)
+                Move(MovementStats.GroundAcceleration, MovementStats.GroundDeceleration, InputManager.Movement);
         }
         else
         {
-            Move(MovementStats.AirAcceleration, MovementStats.AirDeceleration, InputManager.Movement);
+            if (!_isDead)
+                Move(MovementStats.AirAcceleration, MovementStats.AirDeceleration, InputManager.Movement);
         }
 
         ApplyVelocity();
@@ -762,9 +786,17 @@ public class PlayerController : MonoBehaviour
 
     private void DieCheck()
     {
-        if (MovementStats.Life <= 0)
+        if (MovementStats.Life <= 0 || transform.position.y < -10f)
         {
             _isDead = true;
+        }
+        else if (transform.position.y < -6f)
+        {
+            scene = SceneManager.GetActiveScene();
+            if (scene.name == "BossScene" && transform.position.y < -10f)
+                _isDead = true;
+            else if (scene.name != "BossScene")
+                _isDead = true;
         }
         else
         {
@@ -776,9 +808,25 @@ public class PlayerController : MonoBehaviour
     {
         if (_isDead)
         {
-            // Disable player
-            // gameObject.SetActive(false);
+            _isDashing = false;
+            _isAirDashing = false;
+            _isJumping = false;
+            _isAttacking = false;
+            _isCharging = false;
+            _isChargeAttacking = false;
+            _isBeingDamaged = false;
+
+            fadeEffectUI.FadeOut();
+            RespawnPointManager.Instance.Respawn(this);
         }
+    }
+
+    public void Revive()
+    {
+        _isDead = false;
+        MovementStats.Life = MovementStats.MaxLife;
+        lifeUpdateUIEvent.Invoke(MovementStats.Life);
+        dieCount++;
     }
 
     #endregion
@@ -805,6 +853,7 @@ public class PlayerController : MonoBehaviour
             }
             MovementStats.Level = (int)(MovementStats.Exp / 10);
             MovementStats.Life = MovementStats.MaxLife;
+            lifeUpdateUIEvent.Invoke(MovementStats.Life);
             levelUpUIEvent.Invoke(MovementStats.Level);
         }
 
@@ -828,6 +877,7 @@ public class PlayerController : MonoBehaviour
         MovementStats.Level = 1;
         MovementStats.Exp = 10;
         MovementStats.Life = MovementStats.MaxLife;
+        lifeUpdateUIEvent.Invoke(MovementStats.Life);
         MovementStats.Strength = 1;
         MovementStats.Dodge = 1;
         MovementStats.SkillCoolTime = 1;
@@ -945,48 +995,93 @@ public class PlayerController : MonoBehaviour
         {
             if (!_animator.GetCurrentAnimatorStateInfo(0).IsName("Player Die"))
             {
+                _animator.SetBool("isCharging", false);
+                _animator.SetBool("isAttack1", false);
+                _animator.SetFloat("HorizontalVelocity", 0f);
+                _animator.SetBool("isJumping", false);
+                _animator.SetBool("isDashing", false);
                 _animator.SetTrigger("isDead");
             }
         }
 
-
+        else
         {
-            // attack animation
-            _animator.SetBool("isCharging", _isCharging);
-            _animator.SetBool("isAttack1", _isAttacking);
-            _animator.SetFloat("HorizontalVelocity", Mathf.Abs(HorizontalVelocity));
-            _animator.SetBool("isJumping", _isJumping);
-            _animator.SetBool("isDashing", _isDashing || _isAirDashing);
-        }
-        {
-            _rotationTimer += Time.fixedDeltaTime;
-            if ((_isDashing || _isAirDashing) && !_isGrounded)
             {
-                // 대시 방향으로 캐릭터 rotate
-                if (_isFacingRight)
-                    transform.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(_dashDirection.y, _dashDirection.x) * Mathf.Rad2Deg);
+                // attack animation
+                _animator.SetBool("isCharging", _isCharging);
+                _animator.SetBool("isAttack1", _isAttacking);
+                _animator.SetFloat("HorizontalVelocity", Mathf.Abs(HorizontalVelocity));
+                _animator.SetBool("isJumping", _isJumping);
+                _animator.SetBool("isDashing", _isDashing || _isAirDashing);
+            }
+            {
+                _rotationTimer += Time.fixedDeltaTime;
+                if ((_isDashing || _isAirDashing) && !_isGrounded)
+                {
+                    // 대시 방향으로 캐릭터 rotate
+                    if (_isFacingRight)
+                        transform.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(_dashDirection.y, _dashDirection.x) * Mathf.Rad2Deg);
+                    else
+                        transform.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(_dashDirection.y, _dashDirection.x) * Mathf.Rad2Deg + 180);
+                }
+                else if (_rotationTimer > 0.3f)
+                {
+                    _rotationTimer = 0f;
+                    transform.rotation = Quaternion.Euler(0, 0, 0);
+                }
+            }
+            {
+                if (_isCharging)
+                {
+                    chargingFX.SetActive(true);
+                }
                 else
-                    transform.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(_dashDirection.y, _dashDirection.x) * Mathf.Rad2Deg + 180);
-            }
-            else if (_rotationTimer > 0.3f)
-            {
-                _rotationTimer = 0f;
-                transform.rotation = Quaternion.Euler(0, 0, 0);
-            }
-        }
-        {
-            if (_isCharging)
-            {
-                chargingFX.SetActive(true);
-            }
-            else
-            {
-                chargingFX.SetActive(false);
+                {
+                    chargingFX.SetActive(false);
+                }
             }
         }
     }
 
     #endregion
+
+    #region Sound
+
+
+
+    private void Sound()
+    {
+        // walking
+        if (_isGrounded && HorizontalVelocity != 0 && (!_isDashing || !_isAirDashing))
+        {
+            if (_moveSoundTimer > MovementStats.MoveSoundGap || _moveSoundTimer == 0f)
+            {
+                if (InputManager.Movement.x != 0 && _animator.GetCurrentAnimatorStateInfo(0).IsName("Movement"))
+                {
+                    PlayMoveSound();
+                    _moveSoundTimer = 0f;
+                }
+            }
+            _moveSoundTimer += Time.fixedDeltaTime;
+        }
+        // landed
+        if ((_isJumping || _isFalling || _isDashFastFalling) && _isGrounded && VerticalVelocity <= 0f)
+        {
+            audioSrc.PlayOneShot(landSound);
+        }
+        if (_isDashing || _isAirDashing)
+        {
+            audioSrc.PlayOneShot(jumpSound);
+        }
+    }
+
+    private void PlayMoveSound()
+    {
+        audioSrc.PlayOneShot(moveSound);
+    }
+
+    #endregion
+
 
 
 
