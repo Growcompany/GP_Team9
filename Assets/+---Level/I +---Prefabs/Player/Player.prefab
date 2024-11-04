@@ -494,7 +494,6 @@ MonoBehaviour:
   chargingFX: {fileID: 7848607362095877649}
   statusUI: {fileID: 0}
   fadeEffectUI: {fileID: 0}
-  _isDead: 0
   dieCount: 0
   _isFacingRight: 0
   audioSrc: {fileID: 5765406245850680698}
@@ -719,7 +718,7 @@ GameObject:
   - component: {fileID: 5751927255749643330}
   - component: {fileID: 6251672565233690902}
   - component: {fileID: 2224622677582387020}
-  m_Layer: 0
+  m_Layer: 1
   m_Name: AttackArea
   m_TagString: Player
   m_Icon: {fileID: 0}

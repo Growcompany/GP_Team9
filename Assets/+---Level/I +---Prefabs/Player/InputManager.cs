@@ -20,6 +20,8 @@ public class InputManager : MonoBehaviour
     public static bool AttackIsHolding;
     public static bool AttackWasReleased;
 
+    public static bool CheatWasPressed;
+
 
     private InputAction _statusAction;
     private InputAction _moveAction;
@@ -27,6 +29,8 @@ public class InputManager : MonoBehaviour
     private InputAction _runAction;
     private InputAction _dashAction;
     private InputAction _attackAction;
+
+    private InputAction _cheatAction;
 
 
     #endregion
@@ -42,6 +46,8 @@ public class InputManager : MonoBehaviour
         _runAction = PlayerInput.actions["Run"];
         _dashAction = PlayerInput.actions["Dash"];
         _attackAction = PlayerInput.actions["Attack"];
+
+        _cheatAction = PlayerInput.actions["Cheat"];
 
     }
 
@@ -62,5 +68,7 @@ public class InputManager : MonoBehaviour
         AttackWasPressed = _attackAction.WasPressedThisFrame();
         AttackIsHolding = _attackAction.IsPressed();
         AttackWasReleased = _attackAction.WasReleasedThisFrame();
+
+        CheatWasPressed = _cheatAction.WasPressedThisFrame();
     }
 }

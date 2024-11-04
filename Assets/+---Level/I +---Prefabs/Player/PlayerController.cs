@@ -35,7 +35,25 @@ public class PlayerController : MonoBehaviour
     public FadeEffect fadeEffectUI;
 
     // Life
-    public bool _isDead;
+    private bool isDead;
+    public bool _isDead
+    {
+        get { return isDead; }
+        set
+        {
+            if (isDead != value)
+            {
+                if (value == true)
+                {
+                    fadeEffectUI.FadeOut();
+                    RespawnPointManager.Instance.Respawn(this);
+                }
+
+                isDead = value;
+                _isDead = value;
+            }
+        }
+    }
     private bool _isBeingDamaged;
     private bool _isAvoiding;
     private float _avoidanceTimer;
@@ -118,7 +136,6 @@ public class PlayerController : MonoBehaviour
     public AudioClip chargingSound;
     public AudioClip laserSound;
     public AudioClip damagedSound;
-    public AudioClip deathSound;
     public float _moveSoundTimer;
 
     #endregion
@@ -172,6 +189,8 @@ public class PlayerController : MonoBehaviour
         AttackCheck();
         LandCheck();
         DieCheck();
+
+        CheatCheck();
     }
 
     private void FixedUpdate()
@@ -854,15 +873,12 @@ public class PlayerController : MonoBehaviour
             _isChargeAttacking = false;
             _isBeingDamaged = false;
             HorizontalVelocity = 0f;
-
-            fadeEffectUI.FadeOut();
-            audioSrc.PlayOneShot(deathSound);
-            RespawnPointManager.Instance.Respawn(this);
         }
     }
 
     public void Revive()
     {
+        _animator.SetTrigger("isRevived");
         _isDead = false;
         MovementStats.Life = MovementStats.MaxLife;
         lifeUpdateUIEvent.Invoke(MovementStats.Life);
@@ -965,6 +981,8 @@ public class PlayerController : MonoBehaviour
     private void PlayerCollidesWithMonster()
     {
         // BodyColl Collides with Monster Layer
+        if (_isDead) return;
+
         _monsterHit = Physics2D.BoxCast(_bodyColl.bounds.center, _bodyColl.bounds.size, 0f, Vector2.zero, 0f, MovementStats.MonsterLayer);
         if (_monsterHit.collider != null)
         {
@@ -1116,6 +1134,19 @@ public class PlayerController : MonoBehaviour
     private void OnLaserSound()
     {
         audioSrc.PlayOneShot(laserSound);
+    }
+
+    #endregion
+
+    #region Cheat
+
+    private void CheatCheck()
+    {
+        if (InputManager.CheatWasPressed)
+        {
+            // Boss room entrance
+            transform.position = new Vector3(378f, 2f, 0f);
+        }
     }
 
     #endregion
