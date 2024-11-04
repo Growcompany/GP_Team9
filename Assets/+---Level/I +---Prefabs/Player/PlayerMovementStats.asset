@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd20664e8bcded241a48709d82e2162f, type: 3}
   m_Name: PlayerMovementStats
   m_EditorClassIdentifier: 
-  MaxLife: 3
-  Exp: 0
+  MaxLife: 5
+  Life: 5
+  Exp: 10
   Level: 1
   Strength: 1
   Dodge: 1
@@ -28,16 +29,13 @@ MonoBehaviour:
   GroundLayer:
     serializedVersion: 2
     m_Bits: 256
-<<<<<<< Updated upstream
-=======
   MonsterLayer:
     serializedVersion: 2
-    m_Bits: 5120
->>>>>>> Stashed changes
+    m_Bits: 1024
   GroundDetectionRayLength: 0.02
   HeadDetectionRayLength: 0.02
   HeadWidth: 0.75
-  JumpHeight: 6.5
+  JumpHeight: 10
   JumpHeightCompensationFactor: 1.054
   TimeTillJumpApex: 0.5
   GravityOnReleaseMultiplier: 1
@@ -49,20 +47,23 @@ MonoBehaviour:
   JumpBufferTime: 0.125
   JumpCoyoteTime: 0.1
   DashTime: 0.05
-  DashSpeed: 35
+  DashSpeed: 85
   TimeBtwDashesOnGround: 0.225
   NumberOfDashes: 2
   DashDiagonallyBias: 0.4
   DashGravityOnReleaseMultiplier: 1
   DashTimeForUpwardsCancel: 0.027
+  AvoidanceTime: 0.4
   AttackRange: 1.5
   AttackTime: 0.1
   AttackSpeed: 40
-  AttackDamage: 100
+  AttackDamage: 10
   TimeBtwAttacksOnGround: 0.225
   ChargeTime: 0.6
   LaserSpeed: 25
-  LaserDamage: 100
+  LaserDamage: 10
+  LaserCoolTime: 4.5
+  MoveSoundGap: 0.2
   DebugShowIsGroundedBox: 0
   DebugShowHeadBumpBox: 0
   ShowWalkJumpArc: 0
