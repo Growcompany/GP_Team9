@@ -861,6 +861,7 @@ public class PlayerController : MonoBehaviour
 
     public void Revive()
     {
+        _animator.SetTrigger("isRevived");
         _isDead = false;
         MovementStats.Life = MovementStats.MaxLife;
         lifeUpdateUIEvent.Invoke(MovementStats.Life);
