@@ -828,6 +828,7 @@ public class PlayerController : MonoBehaviour
             _isCharging = false;
             _isChargeAttacking = false;
             _isBeingDamaged = false;
+            HorizontalVelocity = 0f;
 
             fadeEffectUI.FadeOut();
             RespawnPointManager.Instance.Respawn(this);
