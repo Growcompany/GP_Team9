@@ -439,6 +439,10 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 77f26f66-d3f2-4a60-82b9-a9477bfe0bc5
     m_ActionName: 'Player/Status[/Keyboard/tab]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 7a200d20-752b-4089-9b11-f638ea802061
+    m_ActionName: 'Player/Cheat[/Keyboard/b]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player

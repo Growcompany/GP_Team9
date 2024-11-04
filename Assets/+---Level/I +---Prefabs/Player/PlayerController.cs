@@ -816,16 +816,28 @@ public class PlayerController : MonoBehaviour
         {
             if (!_isAvoiding)
             {
-                // sound
-                if (!_isDead)
-                    audioSrc.PlayOneShot(damagedSound);
+                // Dodge
+                float dodgePercent = Random.Range(1, 100);
+                // Dodge 확률 계산
+                if (dodgePercent <= MovementStats.Dodge)
+                {
+                    _isBeingDamaged = true;
+                    yield return new WaitForSeconds(1f);
+                    _isBeingDamaged = false;
+                }
+                else
+                {
+                    // sound
+                    if (!_isDead)
+                        audioSrc.PlayOneShot(damagedSound);
 
-                _isBeingDamaged = true;
-                MovementStats.Life -= 1;
-                lifeUpdateUIEvent.Invoke(MovementStats.Life);
-                StartCoroutine(ChangeRed());
-                yield return new WaitForSeconds(1f);
-                _isBeingDamaged = false;
+                    _isBeingDamaged = true;
+                    MovementStats.Life -= 1;
+                    lifeUpdateUIEvent.Invoke(MovementStats.Life);
+                    StartCoroutine(ChangeRed());
+                    yield return new WaitForSeconds(1f);
+                    _isBeingDamaged = false;
+                }
             }
         }
     }
