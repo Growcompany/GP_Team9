@@ -118,6 +118,7 @@ public class PlayerController : MonoBehaviour
     public AudioClip chargingSound;
     public AudioClip laserSound;
     public AudioClip damagedSound;
+    public AudioClip deathSound;
     public float _moveSoundTimer;
 
     #endregion
@@ -855,6 +856,7 @@ public class PlayerController : MonoBehaviour
             HorizontalVelocity = 0f;
 
             fadeEffectUI.FadeOut();
+            audioSrc.PlayOneShot(deathSound);
             RespawnPointManager.Instance.Respawn(this);
         }
     }
