@@ -35,7 +35,24 @@ public class PlayerController : MonoBehaviour
     public FadeEffect fadeEffectUI;
 
     // Life
-    public bool _isDead;
+    private bool isDead;
+    public bool _isDead
+    {
+        get { return isDead; }
+        set
+        {
+            if (isDead != value)
+            {
+                if (value == true)
+                {
+                    fadeEffectUI.FadeOut();
+                    RespawnPointManager.Instance.Respawn(this);
+                }
+
+                isDead = value;
+            }
+        }
+    }
     private bool _isBeingDamaged;
     private bool _isAvoiding;
     private float _avoidanceTimer;
@@ -853,9 +870,6 @@ public class PlayerController : MonoBehaviour
             _isChargeAttacking = false;
             _isBeingDamaged = false;
             HorizontalVelocity = 0f;
-
-            fadeEffectUI.FadeOut();
-            RespawnPointManager.Instance.Respawn(this);
         }
     }
 
