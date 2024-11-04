@@ -156,6 +156,10 @@ public class PlayerController : MonoBehaviour
         {
             ResetStatus();
         }
+        else
+        {
+            MovementStats.Life = MovementStats.MaxLife;
+        }
 
         // Life
         _isDead = false;
