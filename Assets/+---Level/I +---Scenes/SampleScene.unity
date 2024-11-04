@@ -147,6 +147,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.x
       value: 0.0063476562
       objectReference: {fileID: 0}
+    - target: {fileID: 5661794798835521691, guid: 3bd7443448f6591478e2e2b9a9514548,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0.0017089844
+      objectReference: {fileID: 0}
     - target: {fileID: 7505821778466588349, guid: 3bd7443448f6591478e2e2b9a9514548,
         type: 3}
       propertyPath: m_Pivot.x
@@ -2716,6 +2721,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AdditionalShaderChannelsFlag
       value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 5574295212519661027, guid: 9d3e065882f78dd4e8775892d9e37d94,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 2.3413086
       objectReference: {fileID: 0}
     - target: {fileID: 8542664184250986509, guid: 9d3e065882f78dd4e8775892d9e37d94,
         type: 3}
@@ -15641,7 +15651,7 @@ Transform:
   m_GameObject: {fileID: 4670640025868876667}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.605919, y: 5.6977, z: -15}
+  m_LocalPosition: {x: 0.23824501, y: 5.69795, z: -15}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

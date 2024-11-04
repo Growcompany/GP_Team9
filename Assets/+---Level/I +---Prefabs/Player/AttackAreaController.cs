@@ -6,7 +6,7 @@ public class AttackAreaController : MonoBehaviour
 {
     public PlayerController playerController;
     public PlayerMovementStats MovementStats;
-    private bool hasAttacked = false; // °ø°Ý ½ÇÇà ¿©ºÎ ÇÃ·¡±×
+    private bool hasAttacked = false; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½ï¿½
 
     // Start is called before the first frame update
     void Start()
@@ -33,7 +33,7 @@ public class AttackAreaController : MonoBehaviour
 
         else if (collider.tag == "Monster")
         {
-            // ¸ÕÀú MonsterController¸¦ ½ÃµµÇÏ¿© Ã£±â
+            // ï¿½ï¿½ï¿½ï¿½ MonsterControllerï¿½ï¿½ ï¿½Ãµï¿½ï¿½Ï¿ï¿½ Ã£ï¿½ï¿½
             MonsterController monster = collider.GetComponent<MonsterController>();
 
             if (monster != null)
@@ -44,7 +44,7 @@ public class AttackAreaController : MonoBehaviour
             }
             else
             {
-                // MonsterController°¡ ¾øÀ¸¸é BossController ½Ãµµ
+                // MonsterControllerï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ BossController ï¿½Ãµï¿½
                 BossController boss = collider.GetComponent<BossController>();
                 if (boss != null)
                 {
@@ -57,7 +57,7 @@ public class AttackAreaController : MonoBehaviour
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
-        // Æ®¸®°Å¸¦ ¹þ¾î³ª¸é ´Ù½Ã °ø°ÝÇÒ ¼ö ÀÖµµ·Ï ÇÃ·¡±× ÃÊ±âÈ­
+        // Æ®ï¿½ï¿½ï¿½Å¸ï¿½ ï¿½ï¿½ï¿½î³ªï¿½ï¿½ ï¿½Ù½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Öµï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­
         if (collision.GetComponent<MonsterController>() != null)
         {
             hasAttacked = false;
