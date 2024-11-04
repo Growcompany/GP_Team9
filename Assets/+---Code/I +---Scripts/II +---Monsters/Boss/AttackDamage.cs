@@ -8,13 +8,14 @@ public class AttackDamage : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
+            Debug.Log("Collided object name: " + collision.gameObject.name);
             // PlayerController 컴포넌트 가져오기
             PlayerController playerController = collision.GetComponent<PlayerController>();
 
             if (playerController != null)
             {
                 // 플레이어에 데미지 주기
-                playerController.Damaged();
+                playerController.StartCoroutine(playerController.Damaged());
                 Debug.Log("Player damaged by MonsterSkill damage");
             }
             else

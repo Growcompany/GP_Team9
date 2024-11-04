@@ -28,6 +28,12 @@ MonoBehaviour:
   GroundLayer:
     serializedVersion: 2
     m_Bits: 256
+<<<<<<< Updated upstream
+=======
+  MonsterLayer:
+    serializedVersion: 2
+    m_Bits: 5120
+>>>>>>> Stashed changes
   GroundDetectionRayLength: 0.02
   HeadDetectionRayLength: 0.02
   HeadWidth: 0.75

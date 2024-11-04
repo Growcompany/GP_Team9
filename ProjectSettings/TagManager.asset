@@ -17,8 +17,13 @@ TagManager:
   - Ground
   - Player
   - Monster
+<<<<<<< Updated upstream
   - 
   - 
+=======
+  - Obstacle
+  - Boss
+>>>>>>> Stashed changes
   - 
   - 
   - 

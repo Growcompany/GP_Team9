@@ -237,24 +237,6 @@ public class MonsterController : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         Debug.Log("Collided with: " + collision.gameObject.name);
-
-        // 충돌한 오브젝트가 "AttackedRange"인지 확인
-        if (collision.gameObject.name == "AttackedRange")
-        {
-            // 부모 오브젝트에서 PlayerController를 가져오기
-            PlayerController playerController = collision.transform.parent.GetComponent<PlayerController>();
-
-            if (playerController != null)
-            {
-                // 데미지 처리
-                playerController.Damaged();
-                Debug.Log("Player damaged by AttackedRange");
-            }
-            else
-            {
-                Debug.LogWarning("PlayerController not found on the parent object.");
-            }
-        }
     }
 
     public virtual void UpdateHPBar()
