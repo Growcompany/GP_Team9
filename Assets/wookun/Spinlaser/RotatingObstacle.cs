@@ -64,8 +64,8 @@ public class RotatingObstacle : MonoBehaviour
             PlayerController playerController = collision.gameObject.GetComponent<PlayerController>();
             if (playerController != null)
             {
-                // 데미지 처리
-                playerController.Damaged();
+                // 데미지 코루틴 호출
+                playerController.StartCoroutine(playerController.Damaged());
 
                 // 밀려나는 방향을 계산하여 밀어내기
                 Rigidbody2D playerRb = collision.gameObject.GetComponent<Rigidbody2D>();
@@ -79,3 +79,4 @@ public class RotatingObstacle : MonoBehaviour
         }
     }
 }
+

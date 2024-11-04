@@ -72,13 +72,15 @@ public class ForceFieldController : MonoBehaviour
             PlayerController playerController = collision.gameObject.GetComponent<PlayerController>();
             if (playerController != null)
             {
-                playerController.Damaged();
+                // 데미지 코루틴 호출
+                playerController.StartCoroutine(playerController.Damaged());
 
+                // 플레이어를 뒤로 밀어내는 처리
                 Rigidbody2D playerRb = collision.gameObject.GetComponent<Rigidbody2D>();
                 if (playerRb != null)
                 {
                     Vector2 knockbackDirection = (collision.transform.position - transform.position).normalized;
-                    playerRb.velocity = Vector2.zero;
+                    playerRb.velocity = Vector2.zero; // 이전 속도 초기화
                     playerRb.AddForce(knockbackDirection * knockbackForce, ForceMode2D.Impulse);
 
                     Debug.Log("Knockback applied: " + knockbackDirection * knockbackForce);
