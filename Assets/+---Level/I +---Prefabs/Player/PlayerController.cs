@@ -797,7 +797,8 @@ public class PlayerController : MonoBehaviour
             if (!_isAvoiding)
             {
                 // sound
-                audioSrc.PlayOneShot(damagedSound);
+                if (!_isDead)
+                    audioSrc.PlayOneShot(damagedSound);
 
                 _isBeingDamaged = true;
                 MovementStats.Life -= 1;
@@ -896,8 +897,8 @@ public class PlayerController : MonoBehaviour
         }
 
         // Strength
-        MovementStats.AttackDamage = MovementStats.Strength * 10;
-        MovementStats.LaserDamage = MovementStats.Strength * 10;
+        MovementStats.AttackDamage = MovementStats.Strength * 10f + 30f;
+        MovementStats.LaserDamage = MovementStats.Strength * 10f + 30f;
 
         // Dodge
         // Todo: Dodge
@@ -1044,6 +1045,7 @@ public class PlayerController : MonoBehaviour
 
         else
         {
+            _animator.ResetTrigger("isDead");
             {
                 // attack animation
                 _animator.SetBool("isCharging", _isCharging);
