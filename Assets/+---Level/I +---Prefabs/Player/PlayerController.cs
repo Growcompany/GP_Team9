@@ -50,6 +50,7 @@ public class PlayerController : MonoBehaviour
                 }
 
                 isDead = value;
+                _isDead = value;
             }
         }
     }
@@ -978,6 +979,8 @@ public class PlayerController : MonoBehaviour
     private void PlayerCollidesWithMonster()
     {
         // BodyColl Collides with Monster Layer
+        if (_isDead) return;
+
         _monsterHit = Physics2D.BoxCast(_bodyColl.bounds.center, _bodyColl.bounds.size, 0f, Vector2.zero, 0f, MovementStats.MonsterLayer);
         if (_monsterHit.collider != null)
         {
