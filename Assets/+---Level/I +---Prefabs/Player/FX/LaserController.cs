@@ -90,9 +90,11 @@ public class LaserController : MonoBehaviour
         playerController = Object.FindFirstObjectByType<PlayerController>();
         MovementStats = playerController.MovementStats;
         LaserDamage = MovementStats.LaserDamage;
-        Debug.Log("LaserDamage when triggered: " + LaserDamage);
+        Debug.Log("LaserDamage when triggered: " + LaserDamage + " hit the object: " + collider.name + " with tag: " + collider.tag);
 
         if (collider.tag == "Player")
+            return;
+        else if (collider.name == "AttackedRange")
             return;
 
         else if (collider.name == "Ground")
@@ -129,6 +131,7 @@ public class LaserController : MonoBehaviour
                 }
             }
         }
+        else return;
 
         Explode(collider.transform.position);
     }

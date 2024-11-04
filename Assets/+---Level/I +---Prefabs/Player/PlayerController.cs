@@ -87,7 +87,21 @@ public class PlayerController : MonoBehaviour
 
     // Attack vars
     private bool _isAttacking;
-    public bool _isCharging;
+    private bool isCharging;
+    public bool _isCharging
+    {
+        get { return isCharging; }
+        private set
+        {
+            if (isCharging != value)
+            {
+                if (value == true) OnChargingSound();
+                else OnLaserSound();
+
+                isCharging = value;
+            }
+        }
+    }
     private bool _isChargeAttacking;
     private Transform attackTransform;
     private LayerMask AttackableLayer;
@@ -98,8 +112,12 @@ public class PlayerController : MonoBehaviour
     public AudioSource audioSrc;
     public AudioClip moveSound;
     public AudioClip jumpSound;
+    public AudioClip dashSound;
     public AudioClip landSound;
     public AudioClip attackSound;
+    public AudioClip chargingSound;
+    public AudioClip laserSound;
+    public AudioClip damagedSound;
     public float _moveSoundTimer;
 
     #endregion
@@ -311,6 +329,9 @@ public class PlayerController : MonoBehaviour
         _jumpBufferTimer = 0f;
         VerticalVelocity = MovementStats.InitialJumpVelocity;
 
+        // sound
+        audioSrc.PlayOneShot(jumpSound);
+
     }
 
     private void Jump()
@@ -439,6 +460,9 @@ public class PlayerController : MonoBehaviour
         // Landed
         if ((_isJumping || _isFalling || _isDashFastFalling) && _isGrounded && VerticalVelocity <= 0f)
         {
+            // sound
+            audioSrc.PlayOneShot(landSound);
+
             ResetJumpValues();
             ResetDashes();
 
@@ -548,6 +572,8 @@ public class PlayerController : MonoBehaviour
             _rotationTimer = 0f;
         }
 
+        // sound
+        audioSrc.PlayOneShot(dashSound);
 
         // ResetJumpValues();
     }
@@ -681,6 +707,9 @@ public class PlayerController : MonoBehaviour
     {
         _isAttacking = true;
         _chargeTimer = 0f;
+
+        // sound
+        audioSrc.PlayOneShot(attackSound);
     }
 
     private void InitiateChargeAttack()
@@ -767,6 +796,9 @@ public class PlayerController : MonoBehaviour
         {
             if (!_isAvoiding)
             {
+                // sound
+                audioSrc.PlayOneShot(damagedSound);
+
                 _isBeingDamaged = true;
                 MovementStats.Life -= 1;
                 lifeUpdateUIEvent.Invoke(MovementStats.Life);
@@ -790,14 +822,14 @@ public class PlayerController : MonoBehaviour
 
     private void DieCheck()
     {
-        if (MovementStats.Life <= 0 || transform.position.y < -10f)
+        if (MovementStats.Life <= 0 || transform.position.y < -20f)
         {
             _isDead = true;
         }
-        else if (transform.position.y < -6f)
+        else if (transform.position.y < -16f)
         {
             scene = SceneManager.GetActiveScene();
-            if (scene.name == "BossScene" && transform.position.y < -10f)
+            if (scene.name == "BossScene" && transform.position.y < -20f)
                 _isDead = true;
             else if (scene.name != "BossScene")
                 _isDead = true;
@@ -819,6 +851,7 @@ public class PlayerController : MonoBehaviour
             _isCharging = false;
             _isChargeAttacking = false;
             _isBeingDamaged = false;
+            HorizontalVelocity = 0f;
 
             fadeEffectUI.FadeOut();
             RespawnPointManager.Instance.Respawn(this);
@@ -1063,26 +1096,22 @@ public class PlayerController : MonoBehaviour
             {
                 if (InputManager.Movement.x != 0 && _animator.GetCurrentAnimatorStateInfo(0).IsName("Movement"))
                 {
-                    PlayMoveSound();
+                    audioSrc.PlayOneShot(moveSound);
                     _moveSoundTimer = 0f;
                 }
             }
             _moveSoundTimer += Time.fixedDeltaTime;
         }
-        // landed
-        if ((_isJumping || _isFalling || _isDashFastFalling) && _isGrounded && VerticalVelocity <= 0f)
-        {
-            audioSrc.PlayOneShot(landSound);
-        }
-        if (_isDashing || _isAirDashing)
-        {
-            audioSrc.PlayOneShot(jumpSound);
-        }
     }
 
-    private void PlayMoveSound()
+    private void OnChargingSound()
     {
-        audioSrc.PlayOneShot(moveSound);
+        audioSrc.PlayOneShot(chargingSound);
+    }
+
+    private void OnLaserSound()
+    {
+        audioSrc.PlayOneShot(laserSound);
     }
 
     #endregion
