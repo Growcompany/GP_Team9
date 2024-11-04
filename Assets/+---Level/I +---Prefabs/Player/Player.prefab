@@ -509,6 +509,7 @@ MonoBehaviour:
   chargingSound: {fileID: 8300000, guid: 1d74880bed4586644a16a79a2d9dc8af, type: 3}
   laserSound: {fileID: 8300000, guid: c91fcf414acc0344cb03b13996f1bf3b, type: 3}
   damagedSound: {fileID: 8300000, guid: 8b23b175a78d6b5458322e3a6c9905d0, type: 3}
+  deathSound: {fileID: 8300000, guid: 1b2059ed765a4194eaa0eddea94e0a75, type: 3}
   _moveSoundTimer: 0
 --- !u!114 &-6428926172090270449
 MonoBehaviour:

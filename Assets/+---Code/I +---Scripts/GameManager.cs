@@ -69,10 +69,10 @@ public class GameManager : MonoBehaviour
 
     public void Update()
     {
-        if(Input.GetKey(KeyCode.Escape))
-        {
-            player.ExpUp(10);
+        //if(Input.GetKey(KeyCode.Escape))
+        //{
+        //    player.ExpUp(10);
             
-        }
+        //}
     }
 }
