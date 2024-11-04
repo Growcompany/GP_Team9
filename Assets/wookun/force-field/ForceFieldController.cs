@@ -7,10 +7,14 @@ public class ForceFieldController : MonoBehaviour
     public float knockbackForce = 5.0f; // 플레이어가 밀려나는 힘
     public float onDuration = 2.0f; // 전기 오브젝트가 켜진 상태로 유지되는 시간
     public float offDuration = 2.0f; // 전기 오브젝트가 꺼진 상태로 유지되는 시간
+    public AudioClip proximitySound; // 플레이어가 가까이 접근할 때 재생할 소리
+    public float triggerDistance = 5.0f; // 사운드가 재생되는 거리
 
     private bool isActive = true; // 전기 오브젝트의 현재 활성화 상태
     private SpriteRenderer spriteRenderer;
     private Collider2D collider2D;
+    private AudioSource audioSource; // AudioSource 컴포넌트
+    private Transform player; // 플레이어의 Transform
 
     private void Start()
     {
@@ -18,55 +22,84 @@ public class ForceFieldController : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         collider2D = GetComponent<Collider2D>();
 
+        // AudioSource 컴포넌트 추가 및 설정
+        audioSource = gameObject.AddComponent<AudioSource>();
+        audioSource.clip = proximitySound;
+        audioSource.playOnAwake = false;
+        audioSource.loop = true; // 사운드를 반복 재생
+
+        // "Player" 태그를 가진 오브젝트를 찾아 Transform 할당
+        GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
+        if (playerObject != null)
+        {
+            player = playerObject.transform;
+        }
+        else
+        {
+            Debug.LogWarning("Player object with tag 'Player' not found in the scene.");
+        }
+
         // 전기 오브젝트의 켜짐/꺼짐 상태를 주기적으로 변경하는 코루틴 시작
         StartCoroutine(ToggleElectricity());
     }
 
+    private void Update()
+    {
+        // 플레이어와의 거리 계산
+        if (player != null)
+        {
+            float distance = Vector3.Distance(transform.position, player.position);
+
+            // 플레이어가 일정 거리 이내로 접근할 때만 사운드 재생
+            if (distance <= triggerDistance && !audioSource.isPlaying)
+            {
+                audioSource.Play();
+            }
+            else if (distance > triggerDistance && audioSource.isPlaying)
+            {
+                audioSource.Stop();
+            }
+        }
+    }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        // 전기 오브젝트가 활성 상태일 때만 충돌 처리
         if (isActive && collision.gameObject.CompareTag("Player"))
         {
-            Debug.Log("Player collided with Force Field"); // 충돌 확인 로그 출력
+            Debug.Log("Player collided with Force Field");
 
             // PlayerController 컴포넌트에서 Damaged 메서드를 호출하여 데미지를 줌
             PlayerController playerController = collision.gameObject.GetComponent<PlayerController>();
             if (playerController != null)
             {
-                // 데미지 처리
                 playerController.Damaged();
 
-                // 플레이어를 뒤로 밀어내는 처리
                 Rigidbody2D playerRb = collision.gameObject.GetComponent<Rigidbody2D>();
                 if (playerRb != null)
                 {
-                    // 밀려나는 방향을 계산하여 밀어내기
                     Vector2 knockbackDirection = (collision.transform.position - transform.position).normalized;
-                    playerRb.velocity = Vector2.zero; // 이전 속도 초기화
+                    playerRb.velocity = Vector2.zero;
                     playerRb.AddForce(knockbackDirection * knockbackForce, ForceMode2D.Impulse);
 
-                    Debug.Log("Knockback applied: " + knockbackDirection * knockbackForce); // 밀려나는 방향 및 힘 로그 출력
+                    Debug.Log("Knockback applied: " + knockbackDirection * knockbackForce);
                 }
             }
         }
     }
 
-    // 전기 오브젝트의 켜짐/꺼짐 상태를 주기적으로 변경하는 코루틴
     private IEnumerator ToggleElectricity()
     {
         while (true)
         {
-            // 활성화 상태 설정
             isActive = true;
-            spriteRenderer.enabled = true; // 전기 오브젝트의 모습 활성화
-            collider2D.enabled = true; // 전기 오브젝트 충돌 활성화
+            spriteRenderer.enabled = true;
+            collider2D.enabled = true;
             Debug.Log("Electricity ON");
             yield return new WaitForSeconds(onDuration);
 
-            // 비활성화 상태 설정
             isActive = false;
-            spriteRenderer.enabled = false; // 전기 오브젝트의 모습 비활성화
-            collider2D.enabled = false; // 전기 오브젝트 충돌 비활성화
+            spriteRenderer.enabled = false;
+            collider2D.enabled = false;
             Debug.Log("Electricity OFF");
             yield return new WaitForSeconds(offDuration);
         }
