@@ -150,7 +150,16 @@ public class PlayerController : MonoBehaviour
         statusUI.GetComponent<Canvas>().enabled = false;
 
         // Status
-        ResetStatus();
+        // 현재 씬 이름 확인
+        Scene currentScene = SceneManager.GetActiveScene();
+        if (currentScene.name == "SampleScene")
+        {
+            ResetStatus();
+        }
+        else
+        {
+            MovementStats.Life = MovementStats.MaxLife;
+        }
 
         // Life
         _isDead = false;
@@ -806,7 +815,6 @@ public class PlayerController : MonoBehaviour
     }
 
     #endregion
-
 
 
     #region Life
