@@ -20,14 +20,14 @@ public class PlayerLifeUI : MonoBehaviour
         for(int i = 0; i < transform.childCount; i++)
         {
             Transform child = transform.GetChild(i);
-            child.gameObject.SetActive(false);
+            lifeImages.Add(child);
+            lifeImages[i].gameObject.SetActive(false);
         }
 
         // MaxLife SetActive(true)
         for (int i = 0; i < previousLifes; i++)
         {
             Transform child = transform.GetChild(i);
-            lifeImages.Add(child);
             lifeImages[i].gameObject.SetActive(true);
         }
 
@@ -48,9 +48,9 @@ public class PlayerLifeUI : MonoBehaviour
         int diff = currentLifes - previousLifes;
 
         // SetActive(false)
-        if(diff < 0)
+        if (diff < 0)
         {
-            for(int i = 0; i < Math.Abs(diff); i++)
+            for (int i = 0; i < Math.Abs(diff); i++)
             {
                 lifeImages[Math.Clamp(previousLifes - 1 - i, 0, 9)].gameObject.SetActive(false);
             }
@@ -59,12 +59,11 @@ public class PlayerLifeUI : MonoBehaviour
         // SetActive(true)
         else
         {
-            for(int i = 0; i < Math.Abs(diff); i++)
+            for (int i = 0; i < Math.Abs(diff); i++)
             {
-                lifeImages[Math.Clamp(previousLifes + i - 1, 0, 9)].gameObject.SetActive(true);
+                lifeImages[Math.Clamp(previousLifes + i, 0, 9)].gameObject.SetActive(true);
             }
         }
-
         previousLifes = currentLifes;
     }
 }
