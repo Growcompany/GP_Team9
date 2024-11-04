@@ -189,6 +189,8 @@ public class PlayerController : MonoBehaviour
         AttackCheck();
         LandCheck();
         DieCheck();
+
+        CheatCheck();
     }
 
     private void FixedUpdate()
@@ -1132,6 +1134,19 @@ public class PlayerController : MonoBehaviour
     private void OnLaserSound()
     {
         audioSrc.PlayOneShot(laserSound);
+    }
+
+    #endregion
+
+    #region Cheat
+
+    private void CheatCheck()
+    {
+        if (InputManager.CheatWasPressed)
+        {
+            // Boss room entrance
+            transform.position = new Vector3(378f, 2f, 0f);
+        }
     }
 
     #endregion
