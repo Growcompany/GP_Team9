@@ -38,7 +38,11 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        CalculateAvailableStatusPoint();
+        Scene currentScene = SceneManager.GetActiveScene();
+        if (currentScene.name == "SampleScene")
+        {
+            CalculateAvailableStatusPoint();
+        }
     }
 
     public void CalculateAvailableStatusPoint()
@@ -69,10 +73,10 @@ public class GameManager : MonoBehaviour
 
     public void Update()
     {
-        if(Input.GetKey(KeyCode.Escape))
-        {
-            player.ExpUp(10);
+        //if(Input.GetKey(KeyCode.Escape))
+        //{
+        //    player.ExpUp(10);
             
-        }
+        //}
     }
 }

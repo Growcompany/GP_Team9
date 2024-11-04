@@ -35,7 +35,25 @@ public class PlayerController : MonoBehaviour
     public FadeEffect fadeEffectUI;
 
     // Life
-    public bool _isDead;
+    private bool isDead;
+    public bool _isDead
+    {
+        get { return isDead; }
+        set
+        {
+            if (isDead != value)
+            {
+                if (value == true)
+                {
+                    fadeEffectUI.FadeOut(deathSound);
+                    RespawnPointManager.Instance.Respawn(this);
+                }
+
+                isDead = value;
+                _isDead = value;
+            }
+        }
+    }
     private bool _isBeingDamaged;
     private bool _isAvoiding;
     private float _avoidanceTimer;
@@ -87,7 +105,21 @@ public class PlayerController : MonoBehaviour
 
     // Attack vars
     private bool _isAttacking;
-    public bool _isCharging;
+    private bool isCharging;
+    public bool _isCharging
+    {
+        get { return isCharging; }
+        private set
+        {
+            if (isCharging != value)
+            {
+                if (value == true) OnChargingSound();
+                else OnLaserSound();
+
+                isCharging = value;
+            }
+        }
+    }
     private bool _isChargeAttacking;
     private Transform attackTransform;
     private LayerMask AttackableLayer;
@@ -98,8 +130,13 @@ public class PlayerController : MonoBehaviour
     public AudioSource audioSrc;
     public AudioClip moveSound;
     public AudioClip jumpSound;
+    public AudioClip dashSound;
     public AudioClip landSound;
     public AudioClip attackSound;
+    public AudioClip chargingSound;
+    public AudioClip laserSound;
+    public AudioClip damagedSound;
+    public AudioClip deathSound;
     public float _moveSoundTimer;
 
     #endregion
@@ -113,7 +150,16 @@ public class PlayerController : MonoBehaviour
         statusUI.GetComponent<Canvas>().enabled = false;
 
         // Status
-        ResetStatus();
+        // 현재 씬 이름 확인
+        Scene currentScene = SceneManager.GetActiveScene();
+        if (currentScene.name == "SampleScene")
+        {
+            ResetStatus();
+        }
+        else
+        {
+            MovementStats.Life = MovementStats.MaxLife;
+        }
 
         // Life
         _isDead = false;
@@ -153,6 +199,8 @@ public class PlayerController : MonoBehaviour
         AttackCheck();
         LandCheck();
         DieCheck();
+
+        CheatCheck();
     }
 
     private void FixedUpdate()
@@ -311,6 +359,9 @@ public class PlayerController : MonoBehaviour
         _jumpBufferTimer = 0f;
         VerticalVelocity = MovementStats.InitialJumpVelocity;
 
+        // sound
+        audioSrc.PlayOneShot(jumpSound);
+
     }
 
     private void Jump()
@@ -439,6 +490,9 @@ public class PlayerController : MonoBehaviour
         // Landed
         if ((_isJumping || _isFalling || _isDashFastFalling) && _isGrounded && VerticalVelocity <= 0f)
         {
+            // sound
+            audioSrc.PlayOneShot(landSound);
+
             ResetJumpValues();
             ResetDashes();
 
@@ -548,6 +602,8 @@ public class PlayerController : MonoBehaviour
             _rotationTimer = 0f;
         }
 
+        // sound
+        audioSrc.PlayOneShot(dashSound);
 
         // ResetJumpValues();
     }
@@ -681,6 +737,9 @@ public class PlayerController : MonoBehaviour
     {
         _isAttacking = true;
         _chargeTimer = 0f;
+
+        // sound
+        audioSrc.PlayOneShot(attackSound);
     }
 
     private void InitiateChargeAttack()
@@ -758,7 +817,6 @@ public class PlayerController : MonoBehaviour
     #endregion
 
 
-
     #region Life
 
     public IEnumerator Damaged()
@@ -767,12 +825,28 @@ public class PlayerController : MonoBehaviour
         {
             if (!_isAvoiding)
             {
-                _isBeingDamaged = true;
-                MovementStats.Life -= 1;
-                lifeUpdateUIEvent.Invoke(MovementStats.Life);
-                StartCoroutine(ChangeRed());
-                yield return new WaitForSeconds(1f);
-                _isBeingDamaged = false;
+                // Dodge
+                float dodgePercent = Random.Range(1, 100);
+                // Dodge 확률 계산
+                if (dodgePercent <= MovementStats.Dodge)
+                {
+                    _isBeingDamaged = true;
+                    yield return new WaitForSeconds(1f);
+                    _isBeingDamaged = false;
+                }
+                else
+                {
+                    // sound
+                    if (!_isDead)
+                        audioSrc.PlayOneShot(damagedSound);
+
+                    _isBeingDamaged = true;
+                    MovementStats.Life -= 1;
+                    lifeUpdateUIEvent.Invoke(MovementStats.Life);
+                    StartCoroutine(ChangeRed());
+                    yield return new WaitForSeconds(1f);
+                    _isBeingDamaged = false;
+                }
             }
         }
     }
@@ -790,14 +864,14 @@ public class PlayerController : MonoBehaviour
 
     private void DieCheck()
     {
-        if (MovementStats.Life <= 0 || transform.position.y < -10f)
+        if (MovementStats.Life <= 0 || transform.position.y < -20f)
         {
             _isDead = true;
         }
-        else if (transform.position.y < -6f)
+        else if (transform.position.y < -16f)
         {
             scene = SceneManager.GetActiveScene();
-            if (scene.name == "BossScene" && transform.position.y < -10f)
+            if (scene.name == "BossScene" && transform.position.y < -20f)
                 _isDead = true;
             else if (scene.name != "BossScene")
                 _isDead = true;
@@ -819,14 +893,13 @@ public class PlayerController : MonoBehaviour
             _isCharging = false;
             _isChargeAttacking = false;
             _isBeingDamaged = false;
-
-            fadeEffectUI.FadeOut();
-            RespawnPointManager.Instance.Respawn(this);
+            HorizontalVelocity = 0f;
         }
     }
 
     public void Revive()
     {
+        _animator.SetTrigger("isRevived");
         _isDead = false;
         MovementStats.Life = MovementStats.MaxLife;
         lifeUpdateUIEvent.Invoke(MovementStats.Life);
@@ -863,8 +936,8 @@ public class PlayerController : MonoBehaviour
         }
 
         // Strength
-        MovementStats.AttackDamage = MovementStats.Strength * 10;
-        MovementStats.LaserDamage = MovementStats.Strength * 10;
+        MovementStats.AttackDamage = MovementStats.Strength * 10f + 30f;
+        MovementStats.LaserDamage = MovementStats.Strength * 10f + 30f;
 
         // Dodge
         // Todo: Dodge
@@ -929,6 +1002,8 @@ public class PlayerController : MonoBehaviour
     private void PlayerCollidesWithMonster()
     {
         // BodyColl Collides with Monster Layer
+        if (_isDead) return;
+
         _monsterHit = Physics2D.BoxCast(_bodyColl.bounds.center, _bodyColl.bounds.size, 0f, Vector2.zero, 0f, MovementStats.MonsterLayer);
         if (_monsterHit.collider != null)
         {
@@ -1011,6 +1086,7 @@ public class PlayerController : MonoBehaviour
 
         else
         {
+            _animator.ResetTrigger("isDead");
             {
                 // attack animation
                 _animator.SetBool("isCharging", _isCharging);
@@ -1063,26 +1139,35 @@ public class PlayerController : MonoBehaviour
             {
                 if (InputManager.Movement.x != 0 && _animator.GetCurrentAnimatorStateInfo(0).IsName("Movement"))
                 {
-                    PlayMoveSound();
+                    audioSrc.PlayOneShot(moveSound);
                     _moveSoundTimer = 0f;
                 }
             }
             _moveSoundTimer += Time.fixedDeltaTime;
         }
-        // landed
-        if ((_isJumping || _isFalling || _isDashFastFalling) && _isGrounded && VerticalVelocity <= 0f)
-        {
-            audioSrc.PlayOneShot(landSound);
-        }
-        if (_isDashing || _isAirDashing)
-        {
-            audioSrc.PlayOneShot(jumpSound);
-        }
     }
 
-    private void PlayMoveSound()
+    private void OnChargingSound()
     {
-        audioSrc.PlayOneShot(moveSound);
+        audioSrc.PlayOneShot(chargingSound);
+    }
+
+    private void OnLaserSound()
+    {
+        audioSrc.PlayOneShot(laserSound);
+    }
+
+    #endregion
+
+    #region Cheat
+
+    private void CheatCheck()
+    {
+        if (InputManager.CheatWasPressed)
+        {
+            // Boss room entrance
+            transform.position = new Vector3(378f, 2f, 0f);
+        }
     }
 
     #endregion
