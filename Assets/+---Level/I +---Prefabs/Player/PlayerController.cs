@@ -45,7 +45,7 @@ public class PlayerController : MonoBehaviour
             {
                 if (value == true)
                 {
-                    fadeEffectUI.FadeOut();
+                    fadeEffectUI.FadeOut(deathSound);
                     RespawnPointManager.Instance.Respawn(this);
                 }
 
@@ -136,6 +136,7 @@ public class PlayerController : MonoBehaviour
     public AudioClip chargingSound;
     public AudioClip laserSound;
     public AudioClip damagedSound;
+    public AudioClip deathSound;
     public float _moveSoundTimer;
 
     #endregion

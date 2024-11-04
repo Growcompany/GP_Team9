@@ -28,6 +28,8 @@ public class BossController : MonoBehaviour
     private bool isAttacking = false; // 현재 공격 중인지 확인
     private bool isInvincible = false; // 데미지 중복 방지
 
+    public ResultUI resultUI;
+
     private void Awake()
     {
         anim = GetComponent<Animator>();
@@ -87,7 +89,6 @@ public class BossController : MonoBehaviour
         else
         {
         }
-
     }
 
     #region Attack1
@@ -312,6 +313,9 @@ public class BossController : MonoBehaviour
         {
             player.ExpUp(experiencePoints); // 경험치 전달
         }
+
+        // ResultUI
+        resultUI.gameObject.SetActive(true);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

@@ -1,5 +1,6 @@
 using System.Collections;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -28,18 +29,24 @@ public class FadeEffect : MonoBehaviour
         }
     }
 
-    public void FadeIn()
+    public void FadeIn(AudioClip audioClip = null)
     {
-        StartCoroutine(Fade(1, 0));
+        StartCoroutine(Fade(1, 0, audioClip));
     }
 
-    public void FadeOut()
+    public void FadeOut(AudioClip audioClip = null)
     {
-        StartCoroutine(Fade(0, 1));
+        StartCoroutine(Fade(0, 1, audioClip));
     }
 
-    IEnumerator Fade(float startAlpha, float endAlpha)
+    IEnumerator Fade(float startAlpha, float endAlpha, AudioClip audioClip = null)
     {
+        if(!audioClip.IsUnityNull())
+        {
+            AudioSource audioSource = gameObject.GetComponent<AudioSource>();
+            audioSource.PlayOneShot(audioClip);
+        }    
+
         float elapsedTime = 0.0f;
         Color colorImage = fadeImage.color;
         Color colorText = new Color();

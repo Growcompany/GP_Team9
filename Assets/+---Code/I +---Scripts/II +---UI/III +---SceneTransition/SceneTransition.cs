@@ -6,6 +6,8 @@ public class SceneTransition : MonoBehaviour
 {
     public static SceneTransition Instance {  get; private set; }
 
+    public int deathCount = 0;
+    public float elapsedTime = 0;
     [SerializeField] private FadeEffect fadeEffect;
 
     private void Awake()
@@ -23,6 +25,12 @@ public class SceneTransition : MonoBehaviour
 
         Init();
     }
+
+    private void Update()
+    {
+        elapsedTime += Time.deltaTime;
+    }
+
     private void Init()
     {
         if (fadeEffect == null)
@@ -33,6 +41,16 @@ public class SceneTransition : MonoBehaviour
 
     public void LoadScene(string sceneName)
     {
+        if(sceneName == "BossScene")
+        {
+            deathCount += GameManager.instance.player.dieCount;
+        }
+        else
+        {
+            deathCount = 0;
+            elapsedTime = 0;
+        }
+
         StartCoroutine(LoadSceneCoroutine(sceneName));
     }
 
