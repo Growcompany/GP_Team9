@@ -99,6 +99,8 @@ public class PlayerController : MonoBehaviour
     public AudioClip jumpSound;
     public AudioClip landSound;
     public AudioClip attackSound;
+    public AudioClip chargingSound;
+    public AudioClip damagedSound;
     public float _moveSoundTimer;
 
     #endregion
@@ -435,6 +437,9 @@ public class PlayerController : MonoBehaviour
         // Landed
         if ((_isJumping || _isFalling || _isDashFastFalling) && _isGrounded && VerticalVelocity <= 0f)
         {
+            // sound
+            audioSrc.PlayOneShot(landSound);
+
             ResetJumpValues();
             ResetDashes();
 
@@ -544,6 +549,8 @@ public class PlayerController : MonoBehaviour
             _rotationTimer = 0f;
         }
 
+        // sound
+        audioSrc.PlayOneShot(jumpSound);
 
         // ResetJumpValues();
     }
@@ -677,6 +684,9 @@ public class PlayerController : MonoBehaviour
     {
         _isAttacking = true;
         _chargeTimer = 0f;
+
+        // sound
+        audioSrc.PlayOneShot(attackSound);
     }
 
     private void InitiateChargeAttack()
@@ -763,6 +773,9 @@ public class PlayerController : MonoBehaviour
         {
             if (!_isAvoiding)
             {
+                // sound
+                audioSrc.PlayOneShot(damagedSound);
+
                 _isBeingDamaged = true;
                 MovementStats.Life -= 1;
                 lifeUpdateUIEvent.Invoke(MovementStats.Life);
@@ -815,6 +828,7 @@ public class PlayerController : MonoBehaviour
             _isCharging = false;
             _isChargeAttacking = false;
             _isBeingDamaged = false;
+            HorizontalVelocity = 0f;
 
             fadeEffectUI.FadeOut();
             RespawnPointManager.Instance.Respawn(this);
@@ -1058,26 +1072,50 @@ public class PlayerController : MonoBehaviour
             {
                 if (InputManager.Movement.x != 0 && _animator.GetCurrentAnimatorStateInfo(0).IsName("Movement"))
                 {
-                    PlayMoveSound();
+                    audioSrc.PlayOneShot(moveSound);
                     _moveSoundTimer = 0f;
                 }
             }
             _moveSoundTimer += Time.fixedDeltaTime;
         }
         // landed
-        if ((_isJumping || _isFalling || _isDashFastFalling) && _isGrounded && VerticalVelocity <= 0f)
+        /* if ((_isJumping || _isFalling || _isDashFastFalling) && _isGrounded && VerticalVelocity <= 0f)
         {
+            audioSrc.clip = landSound;
             audioSrc.PlayOneShot(landSound);
-        }
-        if (_isDashing || _isAirDashing)
+        } */
+        /* if (_isDashing || _isAirDashing)
         {
+            audioSrc.clip = jumpSound;
             audioSrc.PlayOneShot(jumpSound);
-        }
-    }
+        } */
 
-    private void PlayMoveSound()
-    {
-        audioSrc.PlayOneShot(moveSound);
+        // attack
+        /* if (_isAttacking && InputManager.AttackWasPressed)
+        {
+            audioSrc.Stop();
+            audioSrc.clip = attackSound;
+            audioSrc.Play();
+        } */
+
+        // charging
+        /* if (_isCharging)
+        {
+            if (audioSrc.clip != chargingSound)
+            {
+                audioSrc.Stop();
+                audioSrc.clip = chargingSound;
+                audioSrc.Play();
+            }
+        } */
+
+        // hit
+        /* if (_isBeingDamaged)
+        {
+            audioSrc.Stop();
+            audioSrc.clip = damagedSound;
+            audioSrc.Play();
+        } */
     }
 
     #endregion
