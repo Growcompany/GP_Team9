@@ -43,9 +43,12 @@ public class FadeEffect : MonoBehaviour
         float elapsedTime = 0.0f;
         Color colorImage = fadeImage.color;
         Color colorText = new Color();
+
+        fadeImage.gameObject.SetActive(true);
         if(isText)
         {
             colorText = fadeText.color;
+
         }
 
         while(elapsedTime < duration)
