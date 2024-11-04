@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.Events;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -17,6 +18,7 @@ public class PlayerController : MonoBehaviour
     public UnityEvent<int, int> expUpUIEvent;
     public UnityEvent<int> lifeUpdateUIEvent;
     public UnityEvent skillCoolTimeUIEvent;
+    public PointTextUI pointTextUI;
 
     public GameObject laserPrefab;
     public GameObject shootPoint;
@@ -29,10 +31,15 @@ public class PlayerController : MonoBehaviour
 
     // Status UI
     public GameObject statusUI;
+    private Scene scene;
+    public FadeEffect fadeEffectUI;
 
     // Life
-    public int Life { get; private set; }
     public bool _isDead;
+    private bool _isBeingDamaged;
+    private bool _isAvoiding;
+    private float _avoidanceTimer;
+    public int dieCount;
 
     // Movement
     public float HorizontalVelocity { get; private set; }
@@ -41,6 +48,7 @@ public class PlayerController : MonoBehaviour
     // Collision Check
     private RaycastHit2D _groundHit;
     private RaycastHit2D _headHit;
+    private RaycastHit2D _monsterHit;
     private bool _isGrounded;
     private bool _bumpedHead;
 
@@ -86,20 +94,33 @@ public class PlayerController : MonoBehaviour
     private RaycastHit2D[] hits;
     private float _chargeTimer;
 
-    // invincible
-    private bool isInvincible = false; // 무적 상태 플래그
-    private SpriteRenderer spriteRenderer;
+    // Sound
+    public AudioSource audioSrc;
+    public AudioClip moveSound;
+    public AudioClip jumpSound;
+    public AudioClip landSound;
+    public AudioClip attackSound;
+    public float _moveSoundTimer;
 
     #endregion
 
     private void Awake()
     {
         // Status UI
-        statusUI = GameObject.Find("---StatusUI---").transform.Find("Frame").gameObject;
+        //statusUI = GameObject.Find("---StatusUI---").transform.Find("Frame").gameObject;
+        // statusUI.SetActive(false);
+        statusUI = GameObject.Find("---StatusUI---").gameObject;
+        statusUI.GetComponent<Canvas>().enabled = false;
+
+        // Status
+        ResetStatus();
 
         // Life
-        Life = MovementStats.MaxLife;
         _isDead = false;
+        _isBeingDamaged = false;
+        _isAvoiding = false;
+        _avoidanceTimer = 0f;
+        dieCount = 0;
 
         // Movement
         _isJumping = false;
@@ -112,14 +133,20 @@ public class PlayerController : MonoBehaviour
         // Attack
         attackArea = GameObject.Find("AttackArea");
 
-        // invincible
-        spriteRenderer = GetComponent<SpriteRenderer>();
+        // Sound
+        _moveSoundTimer = 0f;
+        audioSrc = GetComponent<AudioSource>();
     }
 
     private void Update()
     {
         StatusUICheck();
+        StatusCheck();
 
+        if (_isDead)
+        {
+            return;
+        }
         CountTimers();
         JumpChecks();
         DashCheck();
@@ -138,14 +165,17 @@ public class PlayerController : MonoBehaviour
         Fall();
         Die();
         Animations();
+        Sound();
 
         if (_isGrounded)
         {
-            Move(MovementStats.GroundAcceleration, MovementStats.GroundDeceleration, InputManager.Movement);
+            if (!_isDead)
+                Move(MovementStats.GroundAcceleration, MovementStats.GroundDeceleration, InputManager.Movement);
         }
         else
         {
-            Move(MovementStats.AirAcceleration, MovementStats.AirDeceleration, InputManager.Movement);
+            if (!_isDead)
+                Move(MovementStats.AirAcceleration, MovementStats.AirDeceleration, InputManager.Movement);
         }
 
         ApplyVelocity();
@@ -173,7 +203,8 @@ public class PlayerController : MonoBehaviour
 
     public void StatusUIManage()
     {
-        statusUI.SetActive(!statusUI.activeSelf);
+        statusUI.GetComponent<Canvas>().enabled = !statusUI.GetComponent<Canvas>().enabled;
+        // statusUI.SetActive(!statusUI.activeSelf);
     }
 
     #endregion
@@ -691,7 +722,7 @@ public class PlayerController : MonoBehaviour
             ShootLaser();
             _isChargeAttacking = false;
 
-            StartCoroutine(GameManager.instance.CalculateCoolTime(5.0f));
+            StartCoroutine(GameManager.instance.CalculateCoolTime(MovementStats.LaserCoolTime));
             skillCoolTimeUIEvent.Invoke();
         }
     }
@@ -730,50 +761,46 @@ public class PlayerController : MonoBehaviour
 
     #region Life
 
-    public void Damaged()
+    public IEnumerator Damaged()
     {
-        if (isInvincible) return; // 무적 상태일 때는 데미지를 받지 않음
-
-        Life -= 1;
-        lifeUpdateUIEvent.Invoke(Life);
-
-        if (Life > 0)
+        if (!_isBeingDamaged)
         {
-            StartCoroutine(InvincibilityFlash());
-        }
-        else
-        {
-            // 플레이어 사망 처리
-            _isDead = true;
+            if (!_isAvoiding)
+            {
+                _isBeingDamaged = true;
+                MovementStats.Life -= 1;
+                lifeUpdateUIEvent.Invoke(MovementStats.Life);
+                StartCoroutine(ChangeRed());
+                yield return new WaitForSeconds(1f);
+                _isBeingDamaged = false;
+            }
         }
     }
 
-    private IEnumerator InvincibilityFlash()
+    private IEnumerator ChangeRed()
     {
-        isInvincible = true;
-        float flashDuration = 2f; // 무적 상태 지속 시간
-        float flashInterval = 0.1f; // 깜빡임 간격
-
-        float timeElapsed = 0f;
-        while (timeElapsed < flashDuration)
-        {
-            spriteRenderer.color = Color.white; // 하얀색
-            yield return new WaitForSeconds(flashInterval / 2);
-            spriteRenderer.color = Color.black; // 검은색
-            yield return new WaitForSeconds(flashInterval / 2);
-
-            timeElapsed += flashInterval;
-        }
-
-        spriteRenderer.color = Color.white; // 원래 색상으로 복귀
-        isInvincible = false;
+        GetComponent<SpriteRenderer>().color = Color.red;
+        yield return new WaitForSeconds(0.1f);
+        GetComponent<SpriteRenderer>().color = Color.white;
+        yield return new WaitForSeconds(0.1f);
+        GetComponent<SpriteRenderer>().color = Color.red;
+        yield return new WaitForSeconds(0.1f);
+        GetComponent<SpriteRenderer>().color = Color.white;
     }
 
     private void DieCheck()
     {
-        if (Life <= 0)
+        if (MovementStats.Life <= 0 || transform.position.y < -10f)
         {
             _isDead = true;
+        }
+        else if (transform.position.y < -6f)
+        {
+            scene = SceneManager.GetActiveScene();
+            if (scene.name == "BossScene" && transform.position.y < -10f)
+                _isDead = true;
+            else if (scene.name != "BossScene")
+                _isDead = true;
         }
         else
         {
@@ -785,30 +812,82 @@ public class PlayerController : MonoBehaviour
     {
         if (_isDead)
         {
-            // Disable player
-            // gameObject.SetActive(false);
+            _isDashing = false;
+            _isAirDashing = false;
+            _isJumping = false;
+            _isAttacking = false;
+            _isCharging = false;
+            _isChargeAttacking = false;
+            _isBeingDamaged = false;
+
+            fadeEffectUI.FadeOut();
+            RespawnPointManager.Instance.Respawn(this);
         }
+    }
+
+    public void Revive()
+    {
+        _isDead = false;
+        MovementStats.Life = MovementStats.MaxLife;
+        lifeUpdateUIEvent.Invoke(MovementStats.Life);
+        dieCount++;
     }
 
     #endregion
 
-    #region Level Up / EXP
-
-    public void LevelUp()
-    {
-        if (MovementStats.Level >= MovementStats.MaxLevel)
-        {
-            return;
-        }
-        MovementStats.Level += 1;
-        levelUpUIEvent.Invoke(MovementStats.Level);
-    }
+    #region Status (Level Up, EXP, Strength, ...)
 
     public void ExpUp(int exp)
     {
         MovementStats.Exp += exp;
         expUpUIEvent.Invoke(100, MovementStats.Exp);    // 100은 임의로 설정함, 수정 바람
     }
+
+    private void StatusCheck()
+    {
+        // Life
+        // Todo: Life Up
+
+        // Level Up
+        if ((int)(MovementStats.Exp / 10) > MovementStats.Level)
+        {
+            if (MovementStats.Level >= MovementStats.MaxLevel)
+            {
+                return;
+            }
+            MovementStats.Level = (int)(MovementStats.Exp / 10);
+            MovementStats.Life = MovementStats.MaxLife;
+            lifeUpdateUIEvent.Invoke(MovementStats.Life);
+            levelUpUIEvent.Invoke(MovementStats.Level);
+            pointTextUI.onChanged.Invoke();
+        }
+
+        // Strength
+        MovementStats.AttackDamage = MovementStats.Strength * 10;
+        MovementStats.LaserDamage = MovementStats.Strength * 10;
+
+        // Dodge
+        // Todo: Dodge
+
+        // SkillCoolTime
+        float tempValue = 5f - (MovementStats.SkillCoolTime * 0.5f);
+        if (tempValue < 0.5f)
+            tempValue = 0.5f;
+        MovementStats.LaserCoolTime = tempValue;
+    }
+
+    private void ResetStatus()
+    {
+        MovementStats.MaxLife = 5;
+        MovementStats.Level = 1;
+        MovementStats.Exp = 10;
+        MovementStats.Life = MovementStats.MaxLife;
+        lifeUpdateUIEvent.Invoke(MovementStats.Life);
+        MovementStats.Strength = 1;
+        MovementStats.Dodge = 1;
+        MovementStats.SkillCoolTime = 1;
+    }
+
     #endregion
 
 
@@ -829,26 +908,6 @@ public class PlayerController : MonoBehaviour
         {
             _isGrounded = false;
         }
-
-        // #region Debug Visualization
-        // if (MovementStats.DebugShowIsGroundedBox)
-        // {
-        //     Color rayColor;
-        //     if (_isGrounded)
-        //     {
-        //         rayColor = Color.green;
-        //     }
-        //     else
-        //     {
-        //         rayColor = Color.red;
-        //     }
-
-        //     Debug.DrawRay(new Vector2(boxCastOrigin.x - boxCastSize.x / 2, boxCastOrigin.y), Vector2.down * MovementStats.GroundDetectionRayLength, rayColor);
-        //     Debug.DrawRay(new Vector2(boxCastOrigin.x + boxCastSize.x / 2, boxCastOrigin.y), Vector2.down * MovementStats.GroundDetectionRayLength, rayColor);
-        //     Debug.DrawRay(new Vector2(boxCastOrigin.x - boxCastSize.x / 2, boxCastOrigin.y - MovementStats.GroundDetectionRayLength), Vector2.right * boxCastSize.x, rayColor);
-        // }
-
-        // #endregion
     }
 
     private void BumpedHead()
@@ -867,10 +926,40 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void PlayerCollidesWithMonster()
+    {
+        // BodyColl Collides with Monster Layer
+        _monsterHit = Physics2D.BoxCast(_bodyColl.bounds.center, _bodyColl.bounds.size, 0f, Vector2.zero, 0f, MovementStats.MonsterLayer);
+        if (_monsterHit.collider != null)
+        {
+            StartCoroutine(Damaged());
+        }
+
+    }
+
+    private void AvoidCheck()
+    {
+        if (_avoidanceTimer < 5f)
+        {
+            _avoidanceTimer += Time.fixedDeltaTime;
+        }
+        if (_isDashing || _isAirDashing)
+        {
+            _isAvoiding = true;
+            _avoidanceTimer = 0f;
+        }
+        if (_avoidanceTimer > MovementStats.AvoidanceTime)
+        {
+            _isAvoiding = false;
+        }
+    }
+
     private void CollisionCheck()
     {
         IsGrounded();
         BumpedHead();
+        PlayerCollidesWithMonster();
+        AvoidCheck();
     }
 
 
@@ -911,48 +1000,93 @@ public class PlayerController : MonoBehaviour
         {
             if (!_animator.GetCurrentAnimatorStateInfo(0).IsName("Player Die"))
             {
+                _animator.SetBool("isCharging", false);
+                _animator.SetBool("isAttack1", false);
+                _animator.SetFloat("HorizontalVelocity", 0f);
+                _animator.SetBool("isJumping", false);
+                _animator.SetBool("isDashing", false);
                 _animator.SetTrigger("isDead");
             }
         }
 
-
+        else
         {
-            // attack animation
-            _animator.SetBool("isCharging", _isCharging);
-            _animator.SetBool("isAttack1", _isAttacking);
-            _animator.SetFloat("HorizontalVelocity", Mathf.Abs(HorizontalVelocity));
-            _animator.SetBool("isJumping", _isJumping);
-            _animator.SetBool("isDashing", _isDashing || _isAirDashing);
-        }
-        {
-            _rotationTimer += Time.fixedDeltaTime;
-            if ((_isDashing || _isAirDashing) && !_isGrounded)
             {
-                // 대시 방향으로 캐릭터 rotate
-                if (_isFacingRight)
-                    transform.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(_dashDirection.y, _dashDirection.x) * Mathf.Rad2Deg);
+                // attack animation
+                _animator.SetBool("isCharging", _isCharging);
+                _animator.SetBool("isAttack1", _isAttacking);
+                _animator.SetFloat("HorizontalVelocity", Mathf.Abs(HorizontalVelocity));
+                _animator.SetBool("isJumping", _isJumping);
+                _animator.SetBool("isDashing", _isDashing || _isAirDashing);
+            }
+            {
+                _rotationTimer += Time.fixedDeltaTime;
+                if ((_isDashing || _isAirDashing) && !_isGrounded)
+                {
+                    // 대시 방향으로 캐릭터 rotate
+                    if (_isFacingRight)
+                        transform.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(_dashDirection.y, _dashDirection.x) * Mathf.Rad2Deg);
+                    else
+                        transform.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(_dashDirection.y, _dashDirection.x) * Mathf.Rad2Deg + 180);
+                }
+                else if (_rotationTimer > 0.3f)
+                {
+                    _rotationTimer = 0f;
+                    transform.rotation = Quaternion.Euler(0, 0, 0);
+                }
+            }
+            {
+                if (_isCharging)
+                {
+                    chargingFX.SetActive(true);
+                }
                 else
-                    transform.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(_dashDirection.y, _dashDirection.x) * Mathf.Rad2Deg + 180);
-            }
-            else if (_rotationTimer > 0.3f)
-            {
-                _rotationTimer = 0f;
-                transform.rotation = Quaternion.Euler(0, 0, 0);
-            }
-        }
-        {
-            if (_isCharging)
-            {
-                chargingFX.SetActive(true);
-            }
-            else
-            {
-                chargingFX.SetActive(false);
+                {
+                    chargingFX.SetActive(false);
+                }
             }
         }
     }
 
     #endregion
+
+    #region Sound
+
+
+
+    private void Sound()
+    {
+        // walking
+        if (_isGrounded && HorizontalVelocity != 0 && (!_isDashing || !_isAirDashing))
+        {
+            if (_moveSoundTimer > MovementStats.MoveSoundGap || _moveSoundTimer == 0f)
+            {
+                if (InputManager.Movement.x != 0 && _animator.GetCurrentAnimatorStateInfo(0).IsName("Movement"))
+                {
+                    PlayMoveSound();
+                    _moveSoundTimer = 0f;
+                }
+            }
+            _moveSoundTimer += Time.fixedDeltaTime;
+        }
+        // landed
+        if ((_isJumping || _isFalling || _isDashFastFalling) && _isGrounded && VerticalVelocity <= 0f)
+        {
+            audioSrc.PlayOneShot(landSound);
+        }
+        if (_isDashing || _isAirDashing)
+        {
+            audioSrc.PlayOneShot(jumpSound);
+        }
+    }
+
+    private void PlayMoveSound()
+    {
+        audioSrc.PlayOneShot(moveSound);
+    }
+
+    #endregion
+
 
 
 

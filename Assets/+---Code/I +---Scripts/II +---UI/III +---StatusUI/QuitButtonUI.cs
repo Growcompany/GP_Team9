@@ -21,6 +21,7 @@ public class QuitButtonUI : MonoBehaviour
 
     public void Quit()
     {
-        transform.parent.gameObject.SetActive(false);
+        Canvas canvas = transform.parent.parent.gameObject.GetComponent<Canvas>();
+        canvas.enabled = !canvas.enabled;
     }
 }
