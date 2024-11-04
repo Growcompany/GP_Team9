@@ -202,6 +202,8 @@ MonoBehaviour:
   knockbackForce: 5
   onDuration: 2
   offDuration: 2
+  proximitySound: {fileID: 8300000, guid: b3e6d9c782c9c1e40ae964df9a3067b1, type: 3}
+  triggerDistance: 5
 --- !u!114 &5926057026638764645
 MonoBehaviour:
   m_ObjectHideFlags: 0

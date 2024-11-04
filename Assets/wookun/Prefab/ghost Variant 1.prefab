@@ -203,4 +203,4 @@ MonoBehaviour:
   explosionEffectPrefab: {fileID: 8409420106267765905, guid: 31d37d4a1fd880849bde80d79f399915,
     type: 3}
   explosionRadius: 2
-  explosionForce: 1000
+  explosionSound: {fileID: 8300000, guid: fbe498917219e1745820335f33cd6ea4, type: 3}
