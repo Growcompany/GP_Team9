@@ -486,6 +486,7 @@ MonoBehaviour:
   skillCoolTimeUIEvent:
     m_PersistentCalls:
       m_Calls: []
+  pointTextUI: {fileID: 0}
   laserPrefab: {fileID: 1340588117802886057, guid: 0bb2f9102c0c6c24bbfc1cd9eda7b1b9,
     type: 3}
   shootPoint: {fileID: 4617586057157995254}

@@ -1044,6 +1044,7 @@ public class PlayerController : MonoBehaviour
 
         else
         {
+            _animator.ResetTrigger("isDead");
             {
                 // attack animation
                 _animator.SetBool("isCharging", _isCharging);
