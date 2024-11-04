@@ -87,7 +87,21 @@ public class PlayerController : MonoBehaviour
 
     // Attack vars
     private bool _isAttacking;
-    public bool _isCharging;
+    private bool isCharging;
+    public bool _isCharging
+    {
+        get { return isCharging; }
+        private set
+        {
+            if (isCharging != value)
+            {
+                if (value == true) OnChargingSound();
+                else OnLaserSound();
+
+                isCharging = value;
+            }
+        }
+    }
     private bool _isChargeAttacking;
     private Transform attackTransform;
     private LayerMask AttackableLayer;
@@ -98,9 +112,11 @@ public class PlayerController : MonoBehaviour
     public AudioSource audioSrc;
     public AudioClip moveSound;
     public AudioClip jumpSound;
+    public AudioClip dashSound;
     public AudioClip landSound;
     public AudioClip attackSound;
     public AudioClip chargingSound;
+    public AudioClip laserSound;
     public AudioClip damagedSound;
     public float _moveSoundTimer;
 
@@ -312,6 +328,9 @@ public class PlayerController : MonoBehaviour
 
         _jumpBufferTimer = 0f;
         VerticalVelocity = MovementStats.InitialJumpVelocity;
+
+        // sound
+        audioSrc.PlayOneShot(jumpSound);
 
     }
 
@@ -554,7 +573,7 @@ public class PlayerController : MonoBehaviour
         }
 
         // sound
-        audioSrc.PlayOneShot(jumpSound);
+        audioSrc.PlayOneShot(dashSound);
 
         // ResetJumpValues();
     }
@@ -1083,44 +1102,16 @@ public class PlayerController : MonoBehaviour
             }
             _moveSoundTimer += Time.fixedDeltaTime;
         }
-        // landed
-        /* if ((_isJumping || _isFalling || _isDashFastFalling) && _isGrounded && VerticalVelocity <= 0f)
-        {
-            audioSrc.clip = landSound;
-            audioSrc.PlayOneShot(landSound);
-        } */
-        /* if (_isDashing || _isAirDashing)
-        {
-            audioSrc.clip = jumpSound;
-            audioSrc.PlayOneShot(jumpSound);
-        } */
+    }
 
-        // attack
-        /* if (_isAttacking && InputManager.AttackWasPressed)
-        {
-            audioSrc.Stop();
-            audioSrc.clip = attackSound;
-            audioSrc.Play();
-        } */
+    private void OnChargingSound()
+    {
+        audioSrc.PlayOneShot(chargingSound);
+    }
 
-        // charging
-        /* if (_isCharging)
-        {
-            if (audioSrc.clip != chargingSound)
-            {
-                audioSrc.Stop();
-                audioSrc.clip = chargingSound;
-                audioSrc.Play();
-            }
-        } */
-
-        // hit
-        /* if (_isBeingDamaged)
-        {
-            audioSrc.Stop();
-            audioSrc.clip = damagedSound;
-            audioSrc.Play();
-        } */
+    private void OnLaserSound()
+    {
+        audioSrc.PlayOneShot(laserSound);
     }
 
     #endregion
