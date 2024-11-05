@@ -13,7 +13,6 @@ public class ForceFieldController : MonoBehaviour
     private bool isActive = true; // 전기 오브젝트의 현재 활성화 상태
     private SpriteRenderer spriteRenderer;
     private Collider2D collider2D;
-    private AudioSource audioSource; // AudioSource 컴포넌트
     private Transform player; // 플레이어의 Transform
     private bool hasTriggeredSound = false; // 소리가 이미 재생되었는지 확인
 
@@ -22,12 +21,6 @@ public class ForceFieldController : MonoBehaviour
         // SpriteRenderer와 Collider2D 컴포넌트 가져오기
         spriteRenderer = GetComponent<SpriteRenderer>();
         collider2D = GetComponent<Collider2D>();
-
-        // AudioSource 컴포넌트 추가 및 설정
-        audioSource = gameObject.AddComponent<AudioSource>();
-        audioSource.clip = proximitySound;
-        audioSource.playOnAwake = false;
-        audioSource.loop = true; // 사운드를 반복 재생
 
         // "Player" 태그를 가진 오브젝트를 찾아 Transform 할당
         GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
@@ -54,7 +47,7 @@ public class ForceFieldController : MonoBehaviour
             // 플레이어가 일정 거리 이내로 접근할 때만 사운드를 한 번만 재생
             if (distance <= triggerDistance && !hasTriggeredSound)
             {
-                audioSource.Play();
+                AudioManager.PlayProximitySound(proximitySound); // AudioManager를 통해 소리 재생
                 hasTriggeredSound = true; // 소리 재생 여부를 기록
             }
         }
