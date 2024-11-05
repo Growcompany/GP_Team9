@@ -6,29 +6,29 @@ public class GreenSnailController : MonsterController
 {
     protected override void Awake()
     {
-        base.Awake(); // ºÎ¸ð Å¬·¡½ºÀÇ Awake ¸Þ¼­µå È£Ãâ
-        experiencePoints = 50; // GreenSnailÀÇ °æÇèÄ¡
+        base.Awake(); // ï¿½Î¸ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Awake ï¿½Þ¼ï¿½ï¿½ï¿½ È£ï¿½ï¿½
+        experiencePoints = 15; // GreenSnailï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ä¡
         FlipSprite = false;
-        attackAnim = "attack"; // GreenSnailÀÇ °ø°Ý ¼³Á¤
+        attackAnim = "attack"; // GreenSnailï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         idleAnim = "idle";
         runAnim = "run";
     }
 
     protected override void Patrol()
     {
-        // º® Å½Áö ·¹ÀÌÄ³½ºÆ®
+        // ï¿½ï¿½ Å½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ä³ï¿½ï¿½Æ®
         RaycastHit2D wallHit = Physics2D.Raycast(transform.position, patrolDirection, patrolWallDistance, groundLayer);
         Debug.DrawLine(transform.position, transform.position + (Vector3)patrolDirection * patrolWallDistance, Color.green);
 
-        // GreenSnail¿¡¼­ ¶¥ Ã¼Å© ·ÎÁ÷À» Ä¿½ºÅÍ¸¶ÀÌÂ¡
+        // GreenSnailï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ Ã¼Å© ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ä¿ï¿½ï¿½ï¿½Í¸ï¿½ï¿½ï¿½Â¡
         Vector2 groundCheckStart = (Vector2)transform.position + Vector2.down * 0.8f + (Vector2)patrolDirection * 3f;
         RaycastHit2D groundHit = Physics2D.Raycast(groundCheckStart, Vector2.down, groundCheckDistance, groundLayer);
         Debug.DrawLine(groundCheckStart, groundCheckStart + Vector2.down * groundCheckDistance, Color.yellow);
 
         if (wallHit.collider != null || groundHit.collider == null)
         {
-            patrolDirection = -patrolDirection; // ¹æÇâÀ» ¹Ý´ë·Î ÀüÈ¯
-            spriteRenderer.flipX = patrolDirection.x < 0; // ÇÃ¸³ ¹æÇâ ¼³Á¤
+            patrolDirection = -patrolDirection; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ý´ï¿½ï¿½ ï¿½ï¿½È¯
+            spriteRenderer.flipX = patrolDirection.x < 0; // ï¿½Ã¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         }
         else
         {

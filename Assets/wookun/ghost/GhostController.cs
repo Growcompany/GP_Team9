@@ -67,7 +67,7 @@ public class GhostController : MonoBehaviour
         if (other.CompareTag("Player") && !hasExploded)
         {
             anim.SetTrigger("isScared");
-            Invoke("StartExplosion", 0.5f);
+            Invoke("StartExplosion", 0.1f);
         }
     }
 

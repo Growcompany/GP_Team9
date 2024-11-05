@@ -936,8 +936,8 @@ public class PlayerController : MonoBehaviour
         }
 
         // Strength
-        MovementStats.AttackDamage = MovementStats.Strength * 10f + 30f;
-        MovementStats.LaserDamage = MovementStats.Strength * 10f + 30f;
+        MovementStats.AttackDamage = MovementStats.Strength * 10f + 25f;
+        MovementStats.LaserDamage = MovementStats.Strength * 35f + 80f;
 
         // Dodge
         // Todo: Dodge

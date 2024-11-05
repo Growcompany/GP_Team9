@@ -6,10 +6,10 @@ public class CrabController : MonsterController
 {
     protected override void Awake()
     {
-        base.Awake(); // ºÎ¸ð Å¬·¡½ºÀÇ Awake ¸Þ¼­µå È£Ãâ
-        experiencePoints = 50; // CrabÀÇ °æÇèÄ¡
+        base.Awake(); // ï¿½Î¸ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Awake ï¿½Þ¼ï¿½ï¿½ï¿½ È£ï¿½ï¿½
+        experiencePoints = 15; // Crabï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ä¡
         FlipSprite = false;
-        attackAnim = "attackC"; // CrabControllerÀÇ °ø°Ý ¼³Á¤
+        attackAnim = "attackC"; // CrabControllerï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         idleAnim = "idle";
         runAnim = "run";
     }
