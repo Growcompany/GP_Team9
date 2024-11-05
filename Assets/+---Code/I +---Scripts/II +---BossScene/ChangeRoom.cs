@@ -56,7 +56,7 @@ public class ChangeRoom : MonoBehaviour
         {
             RoomPlay.SetActive(true);
             Canvas statusUICanvas = StatusUI.GetComponent<Canvas>();
-            statusUICanvas.enabled = true;
+            // statusUICanvas.enabled = true;
             Canvas BaseUICanvas = BaseUI.GetComponent<Canvas>();
             BaseUICanvas.enabled = true;
         }

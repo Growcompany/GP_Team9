@@ -5530,6 +5530,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4ac8090c47bac124491bc8b2e04d7d90, type: 3}
+--- !u!1 &1402426133 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 420932539122077607, guid: e291a3186d36d6e4caa47e48dd35e23e,
+    type: 3}
+  m_PrefabInstance: {fileID: 7880438476933535435}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1420770149 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6010669791275895194, guid: 6c341f57caa47974ba21900522398eb8,
@@ -16006,6 +16012,18 @@ Canvas:
     type: 3}
   m_PrefabInstance: {fileID: 7880438476933535435}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2304109517056362029
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1402426133}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60c86b7e74da68f4baa4c11dff851d23, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &2723444991082135204
 Transform:
   m_ObjectHideFlags: 0
@@ -26830,10 +26848,24 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7457629730652754565, guid: e291a3186d36d6e4caa47e48dd35e23e,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9213604971613580082, guid: e291a3186d36d6e4caa47e48dd35e23e,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -0.5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 420932539122077607, guid: e291a3186d36d6e4caa47e48dd35e23e,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2304109517056362029}
   m_SourcePrefab: {fileID: 100100000, guid: e291a3186d36d6e4caa47e48dd35e23e, type: 3}
 --- !u!1 &7898258042540447598
 GameObject:
@@ -26919,6 +26951,7 @@ Rigidbody2D:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 3263487138303873666}
   - {fileID: 620747538}
   - {fileID: 343096400}
   - {fileID: 7880438476933535435}
@@ -26937,4 +26970,3 @@ SceneRoots:
   - {fileID: 1997388980287654993}
   - {fileID: 987465511}
   - {fileID: 1422008157}
-  - {fileID: 3263487138303873666}
