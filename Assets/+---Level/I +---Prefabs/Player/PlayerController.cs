@@ -160,6 +160,26 @@ public class PlayerController : MonoBehaviour
         {
             MovementStats.Life = MovementStats.MaxLife;
         }
+        
+        MovementStats.JumpHeight = 10f;
+        MovementStats.JumpHeightCompensationFactor = 1.054f;
+        MovementStats.TimeTillJumpApex = 0.5f;
+        MovementStats.GravityOnReleaseMultiplier = 1f;
+        MovementStats.MaxFallSpeed = 20f;
+        MovementStats.NumberOfJumpsAllowed = 2;
+        MovementStats.TimeForUpwardsCancel = 0.027f;
+        MovementStats.ApexThreshold = 0.97f;
+        MovementStats.ApexHangTime = 0.075f;
+        MovementStats.JumpBufferTime = 0.125f;
+        MovementStats.JumpCoyoteTime = 0.1f;
+
+        MovementStats.MaxWalkSpeed = 50f;
+        MovementStats.DashSpeed = 45f;
+
+        MovementStats.MaxWalkSpeed = 25f;
+        MovementStats.DashSpeed = 45f;
+
+        Debug.Log("JumpHeight: " + MovementStats.JumpHeight + "\nJumpHeightCompensationFactor: " + MovementStats.JumpHeightCompensationFactor + "\nTimeTillJumpApex: " + MovementStats.TimeTillJumpApex + "\nGravityOnReleaseMultiplier: " + MovementStats.GravityOnReleaseMultiplier + "\nMaxFallSpeed: " + MovementStats.MaxFallSpeed + "\nNumberOfJumpsAllowed: " + MovementStats.NumberOfJumpsAllowed + "\nTimeForUpwardsCancel: " + MovementStats.TimeForUpwardsCancel + "\nApexThreshold: " + MovementStats.ApexThreshold + "\nApexHangTime: " + MovementStats.ApexHangTime + "\nJumpBufferTime: " + MovementStats.JumpBufferTime + "\nJumpCoyoteTime: " + MovementStats.JumpCoyoteTime);
 
         // Life
         _isDead = false;
