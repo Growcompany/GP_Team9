@@ -89,7 +89,7 @@ public class RPGTalk : MonoBehaviour {
     /// <summary>
     /// If the player hits the intercation button, should the text be skipped to the end?
     /// </summary>
-    public bool enableQuickSkip = true;
+    public bool enableQuickSkip = false;
 
     /// <summary>
     /// You can assign events to be called when the talk ends
@@ -194,7 +194,7 @@ public class RPGTalk : MonoBehaviour {
     /// <summary>
     /// The user can currently pass the talk?
     /// </summary>
-    public bool enablePass = true;
+    public bool enablePass = false;
 
     /// <summary>
     /// Should the talk pass itself?

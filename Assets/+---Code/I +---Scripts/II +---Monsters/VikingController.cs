@@ -6,10 +6,10 @@ public class VikingController : MonsterController
 {
     protected override void Awake()
     {
-        base.Awake(); // ºÎ¸ð Å¬·¡½ºÀÇ Awake ¸Þ¼­µå È£Ãâ
-        experiencePoints = 50; // BatÀÇ °æÇèÄ¡
+        base.Awake(); // ï¿½Î¸ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Awake ï¿½Þ¼ï¿½ï¿½ï¿½ È£ï¿½ï¿½
+        experiencePoints = 10; // Batï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ä¡
         FlipSprite = false;
-        attackAnim = "attackA"; // VikingController °ø°Ý ¼³Á¤
+        attackAnim = "attackA"; // VikingController ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         idleAnim = "idle";
         runAnim = "walk";
     }
