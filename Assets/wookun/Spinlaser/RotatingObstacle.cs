@@ -7,18 +7,12 @@ public class RotatingObstacle : MonoBehaviour
     public float knockbackForce = 5f; // 플레이어를 밀어내는 힘
     public float damageAmount = 1.0f; // 플레이어에게 줄 데미지 양
     public AudioClip proximitySound; // 플레이어가 가까워질 때 재생될 사운드 클립
-    public float triggerDistance = 5f; // 사운드가 재생되는 거리
-    private AudioSource audioSource; // AudioSource 컴포넌트
+    public float triggerDistance = 15f; // 사운드가 재생되는 거리
     private Transform player; // 플레이어의 Transform
+    private bool hasTriggeredSound = false; // 소리가 이미 재생되었는지 확인
 
     void Start()
     {
-        // AudioSource 컴포넌트를 추가하고 초기 설정
-        audioSource = gameObject.AddComponent<AudioSource>();
-        audioSource.clip = proximitySound;
-        audioSource.playOnAwake = false; // 자동 재생 비활성화
-        audioSource.loop = true; // 사운드 반복 재생
-
         // 플레이어의 Transform을 찾기
         GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
         if (playerObject != null)
@@ -44,14 +38,12 @@ public class RotatingObstacle : MonoBehaviour
         {
             float distance = Vector3.Distance(transform.position, player.position);
 
-            // 거리가 triggerDistance 이내일 때 사운드 재생, 그렇지 않으면 정지
-            if (distance <= triggerDistance && !audioSource.isPlaying)
+            // 거리가 triggerDistance 이내일 때만 소리를 한 번만 재생
+            if (distance <= triggerDistance && !hasTriggeredSound)
             {
-                audioSource.Play();
-            }
-            else if (distance > triggerDistance && audioSource.isPlaying)
-            {
-                audioSource.Stop();
+                // AudioManager를 통해 소리 재생
+                AudioManager.PlayProximitySound(proximitySound);
+                hasTriggeredSound = true; // 한 번 소리 재생을 기록
             }
         }
     }
@@ -79,4 +71,3 @@ public class RotatingObstacle : MonoBehaviour
         }
     }
 }
-

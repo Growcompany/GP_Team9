@@ -8,25 +8,19 @@ public class ForceFieldController : MonoBehaviour
     public float onDuration = 2.0f; // 전기 오브젝트가 켜진 상태로 유지되는 시간
     public float offDuration = 2.0f; // 전기 오브젝트가 꺼진 상태로 유지되는 시간
     public AudioClip proximitySound; // 플레이어가 가까이 접근할 때 재생할 소리
-    public float triggerDistance = 5.0f; // 사운드가 재생되는 거리
+    public float triggerDistance = 20.0f; // 사운드가 재생되는 거리
 
     private bool isActive = true; // 전기 오브젝트의 현재 활성화 상태
     private SpriteRenderer spriteRenderer;
     private Collider2D collider2D;
-    private AudioSource audioSource; // AudioSource 컴포넌트
     private Transform player; // 플레이어의 Transform
+    private bool hasTriggeredSound = false; // 소리가 이미 재생되었는지 확인
 
     private void Start()
     {
         // SpriteRenderer와 Collider2D 컴포넌트 가져오기
         spriteRenderer = GetComponent<SpriteRenderer>();
         collider2D = GetComponent<Collider2D>();
-
-        // AudioSource 컴포넌트 추가 및 설정
-        audioSource = gameObject.AddComponent<AudioSource>();
-        audioSource.clip = proximitySound;
-        audioSource.playOnAwake = false;
-        audioSource.loop = true; // 사운드를 반복 재생
 
         // "Player" 태그를 가진 오브젝트를 찾아 Transform 할당
         GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
@@ -50,14 +44,11 @@ public class ForceFieldController : MonoBehaviour
         {
             float distance = Vector3.Distance(transform.position, player.position);
 
-            // 플레이어가 일정 거리 이내로 접근할 때만 사운드 재생
-            if (distance <= triggerDistance && !audioSource.isPlaying)
+            // 플레이어가 일정 거리 이내로 접근할 때만 사운드를 한 번만 재생
+            if (distance <= triggerDistance && !hasTriggeredSound)
             {
-                audioSource.Play();
-            }
-            else if (distance > triggerDistance && audioSource.isPlaying)
-            {
-                audioSource.Stop();
+                AudioManager.PlayProximitySound(proximitySound); // AudioManager를 통해 소리 재생
+                hasTriggeredSound = true; // 소리 재생 여부를 기록
             }
         }
     }
