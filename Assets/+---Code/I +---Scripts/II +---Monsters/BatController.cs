@@ -6,16 +6,17 @@ public class BatController : MonsterController
 {
     protected override void Awake()
     {
-        base.Awake(); // ºÎ¸ð Å¬·¡½ºÀÇ Awake ¸Þ¼­µå È£Ãâ
+        base.Awake(); // ï¿½Î¸ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Awake ï¿½Þ¼ï¿½ï¿½ï¿½ È£ï¿½ï¿½
+        experiencePoints = 7; // Batï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ä¡
         FirstAnim = "idletofly";
-        attackAnim = "bite"; // BatControllerÀÇ °ø°Ý ¾Ö´Ï¸ÞÀÌ¼Ç ÀÌ¸§ ¼³Á¤
+        attackAnim = "bite"; // BatControllerï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½ï¿½
         idleAnim = "fly";
         runAnim = "fly";
     }
     protected override void Patrol()
     {
-        // Bat Å¬·¡½º´Â ÀÚµ¿ patrol ±â´ÉÀ» »ç¿ëÇÏÁö ¾ÊÀ½
-        // ÀÌ ¸Þ¼­µå´Â ºó »óÅÂ·Î µÓ´Ï´Ù.
+        // Bat Å¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Úµï¿½ patrol ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+        // ï¿½ï¿½ ï¿½Þ¼ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½Â·ï¿½ ï¿½Ó´Ï´ï¿½.
     }
 
 

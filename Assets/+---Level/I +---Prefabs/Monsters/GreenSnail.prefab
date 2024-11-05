@@ -244,7 +244,7 @@ MonoBehaviour:
   hp: 400
   speed: 3
   AttackRange: 3
-  experiencePoints: 0
+  experiencePoints: 20
   patrolWallDistance: 3
   groundCheckDistance: -1
   groundLayer:

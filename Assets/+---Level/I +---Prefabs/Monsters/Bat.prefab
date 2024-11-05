@@ -126,7 +126,7 @@ MonoBehaviour:
   hp: 100
   speed: 5
   AttackRange: 2
-  experiencePoints: 0
+  experiencePoints: 7
   patrolWallDistance: 3
   groundCheckDistance: 0.5
   groundLayer:
@@ -134,6 +134,7 @@ MonoBehaviour:
     m_Bits: 0
   audioSource: {fileID: 6959202955476248326}
   attackSound: {fileID: 8300000, guid: fe90eb35e8d754a4e862e22346008379, type: 3}
+  hpBarTransform: {fileID: 0}
   detectionRange: 10
 --- !u!82 &6959202955476248326
 AudioSource:
