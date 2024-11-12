@@ -160,12 +160,12 @@ public class PlayerController : MonoBehaviour
         {
             MovementStats.Life = MovementStats.MaxLife;
         }
-        
+
         MovementStats.JumpHeight = 10f;
         MovementStats.JumpHeightCompensationFactor = 1.054f;
         MovementStats.TimeTillJumpApex = 0.5f;
         MovementStats.GravityOnReleaseMultiplier = 1f;
-        MovementStats.MaxFallSpeed = 20f;
+        MovementStats.MaxFallSpeed = 30f;
         MovementStats.NumberOfJumpsAllowed = 2;
         MovementStats.TimeForUpwardsCancel = 0.027f;
         MovementStats.ApexThreshold = 0.97f;
