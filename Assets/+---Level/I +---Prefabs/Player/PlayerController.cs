@@ -103,8 +103,13 @@ public class PlayerController : MonoBehaviour
     private float _dashFastFallReleaseSpeed;
     private float _rotationTimer;
 
+    // Skill vars
+    private bool _isSkill1Activated;
+    private float _skill1Timer;
+
     // Attack vars
     private bool _isAttacking;
+    private float _attackTimer;
     private bool isCharging;
     public bool _isCharging
     {
@@ -179,6 +184,8 @@ public class PlayerController : MonoBehaviour
         MovementStats.MaxWalkSpeed = 25f;
         MovementStats.DashSpeed = 45f;
 
+        MovementStats.TimeBtwAttacks = 0.2f;
+
         Debug.Log("JumpHeight: " + MovementStats.JumpHeight + "\nJumpHeightCompensationFactor: " + MovementStats.JumpHeightCompensationFactor + "\nTimeTillJumpApex: " + MovementStats.TimeTillJumpApex + "\nGravityOnReleaseMultiplier: " + MovementStats.GravityOnReleaseMultiplier + "\nMaxFallSpeed: " + MovementStats.MaxFallSpeed + "\nNumberOfJumpsAllowed: " + MovementStats.NumberOfJumpsAllowed + "\nTimeForUpwardsCancel: " + MovementStats.TimeForUpwardsCancel + "\nApexThreshold: " + MovementStats.ApexThreshold + "\nApexHangTime: " + MovementStats.ApexHangTime + "\nJumpBufferTime: " + MovementStats.JumpBufferTime + "\nJumpCoyoteTime: " + MovementStats.JumpCoyoteTime);
 
         // Life
@@ -196,7 +203,13 @@ public class PlayerController : MonoBehaviour
         _rb = GetComponent<Rigidbody2D>();
         _animator = GetComponent<Animator>();
 
+        // Skill1
+        _isSkill1Activated = false;
+        MovementStats.Skill1Time = 3f;
+        _skill1Timer = 0f;
+
         // Attack
+        _attackTimer = 0f;
         attackArea = GameObject.Find("AttackArea");
 
         // Sound
@@ -216,6 +229,7 @@ public class PlayerController : MonoBehaviour
         CountTimers();
         JumpChecks();
         DashCheck();
+        Skill1Check();
         AttackCheck();
         LandCheck();
         DieCheck();
@@ -729,37 +743,77 @@ public class PlayerController : MonoBehaviour
 
     #endregion
 
+    #region Skill1
+
+    private void Skill1Check()
+    {
+        if (InputManager.Skill1WasPressed)
+        {
+            // Skill 1 Activation
+            if (!_isSkill1Activated)
+            {
+                _isSkill1Activated = true;
+            }
+        }
+
+        // CoolTime
+        if (_isSkill1Activated)
+        {
+            _skill1Timer += Time.fixedDeltaTime;
+
+            // 초기화
+            if (_skill1Timer >= MovementStats.Skill1Time)
+            {
+                _isSkill1Activated = false;
+                _skill1Timer = 0f;
+            }
+        }
+    }
+
+    #endregion
+
     #region Attack
 
     private void AttackCheck()
     {
-        if (InputManager.AttackIsHolding)
+        /* if (InputManager.AttackIsHolding)
         {
             if (GameManager.instance.coolTimeRatio > 0.0f)
                 _chargeTimer = 0f;
             else
                 _chargeTimer += Time.fixedDeltaTime;
-        }
-        if (InputManager.AttackWasPressed)
+        } */
+        if (InputManager.AttackWasPressed && _attackTimer >= MovementStats.TimeBtwAttacks)
         {
             InitiateAttack();
         }
-        if (InputManager.AttackWasReleased)
+        /* if (InputManager.AttackWasReleased)
         {
             if (_isCharging)
             {
                 InitiateChargeAttack();
             }
-        }
+        } */
     }
 
     private void InitiateAttack()
     {
         _isAttacking = true;
         _chargeTimer = 0f;
+        _attackTimer = 0f;
 
-        // sound
-        audioSrc.PlayOneShot(attackSound);
+        // animation & sound
+        if (_isSkill1Activated)
+        {
+            _animator.SetBool("isAttack2", true);
+            audioSrc.PlayOneShot(laserSound);
+        }
+        else
+        {
+            _animator.SetBool("isAttack1", true);
+            audioSrc.PlayOneShot(attackSound);
+        }
+
     }
 
     private void InitiateChargeAttack()
@@ -775,22 +829,45 @@ public class PlayerController : MonoBehaviour
     {
         if (_isAttacking)
         {
-            attackArea.SetActive(true);
+            if (_isSkill1Activated)
+            {
+                ShootLaser();
+            }
+
+            else
+            {
+                attackArea.SetActive(true);
+            }
+
+            StartCoroutine(WaitForOneFrame());
+            AttackFinished();
+
         }
         else if (!_isAttacking)
         {
+            _attackTimer += Time.fixedDeltaTime;
+            if (_attackTimer >= 20f)
+            {
+                _attackTimer = 20f;
+            }
+
             attackArea.SetActive(false);
         }
 
-        if (_chargeTimer >= MovementStats.ChargeTime && GameManager.instance.coolTimeRatio <= 0.0f)
+        /* if (_chargeTimer >= MovementStats.ChargeTime && GameManager.instance.coolTimeRatio <= 0.0f)
         {
             _isCharging = true;
-        }
+        } */
+    }
+
+    IEnumerator WaitForOneFrame()
+    {
+        yield return new WaitForSeconds(0.1f);
     }
 
     private void ChargeAttack()
     {
-        if (_isCharging && _isGrounded)
+        /* if (_isCharging && _isGrounded)
         {
             HorizontalVelocity = 0f;
         }
@@ -803,7 +880,7 @@ public class PlayerController : MonoBehaviour
 
             StartCoroutine(GameManager.instance.CalculateCoolTime(MovementStats.LaserCoolTime));
             skillCoolTimeUIEvent.Invoke();
-        }
+        } */
     }
 
     private void AttackFinished()
@@ -813,11 +890,14 @@ public class PlayerController : MonoBehaviour
 
     private void ResetAttackValues()
     {
-        _isAttacking = false;
-        _isCharging = false;
-        _isChargeAttacking = false;
-        _chargeTimer = 0f;
+        // animation 
+        _animator.SetBool("isAttack1", false);
+        _animator.SetBool("isAttack2", false);
 
+        _isAttacking = false;
+        /* _isCharging = false;
+        _isChargeAttacking = false;
+        _chargeTimer = 0f; */
     }
 
     #endregion
@@ -1110,7 +1190,7 @@ public class PlayerController : MonoBehaviour
             {
                 // attack animation
                 _animator.SetBool("isCharging", _isCharging);
-                _animator.SetBool("isAttack1", _isAttacking);
+
                 _animator.SetFloat("HorizontalVelocity", Mathf.Abs(HorizontalVelocity));
                 _animator.SetBool("isJumping", _isJumping);
                 _animator.SetBool("isDashing", _isDashing || _isAirDashing);
