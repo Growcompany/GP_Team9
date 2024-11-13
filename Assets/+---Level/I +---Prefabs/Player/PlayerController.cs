@@ -132,7 +132,7 @@ public class PlayerController : MonoBehaviour
     private float _chargeTimer;
 
     // SpeedForce vars
-    private bool _isSpeedForce;
+    public bool _isSpeedForce;
     private float _speedForceHowSlow;
     private float _speedForceTimer;
     private float _speedForceTime;
