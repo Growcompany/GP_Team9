@@ -719,6 +719,9 @@ MonoBehaviour:
   laserSound: {fileID: 8300000, guid: a652877b012108e41871f867ada9f176, type: 3}
   damagedSound: {fileID: 8300000, guid: 8b23b175a78d6b5458322e3a6c9905d0, type: 3}
   deathSound: {fileID: 8300000, guid: 1b2059ed765a4194eaa0eddea94e0a75, type: 3}
+  speedForceStartSound: {fileID: 8300000, guid: ca9df3ac6f6b1c84d9fac50ab1277444,
+    type: 3}
+  speedForceEndSound: {fileID: 8300000, guid: 20f505905ddaeec43bdf2c5b62921bb9, type: 3}
   _moveSoundTimer: 0
 --- !u!114 &-6428926172090270449
 MonoBehaviour:

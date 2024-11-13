@@ -154,6 +154,8 @@ public class PlayerController : MonoBehaviour
     public AudioClip laserSound;
     public AudioClip damagedSound;
     public AudioClip deathSound;
+    public AudioClip speedForceStartSound;
+    public AudioClip speedForceEndSound;
     public float _moveSoundTimer;
 
     #endregion
@@ -948,6 +950,7 @@ public class PlayerController : MonoBehaviour
     {
         if (InputManager.Skill2WasPressed && !_isSpeedForce)
         {
+            audioSrc.PlayOneShot(speedForceStartSound);
             _isSpeedForce = true;
             _speedForceTimer = 0f;
         }
@@ -1286,7 +1289,7 @@ public class PlayerController : MonoBehaviour
                 _animator.SetBool("isDashing", _isDashing || _isAirDashing);
             }
             {
-                _rotationTimer += Time.fixedUnscaledDeltaTime;
+                _rotationTimer += Time.fixedDeltaTime;
                 if ((_isDashing || _isAirDashing) && !_isGrounded)
                 {
                     // 대시 방향으로 캐릭터 rotate
