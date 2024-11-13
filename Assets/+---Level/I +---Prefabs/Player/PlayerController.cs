@@ -131,6 +131,12 @@ public class PlayerController : MonoBehaviour
     private RaycastHit2D[] hits;
     private float _chargeTimer;
 
+    // SpeedForce vars
+    private bool _isSpeedForce;
+    private float _speedForceHowSlow;
+    private float _speedForceTimer;
+    private float _speedForceTime;
+
     // KnockBack vars
     private bool _isKnockBack;
     private float _knockBackTimer;
@@ -218,6 +224,12 @@ public class PlayerController : MonoBehaviour
         _attackTimer = 0f;
         attackArea = GameObject.Find("AttackArea");
 
+        // SpeedForce
+        _speedForceHowSlow = 0.4f;
+        _isSpeedForce = false;
+        _speedForceTimer = 0f;
+        _speedForceTime = 1f;
+
         // KnockBack
         _isKnockBack = false;
         _knockBackTimer = 0f;
@@ -241,6 +253,7 @@ public class PlayerController : MonoBehaviour
         JumpChecks();
         DashCheck();
         Skill1Check();
+        SpeedForceCheck();
         AttackCheck();
         LandCheck();
         DieCheck();
@@ -253,6 +266,7 @@ public class PlayerController : MonoBehaviour
         CollisionCheck();
         Jump();
         Dash();
+        SpeedForce();
         Attack();
         ChargeAttack();
         Fall();
@@ -516,12 +530,12 @@ public class PlayerController : MonoBehaviour
                     targetVelocity = moveInput.x * MovementStats.MaxWalkSpeed;
                 }
 
-                HorizontalVelocity = Mathf.Lerp(HorizontalVelocity, targetVelocity, acceleration * Time.fixedDeltaTime);
+                HorizontalVelocity = Mathf.Lerp(HorizontalVelocity, targetVelocity, acceleration * Time.fixedUnscaledDeltaTime);
             }
 
             else if (moveInput == Vector2.zero && !_isKnockBack)
             {
-                HorizontalVelocity = Mathf.Lerp(HorizontalVelocity, 0f, deceleration * Time.fixedDeltaTime);
+                HorizontalVelocity = Mathf.Lerp(HorizontalVelocity, 0f, deceleration * Time.fixedUnscaledDeltaTime);
             }
         }
 
@@ -857,7 +871,7 @@ public class PlayerController : MonoBehaviour
         }
         else if (!_isAttacking)
         {
-            _attackTimer += Time.fixedDeltaTime;
+            _attackTimer += Time.fixedUnscaledDeltaTime;
             if (_attackTimer >= 20f)
             {
                 _attackTimer = 20f;
@@ -924,6 +938,42 @@ public class PlayerController : MonoBehaviour
         clone.transform.localScale = new Vector3(6f, 6f, 10f);
         clone.transform.position = shootPoint.transform.position;
         clone.transform.rotation = shootPoint.transform.rotation;
+    }
+
+    #endregion
+
+    #region SpeedForce
+
+    public void SpeedForceCheck()
+    {
+        if (InputManager.Skill2WasPressed && !_isSpeedForce)
+        {
+            _isSpeedForce = true;
+            _speedForceTimer = 0f;
+        }
+    }
+
+    public void SpeedForce()
+    {
+        if (_isSpeedForce)
+        {
+            _speedForceTimer += Time.fixedDeltaTime;
+
+            Time.timeScale = _speedForceHowSlow;
+
+            _animator.SetFloat("SpeedForceMultiplier", 1 / _speedForceHowSlow);
+
+            if (_speedForceTimer >= _speedForceTime)
+            {
+                _isSpeedForce = false;
+                _speedForceTimer = 0f;
+                Time.timeScale = 1f;
+            }
+        }
+        else
+        {
+            _animator.SetFloat("SpeedForceMultiplier", 1f);
+        }
     }
 
     #endregion
@@ -1005,6 +1055,8 @@ public class PlayerController : MonoBehaviour
             _isCharging = false;
             _isChargeAttacking = false;
             _isBeingDamaged = false;
+            _isSpeedForce = false;
+            Time.timeScale = 1f;
             HorizontalVelocity = 0f;
         }
     }
@@ -1159,7 +1211,7 @@ public class PlayerController : MonoBehaviour
     {
         if (_isKnockBack)
         {
-            _knockBackTimer += Time.fixedDeltaTime;
+            _knockBackTimer += Time.fixedUnscaledDeltaTime;
             if (_knockBackTimer < _knockBackTime)
             {
                 float knockBackForce = 20f - (_knockBackTimer * 20f);
@@ -1234,7 +1286,7 @@ public class PlayerController : MonoBehaviour
                 _animator.SetBool("isDashing", _isDashing || _isAirDashing);
             }
             {
-                _rotationTimer += Time.fixedDeltaTime;
+                _rotationTimer += Time.fixedUnscaledDeltaTime;
                 if ((_isDashing || _isAirDashing) && !_isGrounded)
                 {
                     // 대시 방향으로 캐릭터 rotate
