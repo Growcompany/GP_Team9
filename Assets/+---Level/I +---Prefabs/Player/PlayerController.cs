@@ -131,6 +131,12 @@ public class PlayerController : MonoBehaviour
     private RaycastHit2D[] hits;
     private float _chargeTimer;
 
+    // KnockBack vars
+    private bool _isKnockBack;
+    private float _knockBackTimer;
+    private float _knockBackTime;
+
+
     // Sound
     public AudioSource audioSrc;
     public AudioClip moveSound;
@@ -212,6 +218,11 @@ public class PlayerController : MonoBehaviour
         _attackTimer = 0f;
         attackArea = GameObject.Find("AttackArea");
 
+        // KnockBack
+        _isKnockBack = false;
+        _knockBackTimer = 0f;
+        _knockBackTime = 0.08f;
+
         // Sound
         _moveSoundTimer = 0f;
         audioSrc = GetComponent<AudioSource>();
@@ -246,6 +257,7 @@ public class PlayerController : MonoBehaviour
         ChargeAttack();
         Fall();
         Die();
+        KnockBack();
         Animations();
         Sound();
 
@@ -507,7 +519,7 @@ public class PlayerController : MonoBehaviour
                 HorizontalVelocity = Mathf.Lerp(HorizontalVelocity, targetVelocity, acceleration * Time.fixedDeltaTime);
             }
 
-            else if (moveInput == Vector2.zero)
+            else if (moveInput == Vector2.zero && !_isKnockBack)
             {
                 HorizontalVelocity = Mathf.Lerp(HorizontalVelocity, 0f, deceleration * Time.fixedDeltaTime);
             }
@@ -1135,6 +1147,31 @@ public class PlayerController : MonoBehaviour
         BumpedHead();
         PlayerCollidesWithMonster();
         AvoidCheck();
+    }
+
+    public void OnKnockBack()
+    {
+        _isKnockBack = true;
+        _knockBackTimer = 0f;
+    }
+
+    private void KnockBack()
+    {
+        if (_isKnockBack)
+        {
+            _knockBackTimer += Time.fixedDeltaTime;
+            if (_knockBackTimer < _knockBackTime)
+            {
+                if (_isFacingRight)
+                    HorizontalVelocity = -15f;
+                else
+                    HorizontalVelocity = 15f;
+            }
+            else
+            {
+                _isKnockBack = false;
+            }
+        }
     }
 
 
