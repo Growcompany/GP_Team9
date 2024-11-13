@@ -1162,10 +1162,11 @@ public class PlayerController : MonoBehaviour
             _knockBackTimer += Time.fixedDeltaTime;
             if (_knockBackTimer < _knockBackTime)
             {
+                float knockBackForce = 20f - (_knockBackTimer * 20f);
                 if (_isFacingRight)
-                    HorizontalVelocity = -15f;
+                    HorizontalVelocity = -knockBackForce;
                 else
-                    HorizontalVelocity = 15f;
+                    HorizontalVelocity = knockBackForce;
             }
             else
             {
