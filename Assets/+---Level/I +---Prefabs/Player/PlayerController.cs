@@ -136,6 +136,7 @@ public class PlayerController : MonoBehaviour
     private float _speedForceHowSlow;
     private float _speedForceTimer;
     private float _speedForceTime;
+    private SpeedForceFadeEffect _speedForceFX;
 
     // KnockBack vars
     private bool _isKnockBack;
@@ -231,6 +232,7 @@ public class PlayerController : MonoBehaviour
         _isSpeedForce = false;
         _speedForceTimer = 0f;
         _speedForceTime = 1f;
+        _speedForceFX = GameObject.Find("SpeedForceFX").gameObject.GetComponent<SpeedForceFadeEffect>();
 
         // KnockBack
         _isKnockBack = false;
@@ -951,6 +953,7 @@ public class PlayerController : MonoBehaviour
         if (InputManager.Skill2WasPressed && !_isSpeedForce)
         {
             audioSrc.PlayOneShot(speedForceStartSound);
+            _speedForceFX.FadeOut();
             _isSpeedForce = true;
             _speedForceTimer = 0f;
         }
@@ -971,6 +974,7 @@ public class PlayerController : MonoBehaviour
                 _isSpeedForce = false;
                 _speedForceTimer = 0f;
                 Time.timeScale = 1f;
+                _speedForceFX.FadeIn();
             }
         }
         else
@@ -1060,6 +1064,7 @@ public class PlayerController : MonoBehaviour
             _isBeingDamaged = false;
             _isSpeedForce = false;
             Time.timeScale = 1f;
+            _speedForceFX.FadeIn();
             HorizontalVelocity = 0f;
         }
     }
