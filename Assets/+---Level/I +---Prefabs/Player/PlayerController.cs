@@ -103,8 +103,13 @@ public class PlayerController : MonoBehaviour
     private float _dashFastFallReleaseSpeed;
     private float _rotationTimer;
 
+    // Skill vars
+    private bool _isSkill1Activated;
+    private float _skill1Timer;
+
     // Attack vars
     private bool _isAttacking;
+    private float _attackTimer;
     private bool isCharging;
     public bool _isCharging
     {
@@ -126,6 +131,19 @@ public class PlayerController : MonoBehaviour
     private RaycastHit2D[] hits;
     private float _chargeTimer;
 
+    // SpeedForce vars
+    public bool _isSpeedForce;
+    private float _speedForceHowSlow;
+    private float _speedForceTimer;
+    private float _speedForceTime;
+    private SpeedForceFadeEffect _speedForceFX;
+
+    // KnockBack vars
+    private bool _isKnockBack;
+    private float _knockBackTimer;
+    private float _knockBackTime;
+
+
     // Sound
     public AudioSource audioSrc;
     public AudioClip moveSound;
@@ -137,6 +155,8 @@ public class PlayerController : MonoBehaviour
     public AudioClip laserSound;
     public AudioClip damagedSound;
     public AudioClip deathSound;
+    public AudioClip speedForceStartSound;
+    public AudioClip speedForceEndSound;
     public float _moveSoundTimer;
 
     #endregion
@@ -160,12 +180,12 @@ public class PlayerController : MonoBehaviour
         {
             MovementStats.Life = MovementStats.MaxLife;
         }
-        
+
         MovementStats.JumpHeight = 10f;
         MovementStats.JumpHeightCompensationFactor = 1.054f;
         MovementStats.TimeTillJumpApex = 0.5f;
         MovementStats.GravityOnReleaseMultiplier = 1f;
-        MovementStats.MaxFallSpeed = 20f;
+        MovementStats.MaxFallSpeed = 30f;
         MovementStats.NumberOfJumpsAllowed = 2;
         MovementStats.TimeForUpwardsCancel = 0.027f;
         MovementStats.ApexThreshold = 0.97f;
@@ -178,6 +198,8 @@ public class PlayerController : MonoBehaviour
 
         MovementStats.MaxWalkSpeed = 25f;
         MovementStats.DashSpeed = 45f;
+
+        MovementStats.TimeBtwAttacks = 0.2f;
 
         Debug.Log("JumpHeight: " + MovementStats.JumpHeight + "\nJumpHeightCompensationFactor: " + MovementStats.JumpHeightCompensationFactor + "\nTimeTillJumpApex: " + MovementStats.TimeTillJumpApex + "\nGravityOnReleaseMultiplier: " + MovementStats.GravityOnReleaseMultiplier + "\nMaxFallSpeed: " + MovementStats.MaxFallSpeed + "\nNumberOfJumpsAllowed: " + MovementStats.NumberOfJumpsAllowed + "\nTimeForUpwardsCancel: " + MovementStats.TimeForUpwardsCancel + "\nApexThreshold: " + MovementStats.ApexThreshold + "\nApexHangTime: " + MovementStats.ApexHangTime + "\nJumpBufferTime: " + MovementStats.JumpBufferTime + "\nJumpCoyoteTime: " + MovementStats.JumpCoyoteTime);
 
@@ -196,8 +218,26 @@ public class PlayerController : MonoBehaviour
         _rb = GetComponent<Rigidbody2D>();
         _animator = GetComponent<Animator>();
 
+        // Skill1
+        _isSkill1Activated = false;
+        MovementStats.Skill1Time = 3f;
+        _skill1Timer = 0f;
+
         // Attack
+        _attackTimer = 0f;
         attackArea = GameObject.Find("AttackArea");
+
+        // SpeedForce
+        _speedForceHowSlow = 0.4f;
+        _isSpeedForce = false;
+        _speedForceTimer = 0f;
+        _speedForceTime = 1f;
+        _speedForceFX = GameObject.Find("SpeedForceFX").gameObject.GetComponent<SpeedForceFadeEffect>();
+
+        // KnockBack
+        _isKnockBack = false;
+        _knockBackTimer = 0f;
+        _knockBackTime = 0.08f;
 
         // Sound
         _moveSoundTimer = 0f;
@@ -216,6 +256,8 @@ public class PlayerController : MonoBehaviour
         CountTimers();
         JumpChecks();
         DashCheck();
+        Skill1Check();
+        SpeedForceCheck();
         AttackCheck();
         LandCheck();
         DieCheck();
@@ -228,10 +270,12 @@ public class PlayerController : MonoBehaviour
         CollisionCheck();
         Jump();
         Dash();
+        SpeedForce();
         Attack();
         ChargeAttack();
         Fall();
         Die();
+        KnockBack();
         Animations();
         Sound();
 
@@ -490,12 +534,12 @@ public class PlayerController : MonoBehaviour
                     targetVelocity = moveInput.x * MovementStats.MaxWalkSpeed;
                 }
 
-                HorizontalVelocity = Mathf.Lerp(HorizontalVelocity, targetVelocity, acceleration * Time.fixedDeltaTime);
+                HorizontalVelocity = Mathf.Lerp(HorizontalVelocity, targetVelocity, acceleration * Time.fixedUnscaledDeltaTime);
             }
 
-            else if (moveInput == Vector2.zero)
+            else if (moveInput == Vector2.zero && !_isKnockBack)
             {
-                HorizontalVelocity = Mathf.Lerp(HorizontalVelocity, 0f, deceleration * Time.fixedDeltaTime);
+                HorizontalVelocity = Mathf.Lerp(HorizontalVelocity, 0f, deceleration * Time.fixedUnscaledDeltaTime);
             }
         }
 
@@ -729,37 +773,77 @@ public class PlayerController : MonoBehaviour
 
     #endregion
 
+    #region Skill1
+
+    private void Skill1Check()
+    {
+        if (InputManager.Skill1WasPressed)
+        {
+            // Skill 1 Activation
+            if (!_isSkill1Activated)
+            {
+                _isSkill1Activated = true;
+            }
+        }
+
+        // CoolTime
+        if (_isSkill1Activated)
+        {
+            _skill1Timer += Time.fixedDeltaTime;
+
+            // 초기화
+            if (_skill1Timer >= MovementStats.Skill1Time)
+            {
+                _isSkill1Activated = false;
+                _skill1Timer = 0f;
+            }
+        }
+    }
+
+    #endregion
+
     #region Attack
 
     private void AttackCheck()
     {
-        if (InputManager.AttackIsHolding)
+        /* if (InputManager.AttackIsHolding)
         {
             if (GameManager.instance.coolTimeRatio > 0.0f)
                 _chargeTimer = 0f;
             else
                 _chargeTimer += Time.fixedDeltaTime;
-        }
-        if (InputManager.AttackWasPressed)
+        } */
+        if (InputManager.AttackWasPressed && _attackTimer >= MovementStats.TimeBtwAttacks)
         {
             InitiateAttack();
         }
-        if (InputManager.AttackWasReleased)
+        /* if (InputManager.AttackWasReleased)
         {
             if (_isCharging)
             {
                 InitiateChargeAttack();
             }
-        }
+        } */
     }
 
     private void InitiateAttack()
     {
         _isAttacking = true;
         _chargeTimer = 0f;
+        _attackTimer = 0f;
 
-        // sound
-        audioSrc.PlayOneShot(attackSound);
+        // animation & sound
+        if (_isSkill1Activated)
+        {
+            _animator.SetBool("isAttack2", true);
+            audioSrc.PlayOneShot(laserSound);
+        }
+        else
+        {
+            _animator.SetBool("isAttack1", true);
+            audioSrc.PlayOneShot(attackSound);
+        }
+
     }
 
     private void InitiateChargeAttack()
@@ -775,22 +859,45 @@ public class PlayerController : MonoBehaviour
     {
         if (_isAttacking)
         {
-            attackArea.SetActive(true);
+            if (_isSkill1Activated)
+            {
+                ShootLaser();
+            }
+
+            else
+            {
+                attackArea.SetActive(true);
+            }
+
+            StartCoroutine(WaitForOneFrame());
+            AttackFinished();
+
         }
         else if (!_isAttacking)
         {
+            _attackTimer += Time.fixedUnscaledDeltaTime;
+            if (_attackTimer >= 20f)
+            {
+                _attackTimer = 20f;
+            }
+
             attackArea.SetActive(false);
         }
 
-        if (_chargeTimer >= MovementStats.ChargeTime && GameManager.instance.coolTimeRatio <= 0.0f)
+        /* if (_chargeTimer >= MovementStats.ChargeTime && GameManager.instance.coolTimeRatio <= 0.0f)
         {
             _isCharging = true;
-        }
+        } */
+    }
+
+    IEnumerator WaitForOneFrame()
+    {
+        yield return new WaitForSeconds(0.1f);
     }
 
     private void ChargeAttack()
     {
-        if (_isCharging && _isGrounded)
+        /* if (_isCharging && _isGrounded)
         {
             HorizontalVelocity = 0f;
         }
@@ -803,7 +910,7 @@ public class PlayerController : MonoBehaviour
 
             StartCoroutine(GameManager.instance.CalculateCoolTime(MovementStats.LaserCoolTime));
             skillCoolTimeUIEvent.Invoke();
-        }
+        } */
     }
 
     private void AttackFinished()
@@ -813,11 +920,14 @@ public class PlayerController : MonoBehaviour
 
     private void ResetAttackValues()
     {
-        _isAttacking = false;
-        _isCharging = false;
-        _isChargeAttacking = false;
-        _chargeTimer = 0f;
+        // animation 
+        _animator.SetBool("isAttack1", false);
+        _animator.SetBool("isAttack2", false);
 
+        _isAttacking = false;
+        /* _isCharging = false;
+        _isChargeAttacking = false;
+        _chargeTimer = 0f; */
     }
 
     #endregion
@@ -832,6 +942,45 @@ public class PlayerController : MonoBehaviour
         clone.transform.localScale = new Vector3(6f, 6f, 10f);
         clone.transform.position = shootPoint.transform.position;
         clone.transform.rotation = shootPoint.transform.rotation;
+    }
+
+    #endregion
+
+    #region SpeedForce
+
+    public void SpeedForceCheck()
+    {
+        if (InputManager.Skill2WasPressed && !_isSpeedForce)
+        {
+            audioSrc.PlayOneShot(speedForceStartSound);
+            _speedForceFX.FadeOut();
+            _isSpeedForce = true;
+            _speedForceTimer = 0f;
+        }
+    }
+
+    public void SpeedForce()
+    {
+        if (_isSpeedForce)
+        {
+            _speedForceTimer += Time.fixedDeltaTime;
+
+            Time.timeScale = _speedForceHowSlow;
+
+            _animator.SetFloat("SpeedForceMultiplier", 1 / _speedForceHowSlow);
+
+            if (_speedForceTimer >= _speedForceTime)
+            {
+                _isSpeedForce = false;
+                _speedForceTimer = 0f;
+                Time.timeScale = 1f;
+                _speedForceFX.FadeIn();
+            }
+        }
+        else
+        {
+            _animator.SetFloat("SpeedForceMultiplier", 1f);
+        }
     }
 
     #endregion
@@ -913,6 +1062,9 @@ public class PlayerController : MonoBehaviour
             _isCharging = false;
             _isChargeAttacking = false;
             _isBeingDamaged = false;
+            _isSpeedForce = false;
+            Time.timeScale = 1f;
+            _speedForceFX.FadeIn();
             HorizontalVelocity = 0f;
         }
     }
@@ -1057,6 +1209,32 @@ public class PlayerController : MonoBehaviour
         AvoidCheck();
     }
 
+    public void OnKnockBack()
+    {
+        _isKnockBack = true;
+        _knockBackTimer = 0f;
+    }
+
+    private void KnockBack()
+    {
+        if (_isKnockBack)
+        {
+            _knockBackTimer += Time.fixedUnscaledDeltaTime;
+            if (_knockBackTimer < _knockBackTime)
+            {
+                float knockBackForce = 20f - (_knockBackTimer * 20f);
+                if (_isFacingRight)
+                    HorizontalVelocity = -knockBackForce;
+                else
+                    HorizontalVelocity = knockBackForce;
+            }
+            else
+            {
+                _isKnockBack = false;
+            }
+        }
+    }
+
 
     #endregion
 
@@ -1110,7 +1288,7 @@ public class PlayerController : MonoBehaviour
             {
                 // attack animation
                 _animator.SetBool("isCharging", _isCharging);
-                _animator.SetBool("isAttack1", _isAttacking);
+
                 _animator.SetFloat("HorizontalVelocity", Mathf.Abs(HorizontalVelocity));
                 _animator.SetBool("isJumping", _isJumping);
                 _animator.SetBool("isDashing", _isDashing || _isAirDashing);

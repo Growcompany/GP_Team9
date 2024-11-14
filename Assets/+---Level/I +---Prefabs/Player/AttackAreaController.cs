@@ -41,6 +41,7 @@ public class AttackAreaController : MonoBehaviour
                 monster.Damaged(MovementStats.AttackDamage);
                 Debug.Log("Monster damaged by AttackArea with damage: " + MovementStats.AttackDamage);
                 hasAttacked = true;
+                playerController.OnKnockBack();
             }
             else
             {
