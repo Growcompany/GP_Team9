@@ -17,7 +17,7 @@ public class PlayerController : MonoBehaviour
     public UnityEvent<int> levelUpUIEvent;
     public UnityEvent<int, int> expUpUIEvent;
     public UnityEvent<int> lifeUpdateUIEvent;
-    public UnityEvent skillCoolTimeUIEvent;
+    public UnityEvent<int> skillCoolTimeUIEvent;
     public PointTextUI pointTextUI;
 
     public GameObject laserPrefab;
@@ -104,8 +104,32 @@ public class PlayerController : MonoBehaviour
     private float _rotationTimer;
 
     // Skill vars
-    private bool _isSkill1Activated;
+    private bool isSkill1Activated;
+    public bool _isSkill1Activated
+    {
+        get { return isSkill1Activated; }
+        private set
+        {
+            if (isSkill1Activated != value)
+            {
+                if (value != true)
+                {
+                    // Skill1이 발동될 때 딱 한 번 실행
+                    
+                }
+                else
+                {
+                    // Skill1이 해제될 때 딱 한 번 실행
+                    StartCoroutine(coolTimeCalculate.CalculateCoolTime(MovementStats.SkillCoolTime, 0));
+                    skillCoolTimeUIEvent.Invoke(0);
+                }
+
+                isSkill1Activated = value;
+            }
+        }
+    }
     private float _skill1Timer;
+    private CoolTimeCalculate coolTimeCalculate;
 
     // Attack vars
     private bool _isAttacking;
@@ -168,6 +192,8 @@ public class PlayerController : MonoBehaviour
         // statusUI.SetActive(false);
         statusUI = GameObject.Find("---StatusUI---").gameObject;
         statusUI.GetComponent<Canvas>().enabled = false;
+
+        coolTimeCalculate = GetComponent<CoolTimeCalculate>();
 
         // Status
         // 현재 씬 이름 확인
@@ -783,6 +809,7 @@ public class PlayerController : MonoBehaviour
             if (!_isSkill1Activated)
             {
                 _isSkill1Activated = true;
+
             }
         }
 
