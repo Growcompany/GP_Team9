@@ -36,6 +36,7 @@ public class MonsterController : MonoBehaviour
     protected bool FlipSprite = true;
     private bool isDying = false; // 몬스터가 이미 죽음을 처리 중인지 확인
     private bool isInvincible = false; // 데미지 중복 방지
+    public GameObject Hitted_Effect;
 
     protected virtual void Awake()
     {
@@ -258,7 +259,9 @@ public class MonsterController : MonoBehaviour
         if (isInvincible) return; // 무적 상태일 때는 데미지를 받지 않음
 
         Debug.Log("Monster is taking damage: " + amount);
-        anim.SetTrigger("hit"); // 히트 애니메이션 실행
+        //anim.SetTrigger("hit"); // 히트 애니메이션 실행
+        Vector3 spawnPosition = transform.position + new Vector3(1, 0, 0);
+        Instantiate(Hitted_Effect, spawnPosition, Quaternion.identity);
 
         hp -= amount;
 

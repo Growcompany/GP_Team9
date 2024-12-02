@@ -136,6 +136,8 @@ MonoBehaviour:
   attackSound: {fileID: 8300000, guid: fe90eb35e8d754a4e862e22346008379, type: 3}
   hpBarTransform: {fileID: 0}
   detectionRange: 10
+  Hitted_Effect: {fileID: 362261158077530393, guid: 20fda529c996a334da7fd65b48ea40df,
+    type: 3}
 --- !u!82 &6959202955476248326
 AudioSource:
   m_ObjectHideFlags: 0

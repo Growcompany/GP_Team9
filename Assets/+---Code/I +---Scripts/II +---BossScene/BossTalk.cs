@@ -29,9 +29,16 @@ namespace RPGTALK.Snippets
             // 모든 대화가 완전히 종료될 때 발생하는 이벤트
             rpgtalk.OnEndTalk += AllDialogsEnded;
 
-            audioSource.clip = bossSounds[currentSoundIndex];
-            audioSource.Play();
-            currentSoundIndex++;
+            if (bossSounds != null && bossSounds.Length > 0)
+            {
+                audioSource.clip = bossSounds[currentSoundIndex];
+                audioSource.Play();
+                currentSoundIndex++;
+            }
+            else
+            {
+                Debug.LogWarning("bossSounds 배열이 비어 있습니다. AudioClip을 추가하세요.");
+            }
 
             // 대화 중에는 넘어가지 않도록 설정
             rpgtalk.enablePass = false;
