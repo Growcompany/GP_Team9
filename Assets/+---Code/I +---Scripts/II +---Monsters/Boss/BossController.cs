@@ -27,7 +27,7 @@ public class BossController : MonoBehaviour
     private bool isDying = false; // 몬스터가 이미 죽음을 처리 중인지 확인
     private bool isAttacking = false; // 현재 공격 중인지 확인
     private bool isInvincible = false; // 데미지 중복 방지
-
+    public GameObject Hitted_Effect;
     public ResultUI resultUI;
 
     private void Awake()
@@ -279,6 +279,9 @@ public class BossController : MonoBehaviour
 
         Debug.Log("Monster is taking damage: " + amount);
         anim.SetTrigger("hit"); // 히트 애니메이션 실행
+
+        Vector3 spawnPosition = transform.position + new Vector3(-3, -2, 0);
+        Instantiate(Hitted_Effect, spawnPosition, Quaternion.identity);
 
         hp -= amount;
 
