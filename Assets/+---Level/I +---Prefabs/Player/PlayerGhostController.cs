@@ -24,7 +24,7 @@ public class PlayerGhostController : MonoBehaviour
         _ghostDelay = 0.02f;
 
         _ghostRemainTime = 0.1f;
-        player = transform.parent.gameObject;
+        //player = transform.parent.gameObject;
     }
 
     // Update is called once per frame
