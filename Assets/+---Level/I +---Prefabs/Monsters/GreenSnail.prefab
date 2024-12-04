@@ -254,6 +254,9 @@ MonoBehaviour:
   attackSound: {fileID: 8300000, guid: 223a6e9174930414eb421c8020047c99, type: 3}
   hpBarTransform: {fileID: 9096432177602446049}
   detectionRange: 5
+  Hitted_Effect: {fileID: 362261158077530393, guid: 20fda529c996a334da7fd65b48ea40df,
+    type: 3}
+  Exp: {fileID: 6635307167455281010, guid: ddab672438a87ae4eba5514ca509e1e9, type: 3}
 --- !u!61 &8345092761279288338
 BoxCollider2D:
   m_ObjectHideFlags: 0
