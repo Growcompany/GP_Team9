@@ -113,7 +113,11 @@ public class PlayerMovementStats : ScriptableObject
         new Vector2(1, 1).normalized, // Right Up
         new Vector2(-1, 1).normalized, // Left Up
         new Vector2(1, -1).normalized, // Right Down
-        new Vector2(-1, -1).normalized // Left Down
+        new Vector2(-1, -1).normalized, // Left Down
+        new Vector2(1, 1), // Right Up
+        new Vector2(-1, 1), // Left Up
+        new Vector2(1, -1), // Right Down
+        new Vector2(-1, -1) // Left Down
     };
 
 
