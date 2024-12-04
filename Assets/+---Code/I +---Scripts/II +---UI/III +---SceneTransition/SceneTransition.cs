@@ -42,7 +42,7 @@ public class SceneTransition : MonoBehaviour
     public void LoadScene(string sceneName)
     {
         // TODO: player dontdestroy되면 그냥 가져오기
-        if (sceneName == "BossScene")
+        if (sceneName == "BossScene" || sceneName == "BossScene Mobile")
         {
             deathCount += GameManager.instance.Player.dieCount;
         }
