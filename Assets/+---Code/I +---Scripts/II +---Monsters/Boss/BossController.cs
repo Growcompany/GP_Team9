@@ -230,13 +230,13 @@ public class BossController : MonoBehaviour
         if (Teleport_pos == 2 || Teleport_pos == 3)
         {
             attackPosition = new Vector3(transform.position.x + 5f, transform.position.y, transform.position.z);
-            attackInstance = Instantiate(attack3Prefab, attackPosition, Quaternion.identity);
-            attackInstance.transform.eulerAngles = new Vector3(attackInstance.transform.eulerAngles.x, 180f, attackInstance.transform.eulerAngles.z);
+            attackInstance = Instantiate(attack3Prefab, attackPosition, Quaternion.Euler(0f, 180f, 0f));
+            //attackInstance.transform.eulerAngles = new Vector3(attackInstance.transform.eulerAngles.x, 180f, attackInstance.transform.eulerAngles.z);
         }
         else
         {
             attackPosition = new Vector3(transform.position.x - 5f, transform.position.y, transform.position.z);
-            attackInstance = Instantiate(attack3Prefab, attackPosition, Quaternion.identity);
+            attackInstance = Instantiate(attack3Prefab, attackPosition, Quaternion.Euler(0f, 0f, 0f));
         }
 
         yield return StartCoroutine(Attack3Sequence(attackInstance, attackPosition));
