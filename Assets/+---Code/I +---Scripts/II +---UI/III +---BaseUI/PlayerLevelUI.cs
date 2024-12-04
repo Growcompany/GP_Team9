@@ -14,18 +14,18 @@ public class PlayerLevelUI : MonoBehaviour
         if(filledImage == null)
             filledImage = transform.Find("LevelFilled").GetComponent<Image>();
 
-        Debug.LogWarning("Current player: " + GameManager.instance.player);
-        levelText.text = GameManager.instance.player.MovementStats.Level.ToString();
-        filledImage.fillAmount = GameManager.instance.player.MovementStats.Exp / 100.0f;    // 100은 임의 설정
+        Debug.LogWarning("Current player: " + GameManager.instance.Player);
+        levelText.text = GameManager.instance.Player.MovementStats.Level.ToString();
+        filledImage.fillAmount = GameManager.instance.Player.MovementStats.Exp / 100.0f;    // 100은 임의 설정
 
-        GameManager.instance.player.levelUpUIEvent.AddListener(UpdateLevelTextUI);
-        GameManager.instance.player.expUpUIEvent.AddListener(UpdateExpUI);
+        GameManager.instance.Player.levelUpUIEvent.AddListener(UpdateLevelTextUI);
+        GameManager.instance.Player.expUpUIEvent.AddListener(UpdateExpUI);
     }
 
     private void OnDestroy()
     {
-        GameManager.instance.player.levelUpUIEvent.RemoveAllListeners();
-        GameManager.instance.player.expUpUIEvent.RemoveAllListeners();
+        GameManager.instance.Player.levelUpUIEvent.RemoveAllListeners();
+        GameManager.instance.Player.expUpUIEvent.RemoveAllListeners();
     }
 
     // TODO: Player에서

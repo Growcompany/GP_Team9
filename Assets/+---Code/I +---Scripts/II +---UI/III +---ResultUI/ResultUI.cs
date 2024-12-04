@@ -27,7 +27,7 @@ public class ResultUI : MonoBehaviour
     private void OnEnable()
     {
         // TODO: player dontdestroy되면 그냥 가져오기
-        SceneTransition.Instance.deathCount += GameManager.instance.player.dieCount;
+        SceneTransition.Instance.deathCount += GameManager.instance.Player.dieCount;
         deathText.text = SceneTransition.Instance.deathCount.ToString();
         int min = (int)SceneTransition.Instance.elapsedTime / 60;
         float sec = SceneTransition.Instance.elapsedTime % 60;

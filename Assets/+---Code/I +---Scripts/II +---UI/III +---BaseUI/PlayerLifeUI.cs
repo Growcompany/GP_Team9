@@ -10,7 +10,7 @@ public class PlayerLifeUI : MonoBehaviour
 
     private void Start()
     {
-        previousLifes = GameManager.instance.player.MovementStats.MaxLife;
+        previousLifes = GameManager.instance.Player.MovementStats.MaxLife;
 
         // All SetActive(false)
         for(int i = 0; i < transform.childCount; i++)
@@ -27,12 +27,12 @@ public class PlayerLifeUI : MonoBehaviour
             lifeImages[i].gameObject.SetActive(true);
         }
 
-        GameManager.instance.player.lifeUpdateUIEvent.AddListener(UpdateLifeImages);
+        GameManager.instance.Player.lifeUpdateUIEvent.AddListener(UpdateLifeImages);
     }
 
     private void OnDestroy()
     {
-        GameManager.instance.player.lifeUpdateUIEvent.RemoveAllListeners();
+        GameManager.instance.Player.lifeUpdateUIEvent.RemoveAllListeners();
 
     }
 
