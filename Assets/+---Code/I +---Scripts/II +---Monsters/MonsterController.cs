@@ -37,6 +37,7 @@ public class MonsterController : MonoBehaviour
     private bool isDying = false; // 몬스터가 이미 죽음을 처리 중인지 확인
     private bool isInvincible = false; // 데미지 중복 방지
     public GameObject Hitted_Effect;
+    public GameObject Exp;
 
     protected virtual void Awake()
     {
@@ -261,7 +262,11 @@ public class MonsterController : MonoBehaviour
         Debug.Log("Monster is taking damage: " + amount);
         //anim.SetTrigger("hit"); // 히트 애니메이션 실행
         Vector3 spawnPosition = transform.position + new Vector3(1, 0, 0);
-        Instantiate(Hitted_Effect, spawnPosition, Quaternion.identity);
+
+        for (int i = 0; i < experiencePoints / 5; i++)
+        {
+            Instantiate(Hitted_Effect, spawnPosition, Quaternion.identity);
+        }
 
         hp -= amount;
 
@@ -291,10 +296,13 @@ public class MonsterController : MonoBehaviour
         Debug.Log("Monster is dying");
         isDying = true; // 죽음 상태 설정
         anim.SetTrigger("death"); // 죽음 애니메이션 시작
+        Instantiate(Exp, transform.position, Quaternion.identity);
+        /*
         PlayerController player = Object.FindFirstObjectByType<PlayerController>();
         if (player != null)
         {
             player.ExpUp(experiencePoints); // 경험치 전달
         }
+        */
     }
 }

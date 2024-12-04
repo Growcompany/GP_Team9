@@ -138,6 +138,7 @@ MonoBehaviour:
   detectionRange: 10
   Hitted_Effect: {fileID: 5238538877814813142, guid: 47096eff328e11a418ace7db2d72aa97,
     type: 3}
+  Exp: {fileID: 6635307167455281010, guid: ddab672438a87ae4eba5514ca509e1e9, type: 3}
 --- !u!82 &6959202955476248326
 AudioSource:
   m_ObjectHideFlags: 0
