@@ -24250,16 +24250,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: UIs
       objectReference: {fileID: 0}
-    - target: {fileID: 6696999525439352852, guid: 413a802d03a51924b96cddea89ed8e0b,
-        type: 3}
-      propertyPath: m_Color.a
-      value: 0.16078432
-      objectReference: {fileID: 0}
-    - target: {fileID: 6696999527304754194, guid: 413a802d03a51924b96cddea89ed8e0b,
-        type: 3}
-      propertyPath: m_Color.a
-      value: 0.11372549
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

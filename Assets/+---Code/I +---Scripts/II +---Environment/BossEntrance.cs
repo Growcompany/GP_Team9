@@ -18,7 +18,7 @@ public class BossEntrance : MonoBehaviour
                 //SaveData();
 
                 alreadyTriggered = true;
-                SceneTransition.Instance.LoadScene("BossScene_Mobile");
+                SceneTransition.Instance.LoadScene("BossScene Mobile");
             }
         }
     }
