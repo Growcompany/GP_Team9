@@ -82,7 +82,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: -10
+  m_SortingOrder: 0
   m_Sprite: {fileID: -11612656, guid: a829256059222394e86ebeefc23002ab, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 1
@@ -155,8 +155,8 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.029423904, y: -0.038078763}
-  m_Size: {x: 0.54176486, y: 0.46368378}
+  m_Offset: {x: 0.02604195, y: -0.038078763}
+  m_Size: {x: 0.4875903, y: 0.4636923}
   m_Direction: 1
 --- !u!95 &3999589826592950105
 Animator:
@@ -206,13 +206,19 @@ MonoBehaviour:
   - {fileID: 2112496253437995006}
   - {fileID: 4825609222280610121}
   - {fileID: 4632620659736971520}
+  TeleportPoints:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   attackPrefab: {fileID: 3260679359275912738}
   attack2Prefab: {fileID: 3331927204163990810}
   attack3Prefab: {fileID: 664180800616769359, guid: 456a4bf4134fd724889a0d0b82f3f35f,
     type: 3}
   warningDuration: 3
   approachSpeed: 10
-  Hitted_Effect: {fileID: 4515497926535975121, guid: bddb971e34eb14d48be30c7b922eb077,
+  Hitted_Effect: {fileID: 1835355836541019294, guid: 4790206eadc817b4196e071640e653af,
     type: 3}
   resultUI: {fileID: 0}
 --- !u!70 &3775943508520362656
@@ -249,8 +255,8 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.0294239, y: -0.03807876}
-  m_Size: {x: 0.5417649, y: 0.4636838}
+  m_Offset: {x: 0.026041953, y: -0.038078763}
+  m_Size: {x: 0.48759025, y: 0.4636923}
   m_Direction: 1
 --- !u!82 &4335757280731815536
 AudioSource:

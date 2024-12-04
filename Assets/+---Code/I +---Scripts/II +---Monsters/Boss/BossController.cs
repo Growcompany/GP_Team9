@@ -15,6 +15,7 @@ public class BossController : MonoBehaviour
     [SerializeField] private AudioClip attack3Sound; // 공격 소리
     [SerializeField] private Transform hpBarTransform; // HP 바 오브젝트의 Transform
     public Transform[] attackPoints; // 공격 위치 4개의 Transform 배열로 설정
+    public Transform[] TeleportPoints; // 자식 Transform들을 저장할 배열
     public GameObject attackPrefab; // 경고+공격 이펙트 프리팹 (하나의 프리팹 안에 경고/공격 이펙트 있음)
     public GameObject attack2Prefab; // Attack2_razer 프리팹
     public GameObject attack3Prefab;  // Attack3 프리팹을 할당
@@ -52,7 +53,9 @@ public class BossController : MonoBehaviour
 
         StartCoroutine(AttackRoutine());
         StartCoroutine(RandomAttackRoutine());
+        //StartCoroutine(RandomTeleportRoutine());
         //InvokeRepeating("StartPerformAttack2Razer", 0f, 10f); // 10초마다 공격 시퀀스를 반복 실행
+
     }
 
     private void StartPerformAttack2Razer()
@@ -163,7 +166,7 @@ public class BossController : MonoBehaviour
 
     #endregion
 
-    #region Random_Attack2&Attack3
+    #region Random_Attack2&Attack3&Teleport
     private IEnumerator RandomAttackRoutine()
     {
         while (true)
@@ -171,19 +174,24 @@ public class BossController : MonoBehaviour
             // 공격 중이 아니면 랜덤하게 공격 선택
             if (!isAttacking)
             {
-                int attackType = Random.Range(0, 2); // 0이면 Attack2_razer, 1이면 Attack3 선택
+                Random.InitState(System.DateTime.Now.Millisecond); // 현재 시간을 시드로 설정
+                int attackType = Random.Range(0, 3); // 0이면 Attack2_razer, 1이면 Attack3 선택, 2면 teleport
 
                 if (attackType == 0)
                 {
                     yield return StartCoroutine(PerformAttack2Razer());
                 }
-                else
+                else if(attackType == 1)
                 {
                     yield return StartCoroutine(StartAttack3Sequence()); // 변경된 부분
                 }
+                else if (attackType == 2)
+                {
+                    yield return StartCoroutine(RandomTeleportRoutine()); // 변경된 부분
+                }
             }
 
-            yield return new WaitForSeconds(5f); // 두 공격 사이의 대기 시간
+            yield return new WaitForSeconds(3f); // 두 공격 사이의 대기 시간
         }
     }
     #endregion
@@ -247,6 +255,28 @@ public class BossController : MonoBehaviour
             transform.position = Vector3.MoveTowards(transform.position, originalPosition, step);
             yield return null;
         }
+    }
+    #endregion
+
+    #region Random_Teleport
+    private IEnumerator RandomTeleportRoutine()
+    {
+        // 공격 중이 아니면 랜덤하게 공격 선택
+        if (!isAttacking)
+        {
+            Random.InitState(System.DateTime.Now.Millisecond); // 현재 시간을 시드로 설정
+            int Teleport_pos = Random.Range(0, TeleportPoints.Length);
+
+            if (Teleport_pos == 2 || Teleport_pos == 3)
+            {
+                transform.eulerAngles = new Vector3(transform.eulerAngles.x, 180f, transform.eulerAngles.z);
+            }
+            else { transform.eulerAngles = new Vector3(transform.eulerAngles.x, 0f, transform.eulerAngles.z); }
+
+            transform.position = TeleportPoints[Teleport_pos].position;
+        }
+
+        yield return new WaitForSeconds(1f); // 대기 시간
     }
     #endregion
 
