@@ -45,7 +45,7 @@ public class SkillCoolTimeUI : MonoBehaviour
     {
         grayFilledImage.fillAmount = 0;
         text.enabled = false;
-        player = GameManager.instance.player;
+        player = GameManager.instance.Player;
 
         player.skillCoolTimeUIEvent.AddListener(UpdateCoolTimeUI);
     }

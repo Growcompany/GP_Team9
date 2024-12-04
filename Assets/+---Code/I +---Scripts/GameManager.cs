@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -8,7 +9,20 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
-    public PlayerController player;
+    private PlayerController m_player;
+    public PlayerController Player
+    {
+        get 
+        { 
+            if(m_player == null)
+                m_player = Object.FindFirstObjectByType<PlayerController>(); 
+            return m_player;
+        }
+        private set 
+        {
+            m_player = value; 
+        }
+    }
 
     public int totalUsedStatusPoint;                    // ConfirmButtonUI에서 조절
     public int availablePoint;                          // CalculateAvailableStatusPoint 이벤트로 계산됨(ex. Level up, Confirm button)
@@ -29,8 +43,8 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        if(player == null)
-            player = Object.FindFirstObjectByType<PlayerController>();
+        if(Player == null)
+            Player = Object.FindFirstObjectByType<PlayerController>();
 
         
         // DontDestroyOnLoad(gameObject);
@@ -47,7 +61,7 @@ public class GameManager : MonoBehaviour
 
     public void CalculateAvailableStatusPoint()
     {
-        availablePoint = player.MovementStats.Level - totalUsedStatusPoint - 1;
+        availablePoint = Player.MovementStats.Level - totalUsedStatusPoint - 1;
     }
 
     public void ConfirmPoints()
