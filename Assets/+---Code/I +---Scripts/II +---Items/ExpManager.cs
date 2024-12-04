@@ -21,8 +21,8 @@ public class ExpManager : MonoBehaviour
             player_pos = playerObject.transform; // Transform 참조 저장
         }
 
-        // 1초 뒤에 이동 및 충돌 활성화
-        StartCoroutine(EnableMoveAfterDelay(2f));
+        // 이동 및 충돌 활성화
+        StartCoroutine(EnableMoveAfterDelay(1.5f));
     }
 
     // 이동 및 충돌 활성화 코루틴

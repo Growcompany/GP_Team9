@@ -102,7 +102,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Exp: 5
-  MoveSpeed: 10
+  MoveSpeed: 7
   CollisionDistance: 0.8
 --- !u!58 &725613220679349892
 CircleCollider2D:
