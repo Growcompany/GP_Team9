@@ -70,10 +70,10 @@ public class CurrentStatusUI : MonoBehaviour
     {
         switch (type)
         {
-            case StatusType.Life:               currentValue = GameManager.instance.player.MovementStats.MaxLife;        break;
-            case StatusType.Strength:           currentValue = GameManager.instance.player.MovementStats.Strength;       break;
-            case StatusType.Dodge:              currentValue = GameManager.instance.player.MovementStats.Dodge;          break;
-            case StatusType.SkillCoolTime:      currentValue = GameManager.instance.player.MovementStats.SkillCoolTime;  break;
+            case StatusType.Life:               currentValue = GameManager.instance.Player.MovementStats.MaxLife;        break;
+            case StatusType.Strength:           currentValue = GameManager.instance.Player.MovementStats.Strength;       break;
+            case StatusType.Dodge:              currentValue = GameManager.instance.Player.MovementStats.Dodge;          break;
+            case StatusType.SkillCoolTime:      currentValue = GameManager.instance.Player.MovementStats.SkillCoolTime;  break;
         }
 
         currentStateText.text = currentValue.ToString();
@@ -92,10 +92,10 @@ public class CurrentStatusUI : MonoBehaviour
     {
         switch(type)
         {
-            case StatusType.Life:           GameManager.instance.player.MovementStats.MaxLife = currentValue;       break;
-            case StatusType.Strength:       GameManager.instance.player.MovementStats.Strength = currentValue;      break;
-            case StatusType.Dodge:          GameManager.instance.player.MovementStats.Dodge = currentValue;         break;
-            case StatusType.SkillCoolTime:  GameManager.instance.player.MovementStats.SkillCoolTime = currentValue; break;
+            case StatusType.Life:           GameManager.instance.Player.MovementStats.MaxLife = currentValue;       break;
+            case StatusType.Strength:       GameManager.instance.Player.MovementStats.Strength = currentValue;      break;
+            case StatusType.Dodge:          GameManager.instance.Player.MovementStats.Dodge = currentValue;         break;
+            case StatusType.SkillCoolTime:  GameManager.instance.Player.MovementStats.SkillCoolTime = currentValue; break;
         }
 
         Confirm();

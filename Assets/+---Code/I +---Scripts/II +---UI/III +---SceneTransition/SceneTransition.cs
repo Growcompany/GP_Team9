@@ -44,7 +44,7 @@ public class SceneTransition : MonoBehaviour
         // TODO: player dontdestroy되면 그냥 가져오기
         if (sceneName == "BossScene")
         {
-            deathCount += GameManager.instance.player.dieCount;
+            deathCount += GameManager.instance.Player.dieCount;
         }
         else
         {
