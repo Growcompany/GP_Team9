@@ -304,7 +304,7 @@ public class MonsterController : MonoBehaviour
 
             Vector2 explosionDir = Random.insideUnitCircle;
             explosionDir.y = Mathf.Abs(explosionDir.y);
-            Vector2 force = explosionDir * Random.Range(700, 1000);
+            Vector2 force = explosionDir * Random.Range(10, 100);
             rb.AddForce(force);
             Debug.LogWarning(force);
         }

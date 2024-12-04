@@ -201,7 +201,7 @@ public class PlayerController : MonoBehaviour
         // Status
         // 현재 씬 이름 확인
         Scene currentScene = SceneManager.GetActiveScene();
-        if (currentScene.name == "SampleScene")
+        if (currentScene.name == "SampleScene" || currentScene.name == "SampleScene Mobile")
         {
             ResetStatus();
         }
