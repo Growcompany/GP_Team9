@@ -22,7 +22,7 @@ public class ExpManager : MonoBehaviour
         }
 
         // 이동 및 충돌 활성화
-        StartCoroutine(EnableMoveAfterDelay(1.5f));
+        StartCoroutine(EnableMoveAfterDelay(1f));
     }
 
     // 이동 및 충돌 활성화 코루틴

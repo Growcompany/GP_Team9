@@ -30,6 +30,7 @@ public class BossController : MonoBehaviour
     private bool isInvincible = false; // 데미지 중복 방지
     public GameObject Hitted_Effect;
     public ResultUI resultUI;
+    private int Teleport_pos;
 
     private void Awake()
     {
@@ -221,9 +222,22 @@ public class BossController : MonoBehaviour
     #region Attack3
     private IEnumerator StartAttack3Sequence()
     {
-        // 보스 위치를 기준으로 -5 x 좌표에 Attack3경고 생성
-        Vector3 attackPosition = new Vector3(transform.position.x - 5f, transform.position.y, transform.position.z);
-        GameObject attackInstance = Instantiate(attack3Prefab, attackPosition, Quaternion.identity);
+        // 공격 위치 변수
+        Vector3 attackPosition;
+        GameObject attackInstance;
+
+        // 보스 위치를 기준으로 공격 위치 결정 및 Attack3 경고 생성
+        if (Teleport_pos == 2 || Teleport_pos == 3)
+        {
+            attackPosition = new Vector3(transform.position.x + 5f, transform.position.y, transform.position.z);
+            attackInstance = Instantiate(attack3Prefab, attackPosition, Quaternion.identity);
+            attackInstance.transform.eulerAngles = new Vector3(attackInstance.transform.eulerAngles.x, 180f, attackInstance.transform.eulerAngles.z);
+        }
+        else
+        {
+            attackPosition = new Vector3(transform.position.x - 5f, transform.position.y, transform.position.z);
+            attackInstance = Instantiate(attack3Prefab, attackPosition, Quaternion.identity);
+        }
 
         yield return StartCoroutine(Attack3Sequence(attackInstance, attackPosition));
     }
@@ -265,7 +279,7 @@ public class BossController : MonoBehaviour
         if (!isAttacking)
         {
             Random.InitState(System.DateTime.Now.Millisecond); // 현재 시간을 시드로 설정
-            int Teleport_pos = Random.Range(0, TeleportPoints.Length);
+            Teleport_pos = Random.Range(0, TeleportPoints.Length);
 
             if (Teleport_pos == 2 || Teleport_pos == 3)
             {
@@ -311,7 +325,16 @@ public class BossController : MonoBehaviour
         anim.SetTrigger("hit"); // 히트 애니메이션 실행
 
         Vector3 spawnPosition = transform.position + new Vector3(-3, -2, 0);
-        Instantiate(Hitted_Effect, spawnPosition, Quaternion.identity);
+        if (Teleport_pos == 2 || Teleport_pos == 3)
+        {
+            // Y축을 180도로 회전하여 생성
+            Instantiate(Hitted_Effect, spawnPosition, Quaternion.Euler(0f, 180f, 0f));
+        }
+        else
+        {
+            // 기본 회전으로 생성
+            Instantiate(Hitted_Effect, spawnPosition, Quaternion.identity);
+        }
 
         hp -= amount;
 
