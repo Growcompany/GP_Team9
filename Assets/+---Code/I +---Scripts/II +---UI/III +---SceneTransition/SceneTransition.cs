@@ -8,6 +8,7 @@ public class SceneTransition : MonoBehaviour
 
     public int deathCount = 0;
     public float elapsedTime = 0;
+    public float duration = 5.0f;
     [SerializeField] private FadeEffect fadeEffect;
 
     private void Awake()
@@ -57,10 +58,10 @@ public class SceneTransition : MonoBehaviour
 
     private IEnumerator LoadSceneCoroutine(string sceneName)
     {
-        fadeEffect.FadeOut();
-        yield return new WaitForSeconds(fadeEffect.duration);   // Fade In 효과 보장용
+        fadeEffect.FadeOut(null, duration);
+        yield return new WaitForSeconds(duration);   // Fade In 효과 보장용
         yield return StartCoroutine(LoadSceneAsync(sceneName));
-        fadeEffect.FadeIn();
+        fadeEffect.FadeIn(null, duration);
     }
 
     private IEnumerator LoadSceneAsync(string sceneName)

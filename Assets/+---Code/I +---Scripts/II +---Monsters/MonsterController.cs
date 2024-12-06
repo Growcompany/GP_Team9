@@ -92,7 +92,7 @@ public class MonsterController : MonoBehaviour
             if (distanceToPlayer <= AttackRange)
             {
                 TriggerAnimation(attackAnim);  // ���� �ִϸ��̼�
-                Debug.Log(attackAnim);
+                // Debug.Log(attackAnim);
             }
             else // ���� ���� ��, ���� ���� ��
             {
@@ -113,7 +113,7 @@ public class MonsterController : MonoBehaviour
         else
         {
             TriggerAnimation(idleAnim);
-            Debug.Log("idleAnim");
+            // Debug.Log("idleAnim");
             // 플레이어가 탐지되지 않았을 때 순찰 동작 실행
             Patrol();
         }

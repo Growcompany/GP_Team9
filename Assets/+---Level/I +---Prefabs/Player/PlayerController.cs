@@ -809,7 +809,7 @@ public class PlayerController : MonoBehaviour
     private void Skill1Check()
     {
 
-        Debug.Log("_isSkill1Available: " + _isSkill1Available);
+        // Debug.Log("_isSkill1Available: " + _isSkill1Available);
 
         if (InputManager.Skill1WasPressed && _isSkill1Available)
         {
@@ -1035,7 +1035,7 @@ public class PlayerController : MonoBehaviour
 
     #region Life
 
-    public IEnumerator Damaged()
+    public IEnumerator Damaged(int amount = 1)
     {
         if (!_isBeingDamaged)
         {
@@ -1057,7 +1057,7 @@ public class PlayerController : MonoBehaviour
                         audioSrc.PlayOneShot(damagedSound);
 
                     _isBeingDamaged = true;
-                    MovementStats.Life -= 1;
+                    MovementStats.Life -= amount;
                     lifeUpdateUIEvent.Invoke(MovementStats.Life);
                     StartCoroutine(ChangeRed());
                     yield return new WaitForSeconds(1f);

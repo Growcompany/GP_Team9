@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class ForceFieldController : MonoBehaviour
 {
-    public float damageAmount = 1.0f; // 벽에 닿았을 때 플레이어에게 줄 데미지
+    public int damageAmount = 1; // 벽에 닿았을 때 플레이어에게 줄 데미지
     public float knockbackForce = 5.0f; // 플레이어가 밀려나는 힘
     public float onDuration = 2.0f; // 전기 오브젝트가 켜진 상태로 유지되는 시간
     public float offDuration = 2.0f; // 전기 오브젝트가 꺼진 상태로 유지되는 시간
@@ -64,7 +64,7 @@ public class ForceFieldController : MonoBehaviour
             if (playerController != null)
             {
                 // 데미지 코루틴 호출
-                playerController.StartCoroutine(playerController.Damaged());
+                playerController.StartCoroutine(playerController.Damaged(damageAmount));
 
                 // 플레이어를 뒤로 밀어내는 처리
                 Rigidbody2D playerRb = collision.gameObject.GetComponent<Rigidbody2D>();
@@ -87,13 +87,13 @@ public class ForceFieldController : MonoBehaviour
             isActive = true;
             spriteRenderer.enabled = true;
             collider2D.enabled = true;
-            Debug.Log("Electricity ON");
+            // Debug.Log("Electricity ON");
             yield return new WaitForSeconds(onDuration);
 
             isActive = false;
             spriteRenderer.enabled = false;
             collider2D.enabled = false;
-            Debug.Log("Electricity OFF");
+            // Debug.Log("Electricity OFF");
             yield return new WaitForSeconds(offDuration);
         }
     }
