@@ -238,7 +238,7 @@ public class MonsterController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("Collided with: " + collision.gameObject.name);
+        // Debug.Log("Collided with: " + collision.gameObject.name);
     }
 
     public virtual void UpdateHPBar()

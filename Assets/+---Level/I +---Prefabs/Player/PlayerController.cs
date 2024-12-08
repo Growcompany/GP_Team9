@@ -184,6 +184,7 @@ public class PlayerController : MonoBehaviour
     public AudioClip deathSound;
     public AudioClip speedForceStartSound;
     public AudioClip speedForceEndSound;
+    public AudioClip levelUpSound;
     public float _moveSoundTimer;
 
     #endregion
@@ -1132,7 +1133,7 @@ public class PlayerController : MonoBehaviour
     public void ExpUp(int exp)
     {
         MovementStats.Exp += exp;
-        expUpUIEvent.Invoke(100, MovementStats.Exp);    // 100은 임의로 설정함, 수정 바람
+        expUpUIEvent.Invoke(10, MovementStats.Exp % 10);    // 100은 임의로 설정함, 수정 바람
     }
 
     private void StatusCheck()
@@ -1152,6 +1153,9 @@ public class PlayerController : MonoBehaviour
             lifeUpdateUIEvent.Invoke(MovementStats.Life);
             levelUpUIEvent.Invoke(MovementStats.Level);
             pointTextUI.onChanged.Invoke();
+
+            GameManager.instance.LevelUpEffect();
+            audioSrc.PlayOneShot(levelUpSound);
         }
 
         // Strength

@@ -24,12 +24,16 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    [SerializeField] private ParticleSystem m_levelUpEffect;
+
     public int totalUsedStatusPoint;                    // ConfirmButtonUI에서 조절
     public int availablePoint;                          // CalculateAvailableStatusPoint 이벤트로 계산됨(ex. Level up, Confirm button)
     public int currentUsedStatusPoint;                  // PlusMinusButtonUI에서 증감, ConfirmButtonUI에서 초기화
                                                         // PointTextUI에서 availablePoint - currentUsedStatusPoint값 사용
     public float coolTimeRatio;                         // SkillCoolTimeUI에서 사용
     public float currentCoolTime;                       // SkillCoolTimeUI에서 사용
+
+    public bool IsPaused { get; private set; }
 
 
     private void Awake()
@@ -53,7 +57,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         Scene currentScene = SceneManager.GetActiveScene();
-        if (currentScene.name == "SampleScene")
+        if (currentScene.name == "SampleScene" || currentScene.name == "SampleScene Mobile")
         {
             CalculateAvailableStatusPoint();
         }
@@ -85,12 +89,35 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void LevelUpEffect()
+    {
+        StartCoroutine(FollowPlayer(m_levelUpEffect.gameObject));
+        m_levelUpEffect.Play();
+    }
+
+    private IEnumerator FollowPlayer(GameObject go)
+    {
+        // 2.5초간 플레이어를 따라다님
+        float time = 2.5f;
+        while (time > 0)
+        {
+            time -= Time.deltaTime;
+            go.transform.position = Player.transform.position + new Vector3(0, 0.3f, 0);
+            yield return null;
+        }
+    }
+
+    public void Pause(bool isPaused)
+    {
+        IsPaused = isPaused;
+        float timeScale = IsPaused ? 0 : 1;
+        Time.timeScale = timeScale;
+    }
+
+
     public void Update()
     {
-        //if(Input.GetKey(KeyCode.Escape))
-        //{
-        //    player.ExpUp(10);
-            
-        //}
+        //if (!IsPaused)
+        //    Pause(true);
     }
 }
