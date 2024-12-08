@@ -18,8 +18,12 @@ public class ConfirmButtonUI : MonoBehaviour
     [SerializeField] private List<CurrentStatusUI> currentStatusUIs;
     StatusType[] statusTypes = (StatusType[])Enum.GetValues(typeof(StatusType));
 
+    AudioSource m_audioSource;
+
     private void Start()
     {
+
+        m_audioSource = GetComponent<AudioSource>();
 
         button = GetComponent<Button>();
         button.onClick.AddListener(GameManager.instance.ConfirmPoints);
@@ -47,5 +51,7 @@ public class ConfirmButtonUI : MonoBehaviour
         {
             currentStatusUIs[i].Confirm(statusTypes[i]);
         }
+
+        m_audioSource.Play();
     }
 }
