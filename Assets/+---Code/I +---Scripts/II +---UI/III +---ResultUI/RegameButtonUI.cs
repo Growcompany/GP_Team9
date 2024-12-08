@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class RegameButtonUI : MonoBehaviour
 {
     Button button;
+    bool m_isClicked = false;
 
     private void Awake()
     {
@@ -22,6 +23,10 @@ public class RegameButtonUI : MonoBehaviour
 
     void Regame()
     {
-        SceneTransition.Instance.LoadScene("SampleScene");
+        if(!m_isClicked)
+        {
+            SceneTransition.Instance.LoadScene("SampleScene Mobile");
+            m_isClicked = true;
+        }
     }
 }
