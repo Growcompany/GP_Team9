@@ -1,10 +1,12 @@
 using System.Collections;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class SceneTransition : MonoBehaviour
 {
     public static SceneTransition Instance {  get; private set; }
+    public int targetFrameRate = 60;
 
     public int deathCount = 0;
     public float elapsedTime = 0;
@@ -25,6 +27,8 @@ public class SceneTransition : MonoBehaviour
         }
 
         Init();
+
+        Application.targetFrameRate = targetFrameRate;
     }
 
     private void Update()

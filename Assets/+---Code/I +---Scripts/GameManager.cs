@@ -34,6 +34,7 @@ public class GameManager : MonoBehaviour
     public float currentCoolTime;                       // SkillCoolTimeUI에서 사용
 
     public bool IsPaused { get; private set; }
+    public GameObject escapeUI;
 
 
     private void Awake()
@@ -50,7 +51,9 @@ public class GameManager : MonoBehaviour
         if(Player == null)
             Player = Object.FindFirstObjectByType<PlayerController>();
 
-        
+        if(escapeUI == null)
+            escapeUI = GameObject.Find("---EscapeUI---");
+
         // DontDestroyOnLoad(gameObject);
     }
 
@@ -117,7 +120,10 @@ public class GameManager : MonoBehaviour
 
     public void Update()
     {
-        //if (!IsPaused)
-        //    Pause(true);
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            escapeUI.GetComponent<Canvas>().enabled = true;
+            Pause(true);
+        }
     }
 }
