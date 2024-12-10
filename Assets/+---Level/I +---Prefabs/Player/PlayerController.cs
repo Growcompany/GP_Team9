@@ -25,6 +25,8 @@ public class PlayerController : MonoBehaviour
     public GameObject attackArea;
     public GameObject chargingFX;
 
+    public GameObject skillActivatedFX;
+
     private Rigidbody2D _rb;
 
     private Animator _animator; // animation
@@ -116,6 +118,8 @@ public class PlayerController : MonoBehaviour
                 {
                     // Skill1이 발동될 때 딱 한 번 실행
                     _isSkill1Available = false;
+                    // SkillActivated Object Activate
+                    skillActivatedFX.SetActive(true);
                 }
                 else
                 {
@@ -123,6 +127,8 @@ public class PlayerController : MonoBehaviour
                     StartCoroutine(coolTimeCalculate.CalculateCoolTime(MovementStats.SkillCoolTime, 0));
                     skillCoolTimeUIEvent.Invoke(0);
                     _isSkill1Available = false;
+                    // SkillActivated Object Activate
+                    skillActivatedFX.SetActive(false);
                 }
 
                 isSkill1Activated = value;
@@ -253,6 +259,7 @@ public class PlayerController : MonoBehaviour
         _skill1Timer = 0f;
         _skill1CoolTimeTimer = 0f;
         _isSkill1Available = true;
+        skillActivatedFX.SetActive(false);
 
         // Attack
         _attackTimer = 0f;
@@ -818,6 +825,7 @@ public class PlayerController : MonoBehaviour
             {
                 _isSkill1Activated = true;
 
+
             }
         }
 
@@ -1023,10 +1031,14 @@ public class PlayerController : MonoBehaviour
                 Time.timeScale = 1f;
                 _speedForceFX.FadeIn();
             }
+
+            ChangeSkillActivatedFXYellow();
         }
         else
         {
             _animator.SetFloat("SpeedForceMultiplier", 1f);
+
+            ChangeSkillActivatedFXWhite();
         }
     }
 
@@ -1077,6 +1089,20 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(0.1f);
         GetComponent<SpriteRenderer>().color = Color.white;
     }
+
+    private void ChangeSkillActivatedFXYellow()
+    {
+        skillActivatedFX.transform.GetChild(0).GetComponent<SpriteRenderer>().color = Color.yellow;
+        skillActivatedFX.transform.GetChild(1).GetComponent<SpriteRenderer>().color = Color.yellow;
+    }
+
+    private void ChangeSkillActivatedFXWhite()
+    {
+        skillActivatedFX.transform.GetChild(0).GetComponent<SpriteRenderer>().color = Color.white;
+        skillActivatedFX.transform.GetChild(1).GetComponent<SpriteRenderer>().color = Color.white;
+    }
+
+
 
     private void DieCheck()
     {
