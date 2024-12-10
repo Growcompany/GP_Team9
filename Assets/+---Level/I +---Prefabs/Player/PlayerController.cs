@@ -223,10 +223,9 @@ public class PlayerController : MonoBehaviour
         MovementStats.JumpBufferTime = 0.125f;
         MovementStats.JumpCoyoteTime = 0.1f;
 
-        MovementStats.MaxWalkSpeed = 50f;
         MovementStats.DashSpeed = 45f;
 
-        MovementStats.MaxWalkSpeed = 25f;
+        MovementStats.MaxWalkSpeed = 18f;
         MovementStats.DashSpeed = 45f;
 
         MovementStats.TimeBtwAttacks = 0.2f;
