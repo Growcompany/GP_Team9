@@ -17,7 +17,7 @@ public class PlayerController : MonoBehaviour
     public UnityEvent<int> levelUpUIEvent;
     public UnityEvent<int, int> expUpUIEvent;
     public UnityEvent<int> lifeUpdateUIEvent;
-    public UnityEvent skillCoolTimeUIEvent;
+    public UnityEvent<int> skillCoolTimeUIEvent;
     public PointTextUI pointTextUI;
 
     public GameObject laserPrefab;
@@ -104,8 +104,35 @@ public class PlayerController : MonoBehaviour
     private float _rotationTimer;
 
     // Skill vars
-    private bool _isSkill1Activated;
+    private bool isSkill1Activated;
+    public bool _isSkill1Activated
+    {
+        get { return isSkill1Activated; }
+        private set
+        {
+            if (isSkill1Activated != value)
+            {
+                if (value == true)
+                {
+                    // Skill1이 발동될 때 딱 한 번 실행
+                    _isSkill1Available = false;
+                }
+                else
+                {
+                    // Skill1이 해제될 때 딱 한 번 실행
+                    StartCoroutine(coolTimeCalculate.CalculateCoolTime(MovementStats.SkillCoolTime, 0));
+                    skillCoolTimeUIEvent.Invoke(0);
+                    _isSkill1Available = false;
+                }
+
+                isSkill1Activated = value;
+            }
+        }
+    }
     private float _skill1Timer;
+    private float _skill1CoolTimeTimer;
+    private bool _isSkill1Available;
+    private CoolTimeCalculate coolTimeCalculate;
 
     // Attack vars
     private bool _isAttacking;
@@ -157,6 +184,7 @@ public class PlayerController : MonoBehaviour
     public AudioClip deathSound;
     public AudioClip speedForceStartSound;
     public AudioClip speedForceEndSound;
+    public AudioClip levelUpSound;
     public float _moveSoundTimer;
 
     #endregion
@@ -169,10 +197,12 @@ public class PlayerController : MonoBehaviour
         statusUI = GameObject.Find("---StatusUI---").gameObject;
         statusUI.GetComponent<Canvas>().enabled = false;
 
+        coolTimeCalculate = GetComponent<CoolTimeCalculate>();
+
         // Status
         // 현재 씬 이름 확인
         Scene currentScene = SceneManager.GetActiveScene();
-        if (currentScene.name == "SampleScene")
+        if (currentScene.name == "SampleScene" || currentScene.name == "SampleScene Mobile")
         {
             ResetStatus();
         }
@@ -193,10 +223,9 @@ public class PlayerController : MonoBehaviour
         MovementStats.JumpBufferTime = 0.125f;
         MovementStats.JumpCoyoteTime = 0.1f;
 
-        MovementStats.MaxWalkSpeed = 50f;
         MovementStats.DashSpeed = 45f;
 
-        MovementStats.MaxWalkSpeed = 25f;
+        MovementStats.MaxWalkSpeed = 18f;
         MovementStats.DashSpeed = 45f;
 
         MovementStats.TimeBtwAttacks = 0.2f;
@@ -222,6 +251,8 @@ public class PlayerController : MonoBehaviour
         _isSkill1Activated = false;
         MovementStats.Skill1Time = 3f;
         _skill1Timer = 0f;
+        _skill1CoolTimeTimer = 0f;
+        _isSkill1Available = true;
 
         // Attack
         _attackTimer = 0f;
@@ -777,25 +808,41 @@ public class PlayerController : MonoBehaviour
 
     private void Skill1Check()
     {
-        if (InputManager.Skill1WasPressed)
+
+        // Debug.Log("_isSkill1Available: " + _isSkill1Available);
+
+        if (InputManager.Skill1WasPressed && _isSkill1Available)
         {
             // Skill 1 Activation
             if (!_isSkill1Activated)
             {
                 _isSkill1Activated = true;
+
             }
         }
 
-        // CoolTime
+        // Skill Time
         if (_isSkill1Activated)
         {
             _skill1Timer += Time.fixedDeltaTime;
-
+            _skill1CoolTimeTimer = 0f;
             // 초기화
             if (_skill1Timer >= MovementStats.Skill1Time)
             {
                 _isSkill1Activated = false;
                 _skill1Timer = 0f;
+            }
+        }
+
+        // Cool Time
+        if (!_isSkill1Activated)
+        {
+            _skill1CoolTimeTimer += Time.fixedDeltaTime;
+
+            if (_skill1CoolTimeTimer >= MovementStats.SkillCoolTime)
+            {
+                _isSkill1Available = true;
+                _skill1CoolTimeTimer = 0f;
             }
         }
     }
@@ -988,7 +1035,7 @@ public class PlayerController : MonoBehaviour
 
     #region Life
 
-    public IEnumerator Damaged()
+    public IEnumerator Damaged(int amount = 1)
     {
         if (!_isBeingDamaged)
         {
@@ -1010,7 +1057,7 @@ public class PlayerController : MonoBehaviour
                         audioSrc.PlayOneShot(damagedSound);
 
                     _isBeingDamaged = true;
-                    MovementStats.Life -= 1;
+                    MovementStats.Life -= amount;
                     lifeUpdateUIEvent.Invoke(MovementStats.Life);
                     StartCoroutine(ChangeRed());
                     yield return new WaitForSeconds(1f);
@@ -1085,7 +1132,7 @@ public class PlayerController : MonoBehaviour
     public void ExpUp(int exp)
     {
         MovementStats.Exp += exp;
-        expUpUIEvent.Invoke(100, MovementStats.Exp);    // 100은 임의로 설정함, 수정 바람
+        expUpUIEvent.Invoke(10, MovementStats.Exp % 10);    // 100은 임의로 설정함, 수정 바람
     }
 
     private void StatusCheck()
@@ -1105,6 +1152,9 @@ public class PlayerController : MonoBehaviour
             lifeUpdateUIEvent.Invoke(MovementStats.Life);
             levelUpUIEvent.Invoke(MovementStats.Level);
             pointTextUI.onChanged.Invoke();
+
+            GameManager.instance.LevelUpEffect();
+            audioSrc.PlayOneShot(levelUpSound);
         }
 
         // Strength

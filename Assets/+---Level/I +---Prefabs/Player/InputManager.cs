@@ -36,11 +36,28 @@ public class InputManager : MonoBehaviour
 
     private InputAction _cheatAction;
 
+    public enum Device { PC, Mobile };
+    public Device device;
+
+    public FixedJoystick joystick;
+
+
 
     #endregion
 
     private void Awake()
     {
+        if (Application.platform == RuntimePlatform.Android || Application.isEditor)
+        {
+            device = Device.Mobile;
+        }
+        else
+        {
+            device = Device.PC;
+        }
+
+        joystick = FindObjectOfType<FixedJoystick>();
+
         PlayerInput = GetComponent<PlayerInput>();
 
         _statusAction = PlayerInput.actions["Status"];
@@ -55,11 +72,19 @@ public class InputManager : MonoBehaviour
 
         _cheatAction = PlayerInput.actions["Cheat"];
 
+
     }
 
     private void Update()
     {
-        Movement = _moveAction.ReadValue<Vector2>();
+        if (device == Device.PC)
+        {
+            Movement = _moveAction.ReadValue<Vector2>();
+        }
+        else if (device == Device.Mobile)
+        {
+            Movement = joystick.Direction;
+        }
 
         StatusWasPressed = _statusAction.WasPressedThisFrame();
 
@@ -79,5 +104,6 @@ public class InputManager : MonoBehaviour
         Skill2WasPressed = _skill2Action.WasPressedThisFrame();
 
         CheatWasPressed = _cheatAction.WasPressedThisFrame();
+
     }
 }

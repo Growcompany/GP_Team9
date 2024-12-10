@@ -36,6 +36,8 @@ public class MonsterController : MonoBehaviour
     protected bool FlipSprite = true;
     private bool isDying = false; // 몬스터가 이미 죽음을 처리 중인지 확인
     private bool isInvincible = false; // 데미지 중복 방지
+    public GameObject Hitted_Effect;
+    public GameObject Exp;
 
     protected virtual void Awake()
     {
@@ -90,7 +92,7 @@ public class MonsterController : MonoBehaviour
             if (distanceToPlayer <= AttackRange)
             {
                 TriggerAnimation(attackAnim);  // ���� �ִϸ��̼�
-                Debug.Log(attackAnim);
+                // Debug.Log(attackAnim);
             }
             else // ���� ���� ��, ���� ���� ��
             {
@@ -111,7 +113,7 @@ public class MonsterController : MonoBehaviour
         else
         {
             TriggerAnimation(idleAnim);
-            Debug.Log("idleAnim");
+            // Debug.Log("idleAnim");
             // 플레이어가 탐지되지 않았을 때 순찰 동작 실행
             Patrol();
         }
@@ -236,7 +238,7 @@ public class MonsterController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("Collided with: " + collision.gameObject.name);
+        // Debug.Log("Collided with: " + collision.gameObject.name);
     }
 
     public virtual void UpdateHPBar()
@@ -258,7 +260,13 @@ public class MonsterController : MonoBehaviour
         if (isInvincible) return; // 무적 상태일 때는 데미지를 받지 않음
 
         Debug.Log("Monster is taking damage: " + amount);
-        anim.SetTrigger("hit"); // 히트 애니메이션 실행
+        //anim.SetTrigger("hit"); // 히트 애니메이션 실행
+        Vector3 spawnPosition = transform.position + new Vector3(1, 0, 0);
+
+        for (int i = 0; i < experiencePoints / 5; i++)
+        {
+            Instantiate(Hitted_Effect, spawnPosition, Quaternion.identity);
+        }
 
         hp -= amount;
 
@@ -288,10 +296,24 @@ public class MonsterController : MonoBehaviour
         Debug.Log("Monster is dying");
         isDying = true; // 죽음 상태 설정
         anim.SetTrigger("death"); // 죽음 애니메이션 시작
+        
+        for(int i = 0; i < experiencePoints / 5; i++)
+        {
+            GameObject go = Instantiate(Exp, transform.position, Quaternion.identity);
+            Rigidbody2D rb = go.GetComponent<Rigidbody2D>();
+
+            Vector2 explosionDir = Random.insideUnitCircle;
+            explosionDir.y = Mathf.Abs(explosionDir.y);
+            Vector2 force = explosionDir * Random.Range(10, 100);
+            rb.AddForce(force);
+            Debug.LogWarning(force);
+        }
+        /*
         PlayerController player = Object.FindFirstObjectByType<PlayerController>();
         if (player != null)
         {
             player.ExpUp(experiencePoints); // 경험치 전달
         }
+        */
     }
 }

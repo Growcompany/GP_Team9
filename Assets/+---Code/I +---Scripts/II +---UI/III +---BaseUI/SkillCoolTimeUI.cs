@@ -7,43 +7,51 @@ public class SkillCoolTimeUI : MonoBehaviour
 {
     [SerializeField] Image grayFilledImage;
     [SerializeField] TMP_Text text;
-    IEnumerator UpdateImage()
+    [SerializeField] PlayerController player;
+    public int skillIndex;
+
+    IEnumerator UpdateImage(int skillIndex_input)
     {
-        while (GameManager.instance.coolTimeRatio >= 0.0f)
+        CoolTimeCalculate coolTimeCalculate = player.GetComponent<CoolTimeCalculate>();
+        while (coolTimeCalculate.coolTimeRatio[skillIndex] > 0.0f && skillIndex == skillIndex_input)
         {
-            grayFilledImage.fillAmount = GameManager.instance.coolTimeRatio;
+            grayFilledImage.fillAmount = coolTimeCalculate.coolTimeRatio[skillIndex];
             yield return null;
         }
+
+        grayFilledImage.fillAmount = 0; // 이미지가 보이지 않게 하기 위함
     }
 
-    IEnumerator UpdateText()
+    IEnumerator UpdateText(int skillIndex_input)
     {
         text.enabled = true;
-        while (GameManager.instance.currentCoolTime >= 0.0f)
+        CoolTimeCalculate coolTimeCalculate = player.GetComponent<CoolTimeCalculate>();
+        while (coolTimeCalculate.coolTimeRatio[skillIndex] > 0.0f && skillIndex == skillIndex_input)
         {
-            text.text = GameManager.instance.currentCoolTime.ToString("F1");
+            text.text = coolTimeCalculate.remainTime[skillIndex].ToString("F1");
             yield return null;
         }
         text.enabled = false;
     }
 
-    void UpdateCoolTimeUI()
+    void UpdateCoolTimeUI(int skillIndex)
     {
         grayFilledImage.fillAmount = 1.0f;
-        StartCoroutine(UpdateImage());
-        StartCoroutine(UpdateText());
+        StartCoroutine(UpdateImage(skillIndex));
+        StartCoroutine(UpdateText(skillIndex));
     }
 
     private void Start()
     {
         grayFilledImage.fillAmount = 0;
         text.enabled = false;
+        player = GameManager.instance.Player;
 
-        GameManager.instance.player.skillCoolTimeUIEvent.AddListener(UpdateCoolTimeUI);
+        player.skillCoolTimeUIEvent.AddListener(UpdateCoolTimeUI);
     }
 
     private void OnDestroy()
     {
-        GameManager.instance.player.skillCoolTimeUIEvent.RemoveAllListeners();
+        player.skillCoolTimeUIEvent.RemoveAllListeners();
     }
 }

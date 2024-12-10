@@ -10,7 +10,7 @@ public class FadeEffect : MonoBehaviour
 
     public bool isText = false;
     public TMP_Text fadeText;
-    public float duration = 1.0f;
+    // public float duration = 1.0f;
 
     private void Awake()
     {
@@ -29,17 +29,17 @@ public class FadeEffect : MonoBehaviour
         }
     }
 
-    public void FadeIn(AudioClip audioClip = null)
+    public void FadeIn(AudioClip audioClip = null, float duration = 1.0f)
     {
-        StartCoroutine(Fade(1, 0, audioClip));
+        StartCoroutine(Fade(1, 0, duration, audioClip));
     }
 
-    public void FadeOut(AudioClip audioClip = null)
+    public void FadeOut(AudioClip audioClip = null, float duration = 1.0f)
     {
-        StartCoroutine(Fade(0, 1, audioClip));
+        StartCoroutine(Fade(0, 1, duration, audioClip));
     }
 
-    IEnumerator Fade(float startAlpha, float endAlpha, AudioClip audioClip = null)
+    IEnumerator Fade(float startAlpha, float endAlpha, float duration, AudioClip audioClip = null)
     {
         if(!audioClip.IsUnityNull())
         {

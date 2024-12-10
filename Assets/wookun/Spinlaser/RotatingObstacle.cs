@@ -5,7 +5,7 @@ public class RotatingObstacle : MonoBehaviour
     public Transform centerPoint; // 회전 중심점
     public float rotationSpeed = 50f; // 회전 속도
     public float knockbackForce = 5f; // 플레이어를 밀어내는 힘
-    public float damageAmount = 1.0f; // 플레이어에게 줄 데미지 양
+    public int damageAmount = 1; // 플레이어에게 줄 데미지 양
     public AudioClip proximitySound; // 플레이어가 가까워질 때 재생될 사운드 클립
     public float triggerDistance = 15f; // 사운드가 재생되는 거리
     private Transform player; // 플레이어의 Transform
@@ -57,7 +57,7 @@ public class RotatingObstacle : MonoBehaviour
             if (playerController != null)
             {
                 // 데미지 코루틴 호출
-                playerController.StartCoroutine(playerController.Damaged());
+                playerController.StartCoroutine(playerController.Damaged(damageAmount));
 
                 // 밀려나는 방향을 계산하여 밀어내기
                 Rigidbody2D playerRb = collision.gameObject.GetComponent<Rigidbody2D>();

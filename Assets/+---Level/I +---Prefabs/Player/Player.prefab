@@ -394,6 +394,7 @@ GameObject:
   - component: {fileID: 3665350669971206400}
   - component: {fileID: 5765406245850680698}
   - component: {fileID: 3520840294277466284}
+  - component: {fileID: 7231732960494117970}
   m_Layer: 17
   m_Name: Player
   m_TagString: Player
@@ -723,7 +724,9 @@ MonoBehaviour:
   speedForceStartSound: {fileID: 8300000, guid: ca9df3ac6f6b1c84d9fac50ab1277444,
     type: 3}
   speedForceEndSound: {fileID: 8300000, guid: 20f505905ddaeec43bdf2c5b62921bb9, type: 3}
+  levelUpSound: {fileID: 8300000, guid: 7bd6b897eb5ca4b7d88a205c4a51640c, type: 3}
   _moveSoundTimer: 0
+  levelUpEffect: {fileID: 0}
 --- !u!114 &-6428926172090270449
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -736,6 +739,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: deeb33652e17c8844b1daad8622f7afd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  device: 0
+  joystick: {fileID: 0}
 --- !u!95 &3665350669971206400
 Animator:
   serializedVersion: 7
@@ -869,6 +874,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ghost: {fileID: 1058050629947100969}
   player: {fileID: 3580312537343876290}
+--- !u!114 &7231732960494117970
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3580312537343876290}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93fbaeda15c58e042bdd65df6ad1c35d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  coolTimeRatio: []
+  remainTime: []
 --- !u!1 &4669064719947642003
 GameObject:
   m_ObjectHideFlags: 0
@@ -1357,6 +1376,26 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6080808473080469829, guid: e421164a9f8f47f419b6ead297aafb24,
+        type: 3}
+      propertyPath: m_Intensity
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6080808473080469829, guid: e421164a9f8f47f419b6ead297aafb24,
+        type: 3}
+      propertyPath: m_FalloffIntensity
+      value: 0.414
+      objectReference: {fileID: 0}
+    - target: {fileID: 6080808473080469829, guid: e421164a9f8f47f419b6ead297aafb24,
+        type: 3}
+      propertyPath: m_ApplyToSortingLayers.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6080808473080469829, guid: e421164a9f8f47f419b6ead297aafb24,
+        type: 3}
+      propertyPath: 'm_ApplyToSortingLayers.Array.data[1]'
+      value: 130357241
       objectReference: {fileID: 0}
     - target: {fileID: 8374793823294236600, guid: e421164a9f8f47f419b6ead297aafb24,
         type: 3}

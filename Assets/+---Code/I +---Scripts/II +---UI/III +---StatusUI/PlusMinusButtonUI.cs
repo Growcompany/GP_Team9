@@ -12,6 +12,8 @@ public class PlusMinusButtonUI : MonoBehaviour
     [SerializeField] private int min;
     [SerializeField] private int max;
 
+    private AudioSource m_audioSource;
+
     private void Awake()
     {
         if(minus == null)
@@ -27,6 +29,8 @@ public class PlusMinusButtonUI : MonoBehaviour
         plus.onClick.AddListener(Plus);
 
         //CheckMinMax();
+
+        m_audioSource = GetComponent<AudioSource>();
     }
 
     private void OnDestroy()
@@ -49,6 +53,7 @@ public class PlusMinusButtonUI : MonoBehaviour
         {
             GameManager.instance.currentUsedStatusPoint--;
             currentStatus.onStatusChanged.Invoke(false);
+            m_audioSource.Play();
         }
     }
 
@@ -66,6 +71,7 @@ public class PlusMinusButtonUI : MonoBehaviour
         {
             GameManager.instance.currentUsedStatusPoint++;
             currentStatus.onStatusChanged.Invoke(true);
+            m_audioSource.Play();
         }
     }
 

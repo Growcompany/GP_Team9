@@ -433,6 +433,9 @@ MonoBehaviour:
   attackSound: {fileID: 8300000, guid: cb196d11ee7032740b5bb27ab0fbfa89, type: 3}
   hpBarTransform: {fileID: 5390713702627820768}
   detectionRange: 8
+  Hitted_Effect: {fileID: 362261158077530393, guid: 20fda529c996a334da7fd65b48ea40df,
+    type: 3}
+  Exp: {fileID: 6635307167455281010, guid: ddab672438a87ae4eba5514ca509e1e9, type: 3}
 --- !u!50 &5243851850164703461
 Rigidbody2D:
   serializedVersion: 4
