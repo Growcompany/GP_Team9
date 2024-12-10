@@ -170,6 +170,10 @@ public class PlayerController : MonoBehaviour
     private float _speedForceTimer;
     private float _speedForceTime;
     private SpeedForceFadeEffect _speedForceFX;
+    private bool _isTimeSlowing = false;
+    public float transitionDuration = 0.7f; // 시간 배율 전환 시간
+    public float transitionOffDuration = 2f; // 시간 배율 전환 시간
+    private bool isRestoringTime = false;
 
     // KnockBack vars
     private bool _isKnockBack;
@@ -271,6 +275,10 @@ public class PlayerController : MonoBehaviour
         _speedForceTimer = 0f;
         _speedForceTime = 1f;
         _speedForceFX = GameObject.Find("SpeedForceFX").gameObject.GetComponent<SpeedForceFadeEffect>();
+        _isTimeSlowing = false;
+        transitionDuration = 0.7f;
+        transitionOffDuration = 2f;
+        isRestoringTime = false;
 
         // KnockBack
         _isKnockBack = false;
@@ -825,7 +833,6 @@ public class PlayerController : MonoBehaviour
             {
                 _isSkill1Activated = true;
 
-
             }
         }
 
@@ -1005,31 +1012,42 @@ public class PlayerController : MonoBehaviour
 
     public void SpeedForceCheck()
     {
-        if (InputManager.Skill2WasPressed && !_isSpeedForce)
+        if (InputManager.Skill2WasPressed && !_isSpeedForce && !isRestoringTime)
         {
-            audioSrc.PlayOneShot(speedForceStartSound);
-            _speedForceFX.FadeOut();
-            _isSpeedForce = true;
-            _speedForceTimer = 0f;
+            if (!_isTimeSlowing) // 중복 실행 방지
+            {
+                isRestoringTime = false;
+                audioSrc.PlayOneShot(speedForceStartSound);
+                _isSpeedForce = true;
+                _speedForceTimer = 0f;
+
+                _speedForceFX.FadeOut();
+                Time.timeScale = _speedForceHowSlow;
+
+            }
         }
     }
 
     public void SpeedForce()
     {
+        Debug.Log(Time.timeScale);
         if (_isSpeedForce)
         {
             _speedForceTimer += Time.fixedDeltaTime;
 
-            Time.timeScale = _speedForceHowSlow;
+            //Time.timeScale = _speedForceHowSlow;
 
             _animator.SetFloat("SpeedForceMultiplier", 1 / _speedForceHowSlow);
 
             if (_speedForceTimer >= _speedForceTime)
             {
-                _isSpeedForce = false;
                 _speedForceTimer = 0f;
-                Time.timeScale = 1f;
+                //Time.timeScale = 1f;
+
+                _isSpeedForce = false;
+                _isTimeSlowing = false;
                 _speedForceFX.FadeIn();
+                StartCoroutine(RestoreTime());
             }
 
             ChangeSkillActivatedFXYellow();
@@ -1040,6 +1058,42 @@ public class PlayerController : MonoBehaviour
 
             ChangeSkillActivatedFXWhite();
         }
+    }
+
+    /* private IEnumerator SlowTime()
+    {
+        _isTimeSlowing = true;
+
+        float startTimeScale = Time.timeScale;
+        float elapsedTime = 0f;
+
+        while (elapsedTime < transitionDuration)
+        {
+            elapsedTime += Time.unscaledDeltaTime; // 실제 경과 시간 사용
+            Time.timeScale = Mathf.Lerp(startTimeScale, _speedForceHowSlow, elapsedTime / transitionDuration);
+            yield return null; // 다음 프레임까지 대기
+        }
+
+        Time.timeScale = _speedForceHowSlow; // 정확히 목표 시간 배율로 설정
+        _isTimeSlowing = false;
+    } */
+
+    private IEnumerator RestoreTime()
+    {
+        isRestoringTime = true;
+        Time.timeScale = _speedForceHowSlow;
+        float startTimeScale = Time.timeScale;
+        float elapsedTime = 0f;
+
+        while (elapsedTime < transitionOffDuration)
+        {
+            elapsedTime += Time.unscaledDeltaTime; // 실제 경과 시간 사용
+            Time.timeScale = Mathf.Lerp(startTimeScale, 1f, elapsedTime / transitionOffDuration);
+            yield return null; // 다음 프레임까지 대기
+        }
+
+        Time.timeScale = 1f; // 정확히 목표 시간 배율로 설정
+        isRestoringTime = false;
     }
 
     #endregion
