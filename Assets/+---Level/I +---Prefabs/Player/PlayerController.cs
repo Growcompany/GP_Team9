@@ -1030,7 +1030,6 @@ public class PlayerController : MonoBehaviour
 
     public void SpeedForce()
     {
-        Debug.Log(Time.timeScale);
         if (_isSpeedForce)
         {
             _speedForceTimer += Time.fixedDeltaTime;
