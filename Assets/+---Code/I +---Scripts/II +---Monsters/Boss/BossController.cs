@@ -19,6 +19,9 @@ public class BossController : MonoBehaviour
     public GameObject attackPrefab; // 경고+공격 이펙트 프리팹 (하나의 프리팹 안에 경고/공격 이펙트 있음)
     public GameObject attack2Prefab; // Attack2_razer 프리팹
     public GameObject attack3Prefab;  // Attack3 프리팹을 할당
+    public GameObject Warning_Attack;
+    public GameObject attack4_Fire;
+    public GameObject Boss_Move_Effect;
     public float warningDuration = 3f; // 경고 시간 (3초)
     private HashSet<Transform> activeAttackPoints = new HashSet<Transform>(); // 이미 생성된 위치 저장
     public float approachSpeed = 10f; // 공격 위치로 이동할 때 가속도
@@ -31,6 +34,7 @@ public class BossController : MonoBehaviour
     public GameObject Hitted_Effect;
     public ResultUI resultUI;
     private int Teleport_pos;
+    private int attack4_cnt;
 
     private void Awake()
     {
@@ -175,8 +179,12 @@ public class BossController : MonoBehaviour
             // 공격 중이 아니면 랜덤하게 공격 선택
             if (!isAttacking)
             {
+                isAttacking = true;
+
                 Random.InitState(System.DateTime.Now.Millisecond); // 현재 시간을 시드로 설정
-                int attackType = Random.Range(0, 3); // 0이면 Attack2_razer, 1이면 Attack3 선택, 2면 teleport
+                int attackType = Random.Range(0, 4); // 0이면 Attack2_razer, 1이면 Attack3 선택, 2면 teleport
+
+                Debug.Log("AttackType: " + attackType+ "  -0은 레이저 1은 물기 2는 텔포 3은 연속물기");
 
                 if (attackType == 0)
                 {
@@ -190,9 +198,14 @@ public class BossController : MonoBehaviour
                 {
                     yield return StartCoroutine(RandomTeleportRoutine()); // 변경된 부분
                 }
+                else if (attackType == 3)
+                {
+                    attack4_cnt = 0;
+                    yield return StartCoroutine(StartAttack4Sequence()); // 변경된 부분
+                }
             }
 
-            yield return new WaitForSeconds(3f); // 두 공격 사이의 대기 시간
+            yield return new WaitForSeconds(1.5f); // 두 공격 사이의 대기 시간
         }
     }
     #endregion
@@ -200,8 +213,6 @@ public class BossController : MonoBehaviour
     #region Attack2
     private IEnumerator PerformAttack2Razer()
     {
-        isAttacking = true;
-
         // Attack2_razer 애니메이션 트리거
         anim.SetTrigger("attack1");
 
@@ -245,13 +256,18 @@ public class BossController : MonoBehaviour
     private IEnumerator Attack3Sequence(GameObject attack3Instance, Vector3 attackPosition)
     {
         // 3초 기다리기
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(2f);
 
         // Attack3경고 제거
         Destroy(attack3Instance);
 
         anim.SetTrigger("attack2"); // 공격모션 실행
         audioSource.PlayOneShot(attack3Sound); // 공격 효과음 실행
+
+        //이동 이펙트
+        Vector3 Move_effect_pos = new Vector3(transform.position.x, transform.position.y - 2f, transform.position.z);
+        Instantiate(Boss_Move_Effect, Move_effect_pos, Quaternion.identity);
+
         // 보스를 Attack3 위치로 빠르게 이동
         float step = 0f;
         while (Vector3.Distance(transform.position, attackPosition) > 0.1f)
@@ -267,7 +283,111 @@ public class BossController : MonoBehaviour
         {
             step += approachSpeed * Time.deltaTime;
             transform.position = Vector3.MoveTowards(transform.position, originalPosition, step);
+            isAttacking = false;
             yield return null;
+        }
+    }
+    #endregion
+
+    #region Attack4
+    private IEnumerator StartAttack4Sequence()
+    {
+        // 공격 위치 변수
+        Vector3 attackPosition;
+        GameObject attackInstance;
+        GameObject Warning_Mark;
+
+        if (attack4_cnt == 0) // Warning_Mark띄우기
+        {
+            if (Teleport_pos == 2 || Teleport_pos == 3)
+            {
+                attackPosition = new Vector3(transform.position.x + 7f, transform.position.y + 3.6f, transform.position.z);
+                Warning_Mark = Instantiate(Warning_Attack, attackPosition, Quaternion.Euler(0f, 0f, 0f));
+            }
+            else
+            {
+                attackPosition = new Vector3(transform.position.x - 7f, transform.position.y + 3.6f, transform.position.z);
+                Warning_Mark = Instantiate(Warning_Attack, attackPosition, Quaternion.Euler(0f, 0f, 0f));
+            }
+        }
+
+
+        // 보스 위치를 기준으로 공격 위치 결정 및 Attack3 경고 생성
+        if (Teleport_pos == 2 || Teleport_pos == 3)
+        {
+            attackPosition = new Vector3(transform.position.x + 5f, transform.position.y, transform.position.z);
+            attackInstance = Instantiate(attack3Prefab, attackPosition, Quaternion.Euler(0f, 180f, 0f));
+            //attackInstance.transform.eulerAngles = new Vector3(attackInstance.transform.eulerAngles.x, 180f, attackInstance.transform.eulerAngles.z);
+        }
+        else
+        {
+            attackPosition = new Vector3(transform.position.x - 5f, transform.position.y, transform.position.z);
+            attackInstance = Instantiate(attack3Prefab, attackPosition, Quaternion.Euler(0f, 0f, 0f));
+        }
+
+        yield return StartCoroutine(Attack4Sequence(attackInstance, attackPosition));
+    }
+
+    private IEnumerator Attack4Sequence(GameObject attack3Instance, Vector3 attackPosition)
+    {
+        // 1초 기다리기
+        if (attack4_cnt == 0)
+        {
+            yield return new WaitForSeconds(1.5f);
+        }
+        else { yield return new WaitForSeconds(0.1f); }
+
+        // Attack3경고 제거
+        Destroy(attack3Instance);
+
+        anim.SetTrigger("attack2"); // 공격모션 실행
+        audioSource.PlayOneShot(attack3Sound); // 공격 효과음 실행
+
+        //이동 이펙트
+        Instantiate(Boss_Move_Effect, transform.position, Quaternion.identity);
+
+        // 보스를 Attack3 위치로 빠르게 이동
+        float step = 0f;
+        while (Vector3.Distance(transform.position, attackPosition) > 0.1f)
+        {
+            step += approachSpeed * Time.deltaTime;
+            transform.position = Vector3.MoveTowards(transform.position, attackPosition, step);
+            yield return null;
+        }
+
+        // 불 효과 남기기
+        Vector3 Fire_Pos;
+
+        Fire_Pos = new Vector3(transform.position.x + 7f, transform.position.y - 3f, transform.position.z);
+        Instantiate(attack4_Fire, Fire_Pos, Quaternion.Euler(0f, 0f, 0f));
+        Fire_Pos = new Vector3(transform.position.x + 4.5f, transform.position.y - 3f, transform.position.z);
+        Instantiate(attack4_Fire, Fire_Pos, Quaternion.Euler(0f, 0f, 0f));
+        Fire_Pos = new Vector3(transform.position.x + 2f, transform.position.y - 3f, transform.position.z);
+        Instantiate(attack4_Fire, Fire_Pos, Quaternion.Euler(0f, 0f, 0f));
+        Fire_Pos = new Vector3(transform.position.x - 0.5f, transform.position.y - 3f, transform.position.z);
+        Instantiate(attack4_Fire, Fire_Pos, Quaternion.Euler(0f, 0f, 0f));
+        Fire_Pos = new Vector3(transform.position.x - 3f, transform.position.y - 3f, transform.position.z);
+        Instantiate(attack4_Fire, Fire_Pos, Quaternion.Euler(0f, 0f, 0f));
+        Fire_Pos = new Vector3(transform.position.x - 5.5f, transform.position.y - 3f, transform.position.z);
+        Instantiate(attack4_Fire, Fire_Pos, Quaternion.Euler(0f, 0f, 0f));
+
+        if (attack4_cnt < 4)
+        {
+            attack4_cnt++;
+            StartCoroutine(StartAttack4Sequence());
+            yield return null;
+        }
+        else
+        {
+            // 다시 원래 위치로 이동
+            step = 0f;
+            while (Vector3.Distance(transform.position, originalPosition) > 0.1f)
+            {
+                step += approachSpeed * Time.deltaTime;
+                transform.position = Vector3.MoveTowards(transform.position, originalPosition, step);
+                isAttacking = false;
+                yield return null;
+            }
         }
     }
     #endregion
@@ -275,20 +395,20 @@ public class BossController : MonoBehaviour
     #region Random_Teleport
     private IEnumerator RandomTeleportRoutine()
     {
-        // 공격 중이 아니면 랜덤하게 공격 선택
-        if (!isAttacking)
+        Random.InitState(System.DateTime.Now.Millisecond); // 현재 시간을 시드로 설정
+        Teleport_pos = Random.Range(0, TeleportPoints.Length);
+
+        if (Teleport_pos == 2 || Teleport_pos == 3)
         {
-            Random.InitState(System.DateTime.Now.Millisecond); // 현재 시간을 시드로 설정
-            Teleport_pos = Random.Range(0, TeleportPoints.Length);
-
-            if (Teleport_pos == 2 || Teleport_pos == 3)
-            {
-                transform.eulerAngles = new Vector3(transform.eulerAngles.x, 180f, transform.eulerAngles.z);
-            }
-            else { transform.eulerAngles = new Vector3(transform.eulerAngles.x, 0f, transform.eulerAngles.z); }
-
-            transform.position = TeleportPoints[Teleport_pos].position;
+            transform.eulerAngles = new Vector3(transform.eulerAngles.x, 180f, transform.eulerAngles.z);
         }
+        else { transform.eulerAngles = new Vector3(transform.eulerAngles.x, 0f, transform.eulerAngles.z); }
+
+        transform.position = TeleportPoints[Teleport_pos].position;
+        originalPosition = TeleportPoints[Teleport_pos].position;
+        isAttacking = false;
+
+        Debug.Log("teleport_Num:" + Teleport_pos);
 
         yield return new WaitForSeconds(1f); // 대기 시간
     }
@@ -324,16 +444,16 @@ public class BossController : MonoBehaviour
         Debug.Log("Monster is taking damage: " + amount);
         anim.SetTrigger("hit"); // 히트 애니메이션 실행
 
-        Vector3 spawnPosition = transform.position + new Vector3(-3, -2, 0);
+        Vector3 spawnPosition = transform.position + new Vector3(5, -2.5f, 0);
         if (Teleport_pos == 2 || Teleport_pos == 3)
         {
             // Y축을 180도로 회전하여 생성
-            Instantiate(Hitted_Effect, spawnPosition, Quaternion.Euler(0f, 180f, 0f));
+            Instantiate(Hitted_Effect, spawnPosition, Quaternion.Euler(0f, 180f, -90f));
         }
         else
         {
             // 기본 회전으로 생성
-            Instantiate(Hitted_Effect, spawnPosition, Quaternion.identity);
+            Instantiate(Hitted_Effect, spawnPosition, Quaternion.Euler(0f, 0f, -90f));
         }
 
         hp -= amount;

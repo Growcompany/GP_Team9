@@ -216,9 +216,15 @@ MonoBehaviour:
   attack2Prefab: {fileID: 3331927204163990810}
   attack3Prefab: {fileID: 664180800616769359, guid: 456a4bf4134fd724889a0d0b82f3f35f,
     type: 3}
+  Warning_Attack: {fileID: 1427580767195650481, guid: b4553775ad3bcc049bb5b36c2e2ec73c,
+    type: 3}
+  attack4_Fire: {fileID: 1224246275554563117, guid: 65fff7875353dc54e9088d0184a1ac59,
+    type: 3}
+  Boss_Move_Effect: {fileID: 7208913699912547042, guid: 4cb15f90cb7a3ab4fb4889f6fefb7902,
+    type: 3}
   warningDuration: 3
   approachSpeed: 10
-  Hitted_Effect: {fileID: 1835355836541019294, guid: 4790206eadc817b4196e071640e653af,
+  Hitted_Effect: {fileID: 1291850856906918793, guid: bdf701b7666585144b226d8340928db9,
     type: 3}
   resultUI: {fileID: 0}
 --- !u!70 &3775943508520362656
