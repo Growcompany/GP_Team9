@@ -47,7 +47,7 @@ public class InputManager : MonoBehaviour
 
     private void Awake()
     {
-        if (Application.platform == RuntimePlatform.Android || !Application.isEditor)
+        if (Application.platform == RuntimePlatform.Android || Application.isEditor)
         {
             device = Device.Mobile;
         }
