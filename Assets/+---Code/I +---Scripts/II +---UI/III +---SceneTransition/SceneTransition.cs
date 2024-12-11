@@ -33,7 +33,7 @@ public class SceneTransition : MonoBehaviour
 
     private void Update()
     {
-        elapsedTime += Time.deltaTime;
+        elapsedTime += Time.unscaledTime;
     }
 
     private void Init()
@@ -63,7 +63,7 @@ public class SceneTransition : MonoBehaviour
     private IEnumerator LoadSceneCoroutine(string sceneName)
     {
         fadeEffect.FadeOut(null, duration);
-        yield return new WaitForSeconds(duration);   // Fade In 효과 보장용
+        yield return new WaitForSecondsRealtime(duration);   // Fade In 효과 보장용
         yield return StartCoroutine(LoadSceneAsync(sceneName));
         fadeEffect.FadeIn(null, duration);
     }
@@ -78,5 +78,6 @@ public class SceneTransition : MonoBehaviour
         }
         Debug.LogWarning("Load End");
 
+        Time.timeScale = 1.0f;
     }
 }
