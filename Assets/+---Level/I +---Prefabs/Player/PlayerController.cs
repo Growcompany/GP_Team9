@@ -180,6 +180,11 @@ public class PlayerController : MonoBehaviour
     private float _knockBackTimer;
     private float _knockBackTime;
 
+    // FX
+    // Level Up
+    public ParticleSystem levelUpFX;
+
+
 
     // Sound
     public AudioSource audioSrc;
@@ -284,6 +289,9 @@ public class PlayerController : MonoBehaviour
         _isKnockBack = false;
         _knockBackTimer = 0f;
         _knockBackTime = 0.08f;
+
+        // FX
+        levelUpFX.Stop();
 
         // Sound
         _moveSoundTimer = 0f;
@@ -1231,6 +1239,7 @@ public class PlayerController : MonoBehaviour
             lifeUpdateUIEvent.Invoke(MovementStats.Life);
             levelUpUIEvent.Invoke(MovementStats.Level);
             pointTextUI.onChanged.Invoke();
+            levelUpFX.Play();
 
             GameManager.instance.LevelUpEffect();
             audioSrc.PlayOneShot(levelUpSound);
@@ -1351,7 +1360,7 @@ public class PlayerController : MonoBehaviour
             _knockBackTimer += Time.fixedUnscaledDeltaTime;
             if (_knockBackTimer < _knockBackTime)
             {
-                float knockBackForce = 20f - (_knockBackTimer * 20f);
+                float knockBackForce = 10f - (_knockBackTimer * 20f);
                 if (_isFacingRight)
                     HorizontalVelocity = -knockBackForce;
                 else
