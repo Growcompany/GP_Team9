@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a83970873ad18c42a071fb98ce97e36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetFrameRate: 120
   deathCount: 0
   elapsedTime: 0
   duration: 5
