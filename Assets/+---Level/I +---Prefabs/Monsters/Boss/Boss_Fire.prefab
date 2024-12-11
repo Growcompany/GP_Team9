@@ -100,7 +100,7 @@ Animator:
   m_GameObject: {fileID: 1224246275554563117}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: f11a94eaa3d044e46b0327e75f042797, type: 2}
+  m_Controller: {fileID: 9100000, guid: 52e9c4af6d5ee0546a2f2d6c135eee46, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -154,7 +154,7 @@ CapsuleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
