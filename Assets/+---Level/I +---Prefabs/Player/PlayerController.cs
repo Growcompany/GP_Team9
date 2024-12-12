@@ -1268,7 +1268,8 @@ public class PlayerController : MonoBehaviour
         lifeUpdateUIEvent.Invoke(MovementStats.Life);
         MovementStats.Strength = 1;
         MovementStats.Dodge = 1;
-        MovementStats.SkillCoolTime = 1;
+        MovementStats.SkillCoolTime = 5;
+        MovementStats.Skill1Time = 5f;
     }
 
     #endregion
