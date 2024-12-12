@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AttackDamage : MonoBehaviour
+public class Attack4_Fire : MonoBehaviour
 {
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -15,7 +15,7 @@ public class AttackDamage : MonoBehaviour
             if (playerController != null)
             {
                 // 플레이어에 데미지 주기
-                playerController.StartCoroutine(playerController.Damaged());
+                playerController.StartCoroutine(playerController.Damaged(3));
 
                 Debug.Log("Player damaged by MonsterSkill damage");
             }
@@ -26,3 +26,4 @@ public class AttackDamage : MonoBehaviour
         }
     }
 }
+
