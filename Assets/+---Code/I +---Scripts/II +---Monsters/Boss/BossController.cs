@@ -182,23 +182,23 @@ public class BossController : MonoBehaviour
                 isAttacking = true;
 
                 Random.InitState(System.DateTime.Now.Millisecond); // 현재 시간을 시드로 설정
-                int attackType = Random.Range(0, 4); // 0이면 Attack2_razer, 1이면 Attack3 선택, 2면 teleport
+                int attackType = Random.Range(0, 7); // 0이면 Attack2_razer, 1이면 Attack3 선택, 2면 teleport 
 
-                Debug.Log("AttackType: " + attackType+ "  -0은 레이저 1은 물기 2는 텔포 3은 연속물기");
+                Debug.Log("AttackType: " + attackType + "  -0은 레이저 1은 물기 2는 텔포 3은 연속물기");
 
-                if (attackType == 0)
+                if (attackType > -1 && attackType < 2) // 0,1
                 {
                     yield return StartCoroutine(PerformAttack2Razer());
                 }
-                else if(attackType == 1)
+                else if(attackType > 1 && attackType < 5) // 2,3,4
                 {
                     yield return StartCoroutine(StartAttack3Sequence()); // 변경된 부분
                 }
-                else if (attackType == 2)
+                else if (attackType > 4 && attackType < 6) // 5
                 {
                     yield return StartCoroutine(RandomTeleportRoutine()); // 변경된 부분
                 }
-                else if (attackType == 3)
+                else if (attackType == 6)
                 {
                     attack4_cnt = 0;
                     yield return StartCoroutine(StartAttack4Sequence()); // 변경된 부분
@@ -444,14 +444,16 @@ public class BossController : MonoBehaviour
         Debug.Log("Monster is taking damage: " + amount);
         anim.SetTrigger("hit"); // 히트 애니메이션 실행
 
-        Vector3 spawnPosition = transform.position + new Vector3(5, -2.5f, 0);
+        Vector3 spawnPosition = transform.position + new Vector3(5f, -2.5f, 0);
         if (Teleport_pos == 2 || Teleport_pos == 3)
         {
+            spawnPosition = transform.position + new Vector3(-5f, -2.5f, 0);
             // Y축을 180도로 회전하여 생성
             Instantiate(Hitted_Effect, spawnPosition, Quaternion.Euler(0f, 180f, -90f));
         }
         else
         {
+
             // 기본 회전으로 생성
             Instantiate(Hitted_Effect, spawnPosition, Quaternion.Euler(0f, 0f, -90f));
         }
