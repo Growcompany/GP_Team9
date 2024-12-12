@@ -12,7 +12,7 @@ public class PlayerMovementStats : ScriptableObject
     [Range(1, 100)] public int Level = 1;
     [Range(1, 100)] public int Strength = 1;
     [Range(1, 100)] public int Dodge = 1;
-    [Range(1, 100)] public int SkillCoolTime = 1;
+    [Range(1, 100)] public int SkillCoolTime = 8;
     public int MaxLevel = 100;
 
     [Header("Walk")]
