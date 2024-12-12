@@ -264,7 +264,7 @@ public class PlayerController : MonoBehaviour
 
         // Skill1
         _isSkill1Activated = false;
-        MovementStats.Skill1Time = 3f;
+        MovementStats.Skill1Time = 5f;
         _skill1Timer = 0f;
         _skill1CoolTimeTimer = 0f;
         _isSkill1Available = true;
