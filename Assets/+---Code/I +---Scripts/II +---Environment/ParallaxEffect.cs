@@ -1,4 +1,4 @@
-using Unity.VisualScripting;
+ï»¿using Unity.VisualScripting;
 using UnityEngine;
 
 public class ParallaxEffect : MonoBehaviour
@@ -10,10 +10,10 @@ public class ParallaxEffect : MonoBehaviour
     Vector2 startingPosition;
     float startingZ;
 
-    // Camera ÀÌµ¿ ¼Óµµ °è»ê¿ë
+    // Camera ì´ë™ ì†ë„ ê³„ì‚°ìš©
     Vector2 camMoveSinceStart => (Vector2)cam.transform.position - startingPosition;
 
-    // Target°ú BGÀÇ °Å¸®
+    // Targetê³¼ BGì˜ ê±°ë¦¬
     float zDistanceFromTarget => transform.position.z - followTarget.position.z;
 
     float clippingPlane => (cam.transform.position.z + (zDistanceFromTarget > 0 ? cam.farClipPlane : cam.nearClipPlane));

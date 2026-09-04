@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,7 +14,7 @@ public class Hitted_Effect : MonoBehaviour
 
     public void OnAnimationEnd()
     {
-        Destroy(gameObject); // ¾Ö´Ï¸ŞÀÌ¼ÇÀÌ ³¡³ª¸é °´Ã¼ »èÁ¦
+        Destroy(gameObject); // ì• ë‹ˆë©”ì´ì…˜ì´ ëë‚˜ë©´ ê°ì²´ ì‚­ì œ
     }
 }
  

@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -36,9 +36,9 @@ public class PlayerLifeUI : MonoBehaviour
 
     }
 
-    // TODO: Player¿¡¼­
-    // UnityEvent<int> lifeUpdateUIEvent Ãß°¡ ÇÊ¿ä
-    // ÀÌÈÄ Level upÇÏ¸é lifeUpdateUIEvent.Invoke(currentLife: int) Ãß°¡ ÇÊ¿ä
+    // TODO: Playerì—ì„œ
+    // UnityEvent<int> lifeUpdateUIEvent ì¶”ê°€ í•„ìš”
+    // ì´í›„ Level upí•˜ë©´ lifeUpdateUIEvent.Invoke(currentLife: int) ì¶”ê°€ í•„ìš”
     void UpdateLifeImages(int currentLifes)
     {
         int diff = currentLifes - previousLifes;

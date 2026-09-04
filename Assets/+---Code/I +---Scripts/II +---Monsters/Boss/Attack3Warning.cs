@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,10 +15,10 @@ public class Attack3Warning : MonoBehaviour
 
     void Update()
     {
-        // ¾ËÆÄ°ªÀ» 0.1¿¡¼­ 0.3 ¿Ô´Ù °¬´Ù ÇÏ°Ô ¼³Á¤
+        // ì•ŒíŒŒê°’ì„ 0.1ì—ì„œ 0.3 ì™”ë‹¤ ê°”ë‹¤ í•˜ê²Œ ì„¤ì •
         float alpha = Mathf.Lerp(0.2f, 0.7f, Mathf.PingPong(Time.time, 1));
 
-        // º¯°æµÈ ¾ËÆÄ°ªÀ» »ç¿ëÇÏ¿© »ö»ó ¼³Á¤
+        // ë³€ê²½ëœ ì•ŒíŒŒê°’ì„ ì‚¬ìš©í•˜ì—¬ ìƒ‰ìƒ ì„¤ì •
         spriteRenderer.color = new Color(originalColor.r, originalColor.g, originalColor.b, alpha);
     }
 }

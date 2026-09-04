@@ -1,19 +1,19 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class SawMovement : MonoBehaviour
 {
-    public float speed = 3f; // ÅéÀÇ ÀÌµ¿ ¼Óµµ
+    public float speed = 3f; // í†±ì˜ ì´ë™ ì†ë„
     private Rigidbody2D playerRigidbody;
-    public float pushBackForce = 7f; // ÇÃ·¹ÀÌ¾î¸¦ ¹Ğ¾î³»´Â Èû
-    public float slowDuration = 3f; // ÇÃ·¹ÀÌ¾î ´À·ÁÁü Áö¼Ó ½Ã°£
-    public float slowFactor = 5f; // ´À·ÁÁö´Â Á¤µµ
+    public float pushBackForce = 7f; // í”Œë ˆì´ì–´ë¥¼ ë°€ì–´ë‚´ëŠ” í˜
+    public float slowDuration = 3f; // í”Œë ˆì´ì–´ ëŠë ¤ì§ ì§€ì† ì‹œê°„
+    public float slowFactor = 5f; // ëŠë ¤ì§€ëŠ” ì •ë„
     private PlayerHealth playerHealth;
 
     void Start()
     {
-        // ¾À¿¡¼­ ÇÃ·¹ÀÌ¾î GameObject Ã£±â
+        // ì”¬ì—ì„œ í”Œë ˆì´ì–´ GameObject ì°¾ê¸°
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         if (player != null)
         {
@@ -24,7 +24,7 @@ public class SawMovement : MonoBehaviour
 
     void Update()
     {
-        // ¿Ô´Ù °¬´Ù ÇÏ´Â ÅéÀÇ ¿òÁ÷ÀÓ ±¸Çö (ÁÂ¿ì·Î ¿òÁ÷ÀÓ)
+        // ì™”ë‹¤ ê°”ë‹¤ í•˜ëŠ” í†±ì˜ ì›€ì§ì„ êµ¬í˜„ (ì¢Œìš°ë¡œ ì›€ì§ì„)
         transform.position = new Vector3(Mathf.PingPong(Time.time * speed, 4) - 2, transform.position.y, transform.position.z);
     }
 
@@ -35,8 +35,8 @@ public class SawMovement : MonoBehaviour
             PushPlayerBack();
             if (playerHealth != null)
             {
-                playerHealth.TakeDamage(10); // ÇÃ·¹ÀÌ¾î¿¡°Ô µ¥¹ÌÁö ÁÖ±â
-                StartCoroutine(SlowPlayer()); // ÇÃ·¹ÀÌ¾î ¼Óµµ ´À·ÁÁü Àû¿ë
+                playerHealth.TakeDamage(10); // í”Œë ˆì´ì–´ì—ê²Œ ë°ë¯¸ì§€ ì£¼ê¸°
+                StartCoroutine(SlowPlayer()); // í”Œë ˆì´ì–´ ì†ë„ ëŠë ¤ì§ ì ìš©
             }
         }
     }
@@ -45,7 +45,7 @@ public class SawMovement : MonoBehaviour
     {
         if (playerRigidbody != null)
         {
-            // ÇÃ·¹ÀÌ¾î¸¦ ¹Ğ¾î³»±â À§ÇÑ ¹İ´ë ¹æÇâ Èû Àû¿ë
+            // í”Œë ˆì´ì–´ë¥¼ ë°€ì–´ë‚´ê¸° ìœ„í•œ ë°˜ëŒ€ ë°©í–¥ í˜ ì ìš©
             Vector2 pushDirection = (playerRigidbody.transform.position - transform.position).normalized;
             playerRigidbody.AddForce(pushDirection * pushBackForce, ForceMode2D.Impulse);
         }
@@ -56,11 +56,11 @@ public class SawMovement : MonoBehaviour
         if (playerRigidbody != null)
         {
             float originalSpeed = playerRigidbody.velocity.magnitude;
-            playerRigidbody.velocity *= slowFactor; // ÇÃ·¹ÀÌ¾î ¼Óµµ °¨¼Ò
+            playerRigidbody.velocity *= slowFactor; // í”Œë ˆì´ì–´ ì†ë„ ê°ì†Œ
 
-            yield return new WaitForSeconds(slowDuration); // ´À·ÁÁø »óÅÂ À¯Áö
+            yield return new WaitForSeconds(slowDuration); // ëŠë ¤ì§„ ìƒíƒœ ìœ ì§€
 
-            playerRigidbody.velocity = playerRigidbody.velocity.normalized * originalSpeed; // ¿ø·¡ ¼Óµµ·Î º¹±¸
+            playerRigidbody.velocity = playerRigidbody.velocity.normalized * originalSpeed; // ì›ë˜ ì†ë„ë¡œ ë³µêµ¬
         }
     }
 }
@@ -74,7 +74,7 @@ public class PlayerHealth : MonoBehaviour
         health -= damage;
         if (health <= 0)
         {
-            // ÇÃ·¹ÀÌ¾î »ç¸Á Ã³¸®
+            // í”Œë ˆì´ì–´ ì‚¬ë§ ì²˜ë¦¬
             Debug.Log("Player is Dead");
         }
         else

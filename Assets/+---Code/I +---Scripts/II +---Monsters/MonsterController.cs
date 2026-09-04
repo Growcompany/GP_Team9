@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -43,18 +43,18 @@ public class MonsterController : MonoBehaviour
     {
         polygonCollider = gameObject.AddComponent<PolygonCollider2D>();
         anim = GetComponent<Animator>();
-        spriteRenderer = GetComponent<SpriteRenderer>(); // ��������Ʈ ������ ��������
+        spriteRenderer = GetComponent<SpriteRenderer>(); // 스프라이트 렌더러 가져오기
     }
 
     protected virtual void Start()
     {
         maxHp = hp;
-        // �±� "Player"�� ������Ʈ ã��
+        // 태그 "Player"인 오브젝트 찾기
         GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
 
         if (playerObject != null)
         {
-            player = playerObject.transform; // �÷��̾��� Transform�� ������
+            player = playerObject.transform; // 플레이어의 Transform을 저장
         }
         else
         {
@@ -78,32 +78,32 @@ public class MonsterController : MonoBehaviour
         float distanceToPlayer = Vector3.Distance(transform.position, player.position);
         //Debug.Log("Player detected at position: " + player.position + ", distanceToPlayer: " + distanceToPlayer);
 
-        // �÷��̾ ���� ���� ���� ������ ����
+        // 플레이어가 탐지 범위 안에 있으면 추적
         if (distanceToPlayer <= detectionRange)
         {
             DirCheck();
             if (spriteRenderer.sprite != previousSprite)
             {
                 UpdateCollider();
-                previousSprite = spriteRenderer.sprite; // ���� ��������Ʈ�� ���� ��������Ʈ�� ����
+                previousSprite = spriteRenderer.sprite; // 현재 스프라이트를 이전 스프라이트로 저장
             }
 
-            // �÷��̾ ���� ���� �ȿ� ������ ����
+            // 플레이어가 공격 범위 안에 있으면 공격
             if (distanceToPlayer <= AttackRange)
             {
-                TriggerAnimation(attackAnim);  // ���� �ִϸ��̼�
+                TriggerAnimation(attackAnim);  // 공격 애니메이션
                 // Debug.Log(attackAnim);
             }
-            else // ���� ���� ��, ���� ���� ��
+            else // 탐지 범위 안, 공격 범위 밖
             {
                 Vector3 directionToPlayer = (player.position - transform.position).normalized;
                 Move(directionToPlayer);
 
-                if (!FirstAnimation) // ���� ó�� �ѹ��� ����
+                if (!FirstAnimation) // 최초 한 번만 실행
                 {
                     if (FirstAnim != null)
                     {
-                        TriggerAnimation(FirstAnim); // ó�� �����ϴ� �ִϸ��̼�
+                        TriggerAnimation(FirstAnim); // 처음 시작하는 애니메이션
                     }
                     FirstAnimation = true;
                 }
@@ -148,14 +148,14 @@ public class MonsterController : MonoBehaviour
         }
     }
 
-    // Gizmos�� ���� ������ ���� ���� �׸���
+    // Gizmos로 탐지 범위와 공격 범위 그리기
     private void OnDrawGizmosSelected()
     {
-        // Ž�� ������ �Ķ������� ǥ��
+        // 탐지 범위를 파란색으로 표시
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(transform.position, detectionRange);
 
-        // ���� ������ ���������� ǥ��
+        // 공격 범위를 빨간색으로 표시
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, AttackRange);
     }
@@ -206,7 +206,7 @@ public class MonsterController : MonoBehaviour
     {
         if (player.position.x > transform.position.x)
         {
-            // �÷��̾ �����ʿ� ���� �� (������ ����)
+            // 플레이어가 오른쪽에 있을 때 (오른쪽 바라봄)
             if (FlipSprite)
             {
                 spriteRenderer.flipX = true;
@@ -218,7 +218,7 @@ public class MonsterController : MonoBehaviour
         }
         else
         {
-            // �÷��̾ ���ʿ� ���� �� (���� ����)
+            // 플레이어가 왼쪽에 있을 때 (왼쪽 바라봄)
             if (FlipSprite)
             {
                 spriteRenderer.flipX = false;
@@ -230,7 +230,7 @@ public class MonsterController : MonoBehaviour
         }
     }
 
-    // �⺻ �̵� �Լ�
+    // 기본 이동 함수
     public virtual void Move(Vector3 direction)
     {
         transform.Translate(direction * speed * Time.deltaTime);

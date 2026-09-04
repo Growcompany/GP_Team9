@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -26,7 +26,7 @@ public class ResultUI : MonoBehaviour
 
     private void OnEnable()
     {
-        // TODO: player dontdestroyµÇ¸é ±×³É °¡Á®¿À±â
+        // TODO: player dontdestroyë˜ë©´ ê·¸ëƒ¥ ê°€ì ¸ì˜¤ê¸°
         SceneTransition.Instance.deathCount += GameManager.instance.Player.dieCount;
         deathText.text = SceneTransition.Instance.deathCount.ToString();
         int min = (int)SceneTransition.Instance.elapsedTime / 60;

@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -14,19 +14,19 @@ namespace RPGTALK.Snippets
 
         RPGTalk rpgtalk;
 
-        // Audio °ü·Ã Ãß°¡
+        // Audio ê´€ë ¨ ì¶”ê°€
         public AudioSource audioSource;
-        public AudioClip[] bossSounds; // º¸½º°¡ ¸»ÇÏ´Â ¼Ò¸® ¹è¿­
-        private int currentSoundIndex = 0; // ÇöÀç Àç»ıÇÒ »ç¿îµå ÀÎµ¦½º
+        public AudioClip[] bossSounds; // ë³´ìŠ¤ê°€ ë§í•˜ëŠ” ì†Œë¦¬ ë°°ì—´
+        private int currentSoundIndex = 0; // í˜„ì¬ ì¬ìƒí•  ì‚¬ìš´ë“œ ì¸ë±ìŠ¤
 
         // Start is called before the first frame update
         void Start()
         {
             rpgtalk = GetComponent<RPGTalk>();
-            changeRoom = FindObjectOfType<ChangeRoom>(); // TempGameManager ÀÎ½ºÅÏ½º¸¦ Ã£À½
+            changeRoom = FindObjectOfType<ChangeRoom>(); // TempGameManager ì¸ìŠ¤í„´ìŠ¤ë¥¼ ì°¾ìŒ
             rpgtalk.OnEndAnimating += CanPass;
             rpgtalk.OnPlayNext += Passed;
-            // ¸ğµç ´ëÈ­°¡ ¿ÏÀüÈ÷ Á¾·áµÉ ¶§ ¹ß»ıÇÏ´Â ÀÌº¥Æ®
+            // ëª¨ë“  ëŒ€í™”ê°€ ì™„ì „íˆ ì¢…ë£Œë  ë•Œ ë°œìƒí•˜ëŠ” ì´ë²¤íŠ¸
             rpgtalk.OnEndTalk += AllDialogsEnded;
 
             if (bossSounds != null && bossSounds.Length > 0)
@@ -37,10 +37,10 @@ namespace RPGTALK.Snippets
             }
             else
             {
-                Debug.LogWarning("bossSounds ¹è¿­ÀÌ ºñ¾î ÀÖ½À´Ï´Ù. AudioClipÀ» Ãß°¡ÇÏ¼¼¿ä.");
+                Debug.LogWarning("bossSounds ë°°ì—´ì´ ë¹„ì–´ ìˆìŠµë‹ˆë‹¤. AudioClipì„ ì¶”ê°€í•˜ì„¸ìš”.");
             }
 
-            // ´ëÈ­ Áß¿¡´Â ³Ñ¾î°¡Áö ¾Êµµ·Ï ¼³Á¤
+            // ëŒ€í™” ì¤‘ì—ëŠ” ë„˜ì–´ê°€ì§€ ì•Šë„ë¡ ì„¤ì •
             rpgtalk.enablePass = false;
             StartCoroutine(Wait(1f));
         }
@@ -60,7 +60,7 @@ namespace RPGTALK.Snippets
         void Passed()
         {
             OnPassed.Invoke();
-            // »ç¿îµå Àç»ı
+            // ì‚¬ìš´ë“œ ì¬ìƒ
             if (bossSounds != null && currentSoundIndex < bossSounds.Length)
             {
                 audioSource.clip = bossSounds[currentSoundIndex];
@@ -69,7 +69,7 @@ namespace RPGTALK.Snippets
             }
             rpgtalk.enablePass = false;
 
-            // 2.5ÃÊ ÈÄ¿¡ ´ÙÀ½ ´ëÈ­·Î ³Ñ¾î°¡µµ·Ï ¼³Á¤
+            // 2.5ì´ˆ í›„ì— ë‹¤ìŒ ëŒ€í™”ë¡œ ë„˜ì–´ê°€ë„ë¡ ì„¤ì •
             StartCoroutine(Wait(2.5f));
         }
 

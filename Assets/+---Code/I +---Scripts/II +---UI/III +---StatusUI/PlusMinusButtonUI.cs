@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.UI;
 
 public class PlusMinusButtonUI : MonoBehaviour
@@ -8,7 +8,7 @@ public class PlusMinusButtonUI : MonoBehaviour
 
     public CurrentStatusUI currentStatus;
 
-    [Header("PlayerMovementStats Âü°í")]
+    [Header("PlayerMovementStats ì°¸ê³ ")]
     [SerializeField] private int min;
     [SerializeField] private int max;
 
@@ -41,14 +41,14 @@ public class PlusMinusButtonUI : MonoBehaviour
 
     void Minus()
     {
-        // plus ¹öÆ° enable
+        // plus ë²„íŠ¼ enable
         if(!plus.enabled)
             plus.enabled = true;
 
-        // min°ªº¸´Ù ÀÛÀ¸¸é minus ¹öÆ° disable
+        // minê°’ë³´ë‹¤ ì‘ìœ¼ë©´ minus ë²„íŠ¼ disable
         CheckMinMax(false);
 
-        // Current Status °¨¼Ò
+        // Current Status ê°ì†Œ
         if (GameManager.instance.currentUsedStatusPoint > 0)
         {
             GameManager.instance.currentUsedStatusPoint--;
@@ -59,14 +59,14 @@ public class PlusMinusButtonUI : MonoBehaviour
 
     void Plus()
     {
-        // minus ¹öÆ° enable
+        // minus ë²„íŠ¼ enable
         if(!minus.enabled)
             minus.enabled = true;
 
-        // max°ªº¸´Ù Å©¸é plus ¹öÆ° disable
+        // maxê°’ë³´ë‹¤ í¬ë©´ plus ë²„íŠ¼ disable
         CheckMinMax(true);
 
-        // Current Status Áõ°¡
+        // Current Status ì¦ê°€
         if (GameManager.instance.availablePoint > GameManager.instance.currentUsedStatusPoint)
         {
             GameManager.instance.currentUsedStatusPoint++;
@@ -75,8 +75,8 @@ public class PlusMinusButtonUI : MonoBehaviour
         }
     }
 
-    // flag = true ==> Plus È®ÀÎ
-    // flag = false ==> Minus È®ÀÎ
+    // flag = true ==> Plus í™•ì¸
+    // flag = false ==> Minus í™•ì¸
     void CheckMinMax(bool flag)
     {
         int nextValue = flag ? currentStatus.currentValue + 1 : currentStatus.currentValue - 1;

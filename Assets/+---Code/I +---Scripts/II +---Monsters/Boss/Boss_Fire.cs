@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,7 +12,7 @@ public class Boss_Fire : MonoBehaviour
 
     private IEnumerator Destory()
     {
-        yield return new WaitForSeconds(4f); // ÃæºÐÇÑ ´ë±â ½Ã°£ ¼³Á¤
+        yield return new WaitForSeconds(4f); // ì¶©ë¶„í•œ ëŒ€ê¸° ì‹œê°„ ì„¤ì •
 
         Destroy(gameObject);
     }

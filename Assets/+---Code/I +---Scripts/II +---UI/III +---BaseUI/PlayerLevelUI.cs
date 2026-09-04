@@ -1,4 +1,4 @@
-using TMPro;
+ï»¿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,7 +16,7 @@ public class PlayerLevelUI : MonoBehaviour
 
         Debug.LogWarning("Current player: " + GameManager.instance.Player);
         levelText.text = GameManager.instance.Player.MovementStats.Level.ToString();
-        filledImage.fillAmount = GameManager.instance.Player.MovementStats.Exp / 100.0f;    // 100Àº ÀÓÀÇ ¼³Á¤
+        filledImage.fillAmount = GameManager.instance.Player.MovementStats.Exp / 100.0f;    // 100ì€ ì„ì˜ ì„¤ì •
 
         GameManager.instance.Player.levelUpUIEvent.AddListener(UpdateLevelTextUI);
         GameManager.instance.Player.expUpUIEvent.AddListener(UpdateExpUI);
@@ -28,18 +28,18 @@ public class PlayerLevelUI : MonoBehaviour
         GameManager.instance.Player.expUpUIEvent.RemoveAllListeners();
     }
 
-    // TODO: Player¿¡¼­
-    // UnityEvent<int> levelUpUIEvent Ãß°¡ ÇÊ¿ä
-    // ÀÌÈÄ Level upÇÏ¸é levelUpUIEvent.Invoke(level: int) Ãß°¡ ÇÊ¿ä
+    // TODO: Playerì—ì„œ
+    // UnityEvent<int> levelUpUIEvent ì¶”ê°€ í•„ìš”
+    // ì´í›„ Level upí•˜ë©´ levelUpUIEvent.Invoke(level: int) ì¶”ê°€ í•„ìš”
     void UpdateLevelTextUI(int level)
     {
         levelText.text = level.ToString();
         GameManager.instance.CalculateAvailableStatusPoint();
     }
 
-    // TODO: Player¿¡¼­
-    // UnityEvent<int, int> expUpUIEvent Ãß°¡ ÇÊ¿ä
-    // ÀÌÈÄ Level upÇÏ¸é expUpUIEvent.Invoke(totalExp: int, currentExp: int) Ãß°¡ ÇÊ¿ä
+    // TODO: Playerì—ì„œ
+    // UnityEvent<int, int> expUpUIEvent ì¶”ê°€ í•„ìš”
+    // ì´í›„ Level upí•˜ë©´ expUpUIEvent.Invoke(totalExp: int, currentExp: int) ì¶”ê°€ í•„ìš”
     void UpdateExpUI(int totalExp, int currentExp)
     {
         float amount = (float)currentExp / totalExp;

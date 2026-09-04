@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
@@ -28,11 +28,11 @@ public class StartSceneController : MonoBehaviour
                 m_isPressed = true;
                 m_audioSource.Play();
 
-                // 120.0f ±îÁö character ÀÌµ¿
+                // 120.0f ê¹Œì§€ character ì´ë™
                 character.transform.DOMoveX(120.0f, duration).SetEase(Ease.Linear);
                 character.GetComponent<Animator>().Play("Player Move");
 
-                // fillAmount 1.0f ±îÁö darkScreen Ã¤¿ì±â
+                // fillAmount 1.0f ê¹Œì§€ darkScreen ì±„ìš°ê¸°
                 darkScreen.DOFillAmount(1.0f, duration).SetEase(Ease.Linear);
 
                 // Loading SampleScene Mobile

@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -46,7 +46,7 @@ public class SceneTransition : MonoBehaviour
 
     public void LoadScene(string sceneName)
     {
-        // TODO: player dontdestroyµÇ¸é ±×³É °¡Á®¿À±â
+        // TODO: player dontdestroyë˜ë©´ ê·¸ëƒ¥ ê°€ì ¸ì˜¤ê¸°
         if (sceneName == "BossScene" || sceneName == "BossScene Mobile")
         {
             deathCount += GameManager.instance.Player.dieCount;
@@ -63,7 +63,7 @@ public class SceneTransition : MonoBehaviour
     private IEnumerator LoadSceneCoroutine(string sceneName)
     {
         fadeEffect.FadeOut(null, duration);
-        yield return new WaitForSecondsRealtime(duration);   // Fade In È¿°ú º¸Àå¿ë
+        yield return new WaitForSecondsRealtime(duration);   // Fade In íš¨ê³¼ ë³´ì¥ìš©
         yield return StartCoroutine(LoadSceneAsync(sceneName));
         fadeEffect.FadeIn(null, duration);
     }

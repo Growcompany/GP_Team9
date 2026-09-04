@@ -1,4 +1,4 @@
-using TMPro;
+ï»¿using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -10,11 +10,11 @@ public class CurrentStatusUI : MonoBehaviour
     [SerializeField] TMP_Text changesText;
     [SerializeField] TMP_Text currentStateText;
 
-    public int currentValue;            // PlusMinusButtonUI¿¡¼­ »ç¿ë
+    public int currentValue;            // PlusMinusButtonUIì—ì„œ ì‚¬ìš©
     int previousValue;
     int diff;
 
-    // TODO: Ability Âï´Â°Å Á¦ÇÑ ¹× Save±â´É
+    // TODO: Ability ì°ëŠ”ê±° ì œí•œ ë° Saveê¸°ëŠ¥
     private void Awake()
     {
         if(changesText == null)
@@ -42,7 +42,7 @@ public class CurrentStatusUI : MonoBehaviour
     {
         currentValue = selectedButton ? (currentValue + 1) : (currentValue - 1);
 
-        // ±âÁ¸º¸´Ù ³·°Ô µÇ¸é °ª ¿ø·¡´ë·Î º¹±¸ÇÏ°í return
+        // ê¸°ì¡´ë³´ë‹¤ ë‚®ê²Œ ë˜ë©´ ê°’ ì›ë˜ëŒ€ë¡œ ë³µêµ¬í•˜ê³  return
         if(currentValue <= previousValue)
         {
             currentValue = previousValue;
@@ -52,17 +52,17 @@ public class CurrentStatusUI : MonoBehaviour
         {
             diff = currentValue - previousValue;
 
-            // Changes text ¹Ù²Ù±â
+            // Changes text ë°”ê¾¸ê¸°
             if (!changesText.enabled && diff > 0)
                 changesText.enabled = true;
 
             changesText.text = "(+" + diff.ToString() + ")";
         }
 
-        // Current text ¹Ù²Ù±â
+        // Current text ë°”ê¾¸ê¸°
         currentStateText.text = currentValue.ToString();
 
-        // PointTextUI ¹Ù²Ù±â(¿À¸¥ÂÊ »ó´Ü)
+        // PointTextUI ë°”ê¾¸ê¸°(ì˜¤ë¥¸ìª½ ìƒë‹¨)
         pointTextUI.onChanged.Invoke();
     }
 
@@ -80,7 +80,7 @@ public class CurrentStatusUI : MonoBehaviour
         previousValue = currentValue;
     }
 
-    // ³»ºÎ ÃÊ±âÈ­¿ë
+    // ë‚´ë¶€ ì´ˆê¸°í™”ìš©
     private void Confirm()
     {
         previousValue = currentValue;

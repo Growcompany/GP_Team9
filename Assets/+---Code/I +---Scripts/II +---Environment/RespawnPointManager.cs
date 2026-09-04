@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -36,7 +36,7 @@ public class RespawnPointManager : MonoBehaviour
         currentRespawnPointIndex = index;
     }
 
-    // ¿ÜºÎ¿¡¼­ »ç¿ë
+    // ì™¸ë¶€ì—ì„œ ì‚¬ìš©
     public void Respawn(PlayerController player)
     {
         StartCoroutine(RespawnPlayerAfterDeathUI(player));
@@ -44,7 +44,7 @@ public class RespawnPointManager : MonoBehaviour
 
     private IEnumerator RespawnPlayerAfterDeathUI(PlayerController player)
     {
-        // ´ëÃæ 4ÃÊ·Î ÀâÀ½
+        // ëŒ€ì¶© 4ì´ˆë¡œ ì¡ìŒ
         yield return new WaitForSeconds(4);
         player.fadeEffectUI.fadeImage.gameObject.SetActive(false);
         player.transform.position = respawnPoints[currentRespawnPointIndex].transform.position;

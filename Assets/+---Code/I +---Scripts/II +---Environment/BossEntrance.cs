@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public class BossEntrance : MonoBehaviour
 {
@@ -14,7 +14,7 @@ public class BossEntrance : MonoBehaviour
         {
             if (!alreadyTriggered)
             {
-                // º¸½º·ë¿¡ µé¾î°¡±â Àü µ¥ÀÌÅÍ¸¦ ÀúÀå
+                // ë³´ìŠ¤ë£¸ì— ë“¤ì–´ê°€ê¸° ì „ ë°ì´í„°ë¥¼ ì €ì¥
                 //SaveData();
 
                 alreadyTriggered = true;
@@ -25,7 +25,7 @@ public class BossEntrance : MonoBehaviour
 
     //public void SaveData()
     //{
-    //    // MovementStats µ¥ÀÌÅÍ¸¦ ±â¹İÀ¸·Î PlayerStats °´Ã¼ »ı¼º
+    //    // MovementStats ë°ì´í„°ë¥¼ ê¸°ë°˜ìœ¼ë¡œ PlayerStats ê°ì²´ ìƒì„±
     //    PlayerStats stats = new PlayerStats
     //    {
     //        MaxLife = MovementStats.MaxLife,
@@ -37,7 +37,7 @@ public class BossEntrance : MonoBehaviour
     //        SkillCoolTime = MovementStats.SkillCoolTime
     //    };
 
-    //    // µ¥ÀÌÅÍ ÀúÀå
+    //    // ë°ì´í„° ì €ì¥
     //    dataHandler.SaveData(stats);
     //    Debug.Log("Player data saved before entering the boss room.");
     //}

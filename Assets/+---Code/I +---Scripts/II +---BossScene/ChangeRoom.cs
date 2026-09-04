@@ -1,11 +1,11 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public class ChangeRoom : MonoBehaviour
 {    
-    public GameObject RoomEnter; // RoomEnter ¿ÀºêÁ§Æ®
+    public GameObject RoomEnter; // RoomEnter ì˜¤ë¸Œì íŠ¸
     public GameObject RoomPlay;  // RoomPlay
-    public GameObject BaseUI;  // BaseUI ¿ÀºêÁ§Æ®
-    public GameObject StatusUI;  // StatusUI ¿ÀºêÁ§Æ®
+    public GameObject BaseUI;  // BaseUI ì˜¤ë¸Œì íŠ¸
+    public GameObject StatusUI;  // StatusUI ì˜¤ë¸Œì íŠ¸
     //public DataHandler dataHandler;
     //public PlayerMovementStats playerMovementStats; 
 
@@ -14,26 +14,26 @@ public class ChangeRoom : MonoBehaviour
         BaseUI = GameObject.Find("---BaseUI---");
         StatusUI = GameObject.Find("---StatusUI---");
 
-        // StatusUI, BaseUIÀÇ Canvas ºñÈ°¼ºÈ­
+        // StatusUI, BaseUIì˜ Canvas ë¹„í™œì„±í™”
         if (StatusUI != null)
         {
             Canvas statusUICanvas = StatusUI.GetComponent<Canvas>();
-            statusUICanvas.enabled = false; // RoomEnter°¡ È°¼ºÈ­µÉ ¶§¸¸ Canvas¸¦ È°¼ºÈ­
+            statusUICanvas.enabled = false; // RoomEnterê°€ í™œì„±í™”ë  ë•Œë§Œ Canvasë¥¼ í™œì„±í™”
 
         }
         if (BaseUI != null)
         {
             Canvas BaseUICanvas = BaseUI.GetComponent<Canvas>();
-            BaseUICanvas.enabled = false; // RoomEnter°¡ È°¼ºÈ­µÉ ¶§¸¸ Canvas¸¦ È°¼ºÈ­
+            BaseUICanvas.enabled = false; // RoomEnterê°€ í™œì„±í™”ë  ë•Œë§Œ Canvasë¥¼ í™œì„±í™”
         }
 
         
-        // µ¥ÀÌÅÍ ºÒ·¯¿À±â
+        // ë°ì´í„° ë¶ˆëŸ¬ì˜¤ê¸°
         //PlayerStats loadedStats = dataHandler.LoadData();
 
         //if (loadedStats != null)
         //{
-        //    // ºÒ·¯¿Â µ¥ÀÌÅÍ¸¦ PlayerMovementStats¿¡ Àû¿ë
+        //    // ë¶ˆëŸ¬ì˜¨ ë°ì´í„°ë¥¼ PlayerMovementStatsì— ì ìš©
         //    ApplyDataToPlayerMovementStats(loadedStats, playerMovementStats);
         //    Debug.Log("Player data loaded and applied in the Boss Scene.");
         //}
@@ -42,10 +42,10 @@ public class ChangeRoom : MonoBehaviour
         //    Debug.LogWarning("No data found to load in the Boss Scene.");
         //}
     }
-    // BossTalk¿¡¼­ È£ÃâµÉ ¶§ RoomEnter ºñÈ°¼ºÈ­ ¹× RoomPlay È°¼ºÈ­
+    // BossTalkì—ì„œ í˜¸ì¶œë  ë•Œ RoomEnter ë¹„í™œì„±í™” ë° RoomPlay í™œì„±í™”
     public void AllDialogsEnded()
     {
-        Debug.Log("¸ğµç ´ëÈ­°¡ Á¾·á"); // ¸ğµç ´ëÈ­°¡ Á¾·áµÉ ¶§ ·Î±× Ãâ·Â
+        Debug.Log("ëª¨ë“  ëŒ€í™”ê°€ ì¢…ë£Œ"); // ëª¨ë“  ëŒ€í™”ê°€ ì¢…ë£Œë  ë•Œ ë¡œê·¸ ì¶œë ¥
 
         if (RoomEnter != null)
         {
@@ -72,7 +72,7 @@ public class ChangeRoom : MonoBehaviour
     //    movementStats.Dodge = loadedStats.Dodge;
     //    movementStats.SkillCoolTime = loadedStats.SkillCoolTime;
 
-    //    // ·ÎµåµÈ Á¤º¸ ·Î±× Ãâ·Â
+    //    // ë¡œë“œëœ ì •ë³´ ë¡œê·¸ ì¶œë ¥
     //    Debug.Log("Loaded Player Stats:");
     //    Debug.Log("MaxLife: " + loadedStats.MaxLife);
     //    Debug.Log("Life: " + loadedStats.Life);

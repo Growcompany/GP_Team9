@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,8 +8,8 @@ public class ExpManager : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     protected Transform player_pos;
     public float MoveSpeed = 30.0f;
-    public float CollisionDistance = 1.0f; // Ãæµ¹·Î °£ÁÖÇÒ °Å¸®
-    private bool canMove = false; // ÀÌµ¿ ¹× Ãæµ¹ È°¼ºÈ­ ¿©ºÎ
+    public float CollisionDistance = 1.0f; // ì¶©ëŒë¡œ ê°„ì£¼í•  ê±°ë¦¬
+    private bool canMove = false; // ì´ë™ ë° ì¶©ëŒ í™œì„±í™” ì—¬ë¶€
 
     // Start is called before the first frame update
     void Start()
@@ -18,39 +18,39 @@ public class ExpManager : MonoBehaviour
         GameObject playerObject = GameObject.FindWithTag("Player");
         if (playerObject != null)
         {
-            player_pos = playerObject.transform; // Transform ÂüÁ¶ ÀúÀå
+            player_pos = playerObject.transform; // Transform ì°¸ì¡° ì €ì¥
         }
 
-        // ÀÌµ¿ ¹× Ãæµ¹ È°¼ºÈ­
+        // ì´ë™ ë° ì¶©ëŒ í™œì„±í™”
         StartCoroutine(EnableMoveAfterDelay(1f));
     }
 
-    // ÀÌµ¿ ¹× Ãæµ¹ È°¼ºÈ­ ÄÚ·çÆ¾
+    // ì´ë™ ë° ì¶©ëŒ í™œì„±í™” ì½”ë£¨í‹´
     private IEnumerator EnableMoveAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
-        canMove = true; // ÀÌµ¿ ¹× Ãæµ¹ È°¼ºÈ­
+        canMove = true; // ì´ë™ ë° ì¶©ëŒ í™œì„±í™”
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        // R °ªÀ» 0 ~ 1·Î ¹İº¹
+        // R ê°’ì„ 0 ~ 1ë¡œ ë°˜ë³µ
         float rValue = Mathf.PingPong(Time.time, 1f);
 
         Color color = spriteRenderer.color;
-        color.r = rValue; // R °ª º¯°æ
+        color.r = rValue; // R ê°’ ë³€ê²½
         spriteRenderer.color = color;
 
         if (!canMove) return;
 
-        // ÇÃ·¹ÀÌ¾î ¹æÇâÀ¸·Î ÀÌµ¿
+        // í”Œë ˆì´ì–´ ë°©í–¥ìœ¼ë¡œ ì´ë™
         if (player_pos != null)
         {
             Vector3 directionToPlayer = (player_pos.position - transform.position).normalized;
             Move(directionToPlayer);
 
-            // ÀÏÁ¤ °Å¸® ÀÌ³»¸é Ãæµ¹ Ã³¸®
+            // ì¼ì • ê±°ë¦¬ ì´ë‚´ë©´ ì¶©ëŒ ì²˜ë¦¬
             if (Vector3.Distance(transform.position, player_pos.position) <= CollisionDistance)
             {
                 HandleCollision();
@@ -66,10 +66,10 @@ public class ExpManager : MonoBehaviour
         PlayerController player = Object.FindFirstObjectByType<PlayerController>();
         if (player != null)
         {
-            player.ExpUp(Exp); // °æÇèÄ¡ Àü´Ş
-            //Debug.Log("°æÇèÄ¡ÁÖ±â");
+            player.ExpUp(Exp); // ê²½í—˜ì¹˜ ì „ë‹¬
+            //Debug.Log("ê²½í—˜ì¹˜ì£¼ê¸°");
         }
 
-        Destroy(gameObject); // ExpManager ¿ÀºêÁ§Æ® Á¦°Å
+        Destroy(gameObject); // ExpManager ì˜¤ë¸Œì íŠ¸ ì œê±°
     }
 }

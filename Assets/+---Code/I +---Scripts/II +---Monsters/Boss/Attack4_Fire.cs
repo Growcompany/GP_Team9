@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,12 +9,12 @@ public class Attack4_Fire : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             Debug.Log("Collided object name: " + collision.gameObject.name);
-            // PlayerController ÄÄÆ÷³ÍÆ® °¡Á®¿À±â
+            // PlayerController ì»´í¬ë„ŒíŠ¸ ê°€ì ¸ì˜¤ê¸°
             PlayerController playerController = collision.GetComponent<PlayerController>();
 
             if (playerController != null)
             {
-                // ÇÃ·¹ÀÌ¾î¿¡ µ¥¹ÌÁö ÁÖ±â
+                // í”Œë ˆì´ì–´ì— ë°ë¯¸ì§€ ì£¼ê¸°
                 playerController.StartCoroutine(playerController.Damaged(3));
 
                 Debug.Log("Player damaged by MonsterSkill damage");

@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -19,7 +19,7 @@ public class SkillCoolTimeUI : MonoBehaviour
             yield return null;
         }
 
-        grayFilledImage.fillAmount = 0; // ÀÌ¹ÌÁö°¡ º¸ÀÌÁö ¾Ê°Ô ÇÏ±â À§ÇÔ
+        grayFilledImage.fillAmount = 0; // ì´ë¯¸ì§€ê°€ ë³´ì´ì§€ ì•Šê²Œ í•˜ê¸° ìœ„í•¨
     }
 
     IEnumerator UpdateText(int skillIndex_input)

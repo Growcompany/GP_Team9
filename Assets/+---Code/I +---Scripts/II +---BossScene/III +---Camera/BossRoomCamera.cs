@@ -1,15 +1,15 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using Unity.Cinemachine;
 
 public class WaypointCameraControl : MonoBehaviour
 {
-    public float fixedXRotation = -30f; // ¿øÇÏ´Â °íÁ¤ x È¸Àü °¢µµ ¼³Á¤ (¿¹: -30µµ)
+    public float fixedXRotation = -30f; // ì›í•˜ëŠ” ê³ ì • x íšŒì „ ê°ë„ ì„¤ì • (ì˜ˆ: -30ë„)
 
     void LateUpdate()
     {
-        // ÇöÀç Ä«¸Ş¶óÀÇ È¸ÀüÀ» °¡Á®¿Í¼­ x Ãà¸¸ °íÁ¤ÇÑ È¸ÀüÀ¸·Î ¾÷µ¥ÀÌÆ®
+        // í˜„ì¬ ì¹´ë©”ë¼ì˜ íšŒì „ì„ ê°€ì ¸ì™€ì„œ x ì¶•ë§Œ ê³ ì •í•œ íšŒì „ìœ¼ë¡œ ì—…ë°ì´íŠ¸
         Vector3 rotation = transform.eulerAngles;
-        rotation.x = fixedXRotation; // x ÃàÀ» °íÁ¤µÈ °¢µµ·Î ¼³Á¤
+        rotation.x = fixedXRotation; // x ì¶•ì„ ê³ ì •ëœ ê°ë„ë¡œ ì„¤ì •
         transform.eulerAngles = rotation;
     }
 }

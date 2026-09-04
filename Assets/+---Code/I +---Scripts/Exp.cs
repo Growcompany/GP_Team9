@@ -1,4 +1,4 @@
-using System.Collections;
+Ôªøusing System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
@@ -62,11 +62,11 @@ public class Exp : MonoBehaviour
         {
             HandleCollsion();
         }
-        // R ∞™¿ª 0 ~ 1∑Œ π›∫π
+        // R Í∞íÏùÑ 0 ~ 1Î°ú Î∞òÎ≥µ
         float rValue = Mathf.PingPong(Time.time, 1f);
 
         Color color = m_spriteRenderer.color;
-        color.r = rValue; // R ∞™ ∫Ø∞Ê
+        color.r = rValue; // R Í∞í Î≥ÄÍ≤Ω
         m_spriteRenderer.color = color;
 
         if (m_startTween)

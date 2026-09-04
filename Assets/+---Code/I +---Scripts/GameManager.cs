@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -26,12 +26,12 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private ParticleSystem m_levelUpEffect;
 
-    public int totalUsedStatusPoint;                    // ConfirmButtonUI¿¡¼­ Á¶Àý
-    public int availablePoint;                          // CalculateAvailableStatusPoint ÀÌº¥Æ®·Î °è»êµÊ(ex. Level up, Confirm button)
-    public int currentUsedStatusPoint;                  // PlusMinusButtonUI¿¡¼­ Áõ°¨, ConfirmButtonUI¿¡¼­ ÃÊ±âÈ­
-                                                        // PointTextUI¿¡¼­ availablePoint - currentUsedStatusPoint°ª »ç¿ë
-    public float coolTimeRatio;                         // SkillCoolTimeUI¿¡¼­ »ç¿ë
-    public float currentCoolTime;                       // SkillCoolTimeUI¿¡¼­ »ç¿ë
+    public int totalUsedStatusPoint;                    // ConfirmButtonUIì—ì„œ ì¡°ì ˆ
+    public int availablePoint;                          // CalculateAvailableStatusPoint ì´ë²¤íŠ¸ë¡œ ê³„ì‚°ë¨(ex. Level up, Confirm button)
+    public int currentUsedStatusPoint;                  // PlusMinusButtonUIì—ì„œ ì¦ê°, ConfirmButtonUIì—ì„œ ì´ˆê¸°í™”
+                                                        // PointTextUIì—ì„œ availablePoint - currentUsedStatusPointê°’ ì‚¬ìš©
+    public float coolTimeRatio;                         // SkillCoolTimeUIì—ì„œ ì‚¬ìš©
+    public float currentCoolTime;                       // SkillCoolTimeUIì—ì„œ ì‚¬ìš©
 
     public bool IsPaused { get; private set; }
     public GameObject escapeUI;
@@ -100,7 +100,7 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator FollowPlayer(GameObject go)
     {
-        // 2.5ÃÊ°£ ÇÃ·¹ÀÌ¾î¸¦ µû¶ó´Ù´Ô
+        // 2.5ì´ˆê°„ í”Œë ˆì´ì–´ë¥¼ ë”°ë¼ë‹¤ë‹˜
         float time = 2.5f;
         while (time > 0)
         {

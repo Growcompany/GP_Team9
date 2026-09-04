@@ -1,11 +1,11 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public class AttackWarning : MonoBehaviour
 {
     private SpriteRenderer spriteRenderer;
-    public float minAlpha = 0.3f; // Åõ¸íµµ 30%
-    public float maxAlpha = 1f;   // Åõ¸íµµ 100%
-    public float speed = 2f;      // º¯È­ ¼Óµµ
+    public float minAlpha = 0.3f; // íˆ¬ëª…ë„ 30%
+    public float maxAlpha = 1f;   // íˆ¬ëª…ë„ 100%
+    public float speed = 2f;      // ë³€í™” ì†ë„
 
     private Color startColor = Color.yellow;
     private Color targetColor = Color.red;
@@ -13,18 +13,18 @@ public class AttackWarning : MonoBehaviour
     void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
-        spriteRenderer.color = startColor; // ÃÊ±â »ö»óÀ» ³ë¶õ»öÀ¸·Î ¼³Á¤
+        spriteRenderer.color = startColor; // ì´ˆê¸° ìƒ‰ìƒì„ ë…¸ë€ìƒ‰ìœ¼ë¡œ ì„¤ì •
     }
 
     void Update()
     {
-        // Åõ¸íµµ¸¦ 30~100% »çÀÌ·Î ¹İº¹ º¯È­
+        // íˆ¬ëª…ë„ë¥¼ 30~100% ì‚¬ì´ë¡œ ë°˜ë³µ ë³€í™”
         float alpha = Mathf.Lerp(minAlpha, maxAlpha, Mathf.PingPong(Time.time * speed, 1));
 
-        // ³ë¶õ»ö¿¡¼­ »¡°£»öÀ¸·Î Á¡Â÷ º¯È­
+        // ë…¸ë€ìƒ‰ì—ì„œ ë¹¨ê°„ìƒ‰ìœ¼ë¡œ ì ì°¨ ë³€í™”
         Color currentColor = Color.Lerp(startColor, targetColor, Mathf.PingPong(Time.time * speed, 1));
 
-        // »ö»ó°ú Åõ¸íµµ¸¦ Àû¿ë
+        // ìƒ‰ìƒê³¼ íˆ¬ëª…ë„ë¥¼ ì ìš©
         currentColor.a = alpha;
         spriteRenderer.color = currentColor;
     }

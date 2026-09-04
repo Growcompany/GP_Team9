@@ -1,4 +1,4 @@
-using System.IO;
+ï»¿using System.IO;
 using UnityEngine;
 public class DataHandler : MonoBehaviour
 {
@@ -6,13 +6,13 @@ public class DataHandler : MonoBehaviour
 
     private void Awake()
     {
-        // JSON ÆÄÀÏ °æ·Î ¼³Á¤
+        // JSON íŒŒì¼ ê²½ë¡œ ì„¤ì •
         filePath = Application.persistentDataPath + "/playerStats.json";
     }
 
     public void SaveData(PlayerStats stats)
     {
-        // °´Ã¼¸¦ JSONÀ¸·Î Á÷·ÄÈ­ÇÏ¿© ÆÄÀÏ·Î ÀúÀå
+        // ê°ì²´ë¥¼ JSONìœ¼ë¡œ ì§ë ¬í™”í•˜ì—¬ íŒŒì¼ë¡œ ì €ì¥
         string json = JsonUtility.ToJson(stats, true);
         File.WriteAllText(filePath, json);
         Debug.Log("Data saved to " + filePath);
@@ -22,7 +22,7 @@ public class DataHandler : MonoBehaviour
     {
         if (File.Exists(filePath))
         {
-            // JSON ÆÄÀÏÀ» ÀĞ¾î °´Ã¼·Î ¿ªÁ÷·ÄÈ­
+            // JSON íŒŒì¼ì„ ì½ì–´ ê°ì²´ë¡œ ì—­ì§ë ¬í™”
             string json = File.ReadAllText(filePath);
             PlayerStats stats = JsonUtility.FromJson<PlayerStats>(json);
             Debug.Log("Data loaded from " + filePath);

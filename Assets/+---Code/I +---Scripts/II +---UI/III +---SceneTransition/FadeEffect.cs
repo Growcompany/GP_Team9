@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -14,7 +14,7 @@ public class FadeEffect : MonoBehaviour
 
     private void Awake()
     {
-        // ±âº» »óÅÂ°¡ false¶ó¼­ ÄÑÁÜ
+        // ê¸°ë³¸ ìƒíƒœê°€ falseë¼ì„œ ì¼œì¤Œ
         fadeImage.gameObject.SetActive(true);
 
         Color colorImage = fadeImage.color;

@@ -1,11 +1,11 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using Unity.Cinemachine;
 using UnityEngine;
 
 public class TutorialEnd : MonoBehaviour
 {
-    public FadeEffect fadeEffect;       // FadeUI¿¡ ÀÖ´Â FadeEffect¸¦ °¡Á®¿È
+    public FadeEffect fadeEffect;       // FadeUIì— ìˆëŠ” FadeEffectë¥¼ ê°€ì ¸ì˜´
     public float duration = 2.0f;
 
     [Header("Confiner")]
